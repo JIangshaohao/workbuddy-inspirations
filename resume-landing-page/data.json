@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "theme_color": "#3B7BF6",
+    "style_tag": "Aurora Dark · Engineering Minimal",
+    "language": "zh-CN",
+    "updated_at": "2026-10-08"
+  },
+
+  "hero_card": {
+    "name": "Harrison Jiang",
+    "title": "资深 Java 后端工程师 / 全栈交付",
+    "status": "开放机会 · Open to opportunities",
+    "slogan": "把复杂业务拆成可维护的系统，把重复劳动交给脚本。",
+    "sub_slogan": "不追新，追确定性 —— 存量系统稳得住，新系统起得来。",
+    "tags": ["Java 后端", "JDK 1.8 存量维护", "JS / jQuery", "系统稳定性", "工程自动化"],
+    "location": "中国 · 上海",
+    "contacts": [
+      {
+        "type": "email",
+        "label": "邮箱",
+        "value": "harrison.jiang@example.com",
+        "copy": true
+      },
+      {
+        "type": "phone",
+        "label": "电话",
+        "value": "+86 138-0000-0000",
+        "copy": true
+      },
+      {
+        "type": "wechat",
+        "label": "微信",
+        "value": "harrison_jiang",
+        "copy": true
+      }
+    ]
+  },
+
+  "stats_board": [
+    { "label": "从业经验", "value": "8年", "icon": "Time" },
+    { "label": "交付系统", "value": "20+", "icon": "Code" },
+    { "label": "接口 P99 下降", "value": "65%", "icon": "Trend" },
+    { "label": "线上可用性", "value": "99.9%", "icon": "Award" },
+    { "label": "自动化脚本", "value": "60+", "icon": "Terminal" },
+    { "label": "年均省人时", "value": "1200h", "icon": "Clock" }
+  ],
+
+  "timeline_pro": [
+    {
+      "company": "某互联网科技有限公司",
+      "role": "高级 Java 开发工程师",
+      "period": "2022 — 至今",
+      "bullets": [
+        "负责核心业务系统的后端设计与迭代，长期维护 JDK 1.8 存量服务，连续两年线上零重大事故",
+        "主导慢 SQL 与接口性能治理，核心接口 P99 从 1.2s 降至 420ms，慢查询数量下降 83%",
+        "用 PowerShell / CMD 编写发布与巡检脚本，把单次上线流程从人工 2 小时压缩到 10 分钟"
+      ]
+    },
+    {
+      "company": "某软件技术有限公司",
+      "role": "Java 开发工程师",
+      "period": "2019 — 2022",
+      "bullets": [
+        "参与业务中台从 0 到 1 建设，负责订单、结算等核心模块的后端实现与联调",
+        "使用原生 JS + jQuery 维护管理后台前端，独立完成 30+ 页面与公共组件封装",
+        "建立接口文档与联调规范，跨团队联调返工率下降约 40%"
+      ]
+    },
+    {
+      "company": "某信息技术有限公司",
+      "role": "Java 开发工程师",
+      "period": "2017 — 2019",
+      "bullets": [
+        "独立承担中小型项目的后端开发与部署，10+ 项目全部按期交付",
+        "编写定时任务与数据同步脚本替代人工重复操作，月均节省 30 人时"
+      ]
+    }
+  ],
+
+  "skill_radar": [
+    { "skill_name": "Java 后端开发", "score": 92, "category": "Backend" },
+    { "skill_name": "数据库 & SQL 调优", "score": 88, "category": "Database" },
+    { "skill_name": "前端 JS / jQuery", "score": 80, "category": "Frontend" },
+    { "skill_name": "系统稳定性治理", "score": 85, "category": "Reliability" },
+    { "skill_name": "运维自动化", "score": 82, "category": "Automation" },
+    { "skill_name": "工程协作 & 交付", "score": 86, "category": "Delivery" }
+  ],
+
+  "bento_gallery": [
+    {
+      "project_name": "核心链路性能治理",
+      "role": "后端负责人",
+      "impact": "P99 1.2s → 420ms，慢查询下降 83%，大促期间零超时"
+    },
+    {
+      "project_name": "JDK 1.8 存量维护体系",
+      "role": "主要维护者",
+      "impact": "覆盖 12 个服务，线上故障同比下降 60%"
+    },
+    {
+      "project_name": "前后端一体化管理后台",
+      "role": "全栈开发",
+      "impact": "30+ 页面，首屏加载 < 1.5s，组件复用率 70%"
+    },
+    {
+      "project_name": "运维自动化脚本工具集",
+      "role": "作者",
+      "impact": "PowerShell / CMD 脚本 60+，发布与巡检提效 92%"
+    },
+    {
+      "project_name": "数据同步与报表服务",
+      "role": "后端开发",
+      "impact": "日均处理 200W+ 条记录，T+1 报表准点率 100%"
+    },
+    {
+      "project_name": "内部公共组件与脚手架",
+      "role": "核心维护者",
+      "impact": "沉淀 8 个通用模块，新项目启动周期 5 天 → 1 天"
+    }
+  ],
+
+  "testimonial": [
+    {
+      "author": "技术总监",
+      "text": "交付确定性很高。一个还很模糊的需求交给他，通常会带回一个能上线、也养得起的方案。",
+      "relation": "Former Direct Manager"
+    },
+    {
+      "author": "产品经理",
+      "text": "很少需要追问进度。风险会提前暴露出来，排期基本没有意外。",
+      "relation": "Long-term Collaborator"
+    },
+    {
+      "author": "后端同事",
+      "text": "他写的那些脚本替团队省掉了大量重复劳动。JDK 1.8 的老系统在他手里比新系统还稳。",
+      "relation": "Peer Engineer"
+    }
+  ]
+}

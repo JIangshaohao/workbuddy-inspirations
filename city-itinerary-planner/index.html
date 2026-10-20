@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>烟火蓉城 · 成都3日行程规划</title>
+
+<!-- 地图 Key 由 WorkBuddy 本地代理注入，前端不出现任何明文 Key -->
+<script>
+  window._TMapSecurityConfig = {
+    serviceHost: 'http://127.0.0.1:__WB_HTTP_PORT__/_TMapService/_wbt/__WB_TMAP_SECRET__'
+  };
+</script>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&libraries=service"></script>
+
+<style>
+  :root{
+    /* Stripe 调色板 */
+    --bg:#F6F9FC;
+    --surface:#FFFFFF;
+    --navy:#0A2540;
+    --slate:#425466;
+    --muted:#7A8B9E;
+    --line:#E6EBF1;
+    --line-soft:#EEF2F7;
+    --blurple:#635BFF;
+    --blurple-soft:rgba(99,91,255,.10);
+    --cyan:#22D3EE;
+
+    /* 四类 POI 配色 */
+    --scenic:#059669;  --scenic-1:#34D399; --scenic-2:#059669; --scenic-soft:#ECFDF5;
+    --food:#EA580C;    --food-1:#FBBF24;   --food-2:#EA580C;   --food-soft:#FFF7ED;
+    --culture:#4F46E5; --culture-1:#8B85FF;--culture-2:#4F46E5;--culture-soft:#EEF0FF;
+    --shop:#DB2777;    --shop-1:#F472B6;   --shop-2:#DB2777;   --shop-soft:#FDF2F8;
+
+    --r-lg:20px;
+    --r-md:14px;
+    --r-sm:10px;
+
+    --sh-1:0 1px 2px rgba(10,37,64,.05), 0 1px 3px rgba(10,37,64,.04);
+    --sh-2:0 4px 12px rgba(10,37,64,.06), 0 1px 3px rgba(10,37,64,.05);
+    --sh-3:0 12px 34px rgba(10,37,64,.10), 0 2px 6px rgba(10,37,64,.05);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{ height:100%; }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--slate);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    font-size:14px;
+    padding:18px 26px;
+  }
+
+  .page{
+    max-width:1500px; height:100%; margin:0 auto;
+    display:flex; flex-direction:column; gap:14px;
+  }
+
+  /* ==================== BANNER ==================== */
+  .banner{
+    position:relative; flex-shrink:0; overflow:hidden;
+    border-radius:var(--r-lg);
+    border:1px solid var(--line);
+    background:
+      radial-gradient(680px 320px at 10% -20%, rgba(99,91,255,.20), transparent 62%),
+      radial-gradient(560px 300px at 90% -10%, rgba(34,211,238,.18), transparent 60%),
+      radial-gradient(640px 340px at 74% 120%, rgba(236,72,153,.13), transparent 62%),
+      linear-gradient(180deg,#FFFFFF 0%,#F7FAFF 100%);
+    box-shadow:var(--sh-1), 0 14px 36px rgba(10,37,64,.06);
+  }
+  .banner::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,0) 46%);
+  }
+  .banner-inner{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:36px 40px 34px; min-height:196px;
+  }
+  .banner-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11.5px; font-weight:700; letter-spacing:3.4px;
+    color:var(--blurple); background:var(--blurple-soft);
+    border:1px solid rgba(99,91,255,.18);
+    padding:5px 15px; border-radius:999px; margin-bottom:15px;
+  }
+  .banner-title{
+    font-size:46px; line-height:1.12; font-weight:800;
+    color:var(--navy); letter-spacing:-.6px; margin-bottom:12px;
+  }
+  .banner-title .accent{
+    font-style:normal;
+    background:linear-gradient(100deg,#635BFF 0%,#22D3EE 105%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .banner-sub{
+    font-size:14.5px; line-height:1.72; color:#5A6B85;
+    max-width:770px;
+  }
+
+  /* 右侧徽章 */
+  .banner-meta{
+    position:absolute; right:32px; top:50%; transform:translateY(-50%); z-index:3;
+    display:flex; align-items:stretch;
+    padding:9px 5px; border-radius:16px;
+    background:rgba(255,255,255,.74);
+    backdrop-filter:blur(16px) saturate(1.5);
+    -webkit-backdrop-filter:blur(16px) saturate(1.5);
+    border:1px solid rgba(10,37,64,.07);
+    box-shadow:0 10px 28px rgba(10,37,64,.09);
+  }
+  .banner-meta .item{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px; padding:6px 20px; min-width:98px;
+  }
+  .banner-meta .item + .item{ border-left:1px solid rgba(10,37,64,.08); }
+  .banner-meta .num{
+    font-size:25px; font-weight:800; line-height:1.04;
+    color:var(--navy); letter-spacing:-.6px;
+  }
+  .banner-meta .num i{ font-style:normal; font-size:15px; font-weight:700; margin-right:1px; }
+  .banner-meta .lbl{ font-size:11.5px; color:var(--muted); letter-spacing:.4px; }
+
+  /* ==================== DAY TABS ==================== */
+  .tabbar{ flex-shrink:0; display:flex; justify-content:center; }
+  .day-tabs{
+    display:inline-flex; gap:5px; padding:5px;
+    background:#EDF1F7; border:1px solid var(--line); border-radius:15px;
+  }
+  .day-tab{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 18px 8px 14px; border-radius:11px; cursor:pointer;
+    transition:background .22s ease, box-shadow .22s ease, transform .22s ease;
+    user-select:none; background:transparent;
+  }
+  .day-tab:hover{ background:rgba(255,255,255,.62); }
+  .day-tab.active{
+    background:#fff;
+    box-shadow:0 1px 2px rgba(10,37,64,.08), 0 7px 18px rgba(10,37,64,.08);
+  }
+  .dtag{
+    flex-shrink:0; width:30px; height:30px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800; letter-spacing:-.2px;
+    background:#E3E9F2; color:#8898AA;
+    transition:all .22s ease;
+  }
+  .day-tab.active .dtag{
+    background:linear-gradient(135deg,#7C74FF,#5A52F0); color:#fff;
+    box-shadow:0 3px 9px rgba(99,91,255,.34);
+  }
+  .tbox{ display:flex; flex-direction:column; line-height:1.3; }
+  .t1{ font-size:10.5px; font-weight:700; letter-spacing:.7px; color:#93A2B5; }
+  .t2{ font-size:13.5px; font-weight:600; color:#5A6B85; transition:color .22s ease; }
+  .day-tab.active .t1{ color:var(--blurple); }
+  .day-tab.active .t2{ color:var(--navy); }
+
+  /* ==================== MAIN ==================== */
+  .main{ display:flex; flex:1; min-height:0; gap:14px; }
+  .card{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--r-lg); box-shadow:var(--sh-1);
+  }
+
+  /* ---------- 左侧时间轴 ---------- */
+  .sidebar{
+    width:418px; flex-shrink:0; display:flex; flex-direction:column; overflow:hidden;
+  }
+  .sidebar-head{
+    flex-shrink:0; padding:15px 18px 13px;
+    border-bottom:1px solid var(--line-soft);
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .sh-left{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .sh-title{ font-size:15px; font-weight:700; color:var(--navy); letter-spacing:-.2px; }
+  .sh-sub{ font-size:11.5px; color:var(--muted); }
+  .sh-badge{
+    flex-shrink:0; font-size:11.5px; font-weight:700; color:var(--blurple);
+    background:var(--blurple-soft); border:1px solid rgba(99,91,255,.16);
+    padding:4px 10px; border-radius:999px; white-space:nowrap;
+  }
+
+  .timeline{
+    flex:1; min-height:0; overflow-y:auto;
+    padding:16px 16px 20px 10px;
+    display:flex; flex-direction:column;
+  }
+
+  .tl-row{
+    display:grid; grid-template-columns:48px 26px 1fr;
+    animation:tl-rise .42s cubic-bezier(.22,.61,.36,1) both;
+  }
+  @keyframes tl-rise{
+    from{ opacity:0; transform:translateY(9px); }
+    to{ opacity:1; transform:none; }
+  }
+
+  .tl-time{
+    padding-top:19px; padding-right:8px; text-align:right;
+    font-size:11.5px; font-weight:700; color:#93A2B5;
+    font-variant-numeric:tabular-nums; letter-spacing:.2px;
+  }
+  .tl-row.on .tl-time{ color:var(--navy); }
+
+  .tl-rail{ position:relative; }
+  .tl-rail::before{
+    content:''; position:absolute; left:50%; top:0; bottom:0;
+    width:2px; margin-left:-1px; border-radius:2px;
+    background:linear-gradient(180deg,#E3E9F2,#EDF1F7);
+  }
+  .tl-row:first-child .tl-rail::before{ top:26px; }
+  .tl-row:last-child .tl-rail::before{ bottom:auto; height:26px; }
+
+  .tl-dot{
+    position:absolute; left:50%; top:22px; width:11px; height:11px;
+    margin-left:-5.5px; border-radius:50%;
+    background:#fff; border:2.5px solid var(--tc,#C9D3DF);
+    box-shadow:0 0 0 3px rgba(255,255,255,.9);
+    transition:all .22s ease; z-index:2;
+  }
+  .tl-row.on .tl-dot{
+    background:var(--tc); border-color:#fff;
+    box-shadow:0 0 0 3px var(--tc-soft), 0 0 0 5px rgba(255,255,255,.9);
+  }
+
+  .tl-card{
+    position:relative; margin-bottom:13px;
+    padding:13px 15px 13px 17px;
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-md);
+    cursor:pointer; overflow:hidden;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .tl-card::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--tc); opacity:.85;
+  }
+  .tl-card:hover{
+    transform:translateY(-2px);
+    border-color:#D8E0EA;
+    box-shadow:var(--sh-2);
+  }
+  .tl-card.on{
+    border-color:var(--tc);
+    background:linear-gradient(135deg,var(--tc-soft) 0%, #fff 62%);
+    box-shadow:0 0 0 3px var(--tc-soft), 0 10px 26px rgba(10,37,64,.09);
+  }
+
+  .tl-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .chip{
+    flex-shrink:0; font-size:10.5px; font-weight:700; letter-spacing:.3px;
+    padding:2px 8px; border-radius:6px;
+    background:var(--tc-soft); color:var(--tc);
+  }
+  .tl-name{
+    flex:1; min-width:0; font-size:14.5px; font-weight:700; color:var(--navy);
+    letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .tl-dur{
+    flex-shrink:0; font-size:11px; font-weight:600; color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .tl-desc{
+    font-size:12.5px; line-height:1.62; color:#5A6B85;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .tl-meta{
+    display:flex; flex-wrap:wrap; gap:4px 12px;
+    margin-top:8px; font-size:11px; color:var(--muted);
+  }
+  .tl-meta b{ font-weight:600; color:#6B7C93; }
+
+  /* ---------- 右侧地图 ---------- */
+  .map-wrap{ flex:1; min-width:0; position:relative; overflow:hidden; }
+  #map{ position:absolute; inset:0; }
+
+  .map-legend{
+    position:absolute; right:16px; bottom:16px; z-index:20;
+    display:flex; align-items:center; gap:15px;
+    padding:9px 15px; border-radius:12px;
+    background:rgba(255,255,255,.90);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(10,37,64,.07);
+    box-shadow:0 7px 22px rgba(10,37,64,.10);
+  }
+  .lg{ display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:600; color:#5A6B85; }
+  .lg .sw{ width:9px; height:9px; border-radius:3px; }
+
+  .map-chip{
+    position:absolute; left:16px; top:16px; z-index:20;
+    display:flex; align-items:center; gap:9px;
+    padding:9px 14px; border-radius:12px;
+    background:rgba(255,255,255,.90);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(10,37,64,.07);
+    box-shadow:0 7px 22px rgba(10,37,64,.10);
+    font-size:12px; font-weight:600; color:#5A6B85;
+  }
+  .map-chip .mc-dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--blurple); box-shadow:0 0 0 4px var(--blurple-soft);
+  }
+  .map-chip b{ color:var(--navy); font-weight:700; }
+
+  .map-fallback{
+    position:absolute; inset:0; z-index:30;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; padding:36px; text-align:center;
+    background:
+      radial-gradient(520px 260px at 20% 10%, rgba(99,91,255,.14), transparent 62%),
+      radial-gradient(460px 240px at 88% 90%, rgba(34,211,238,.14), transparent 62%),
+      #FBFCFE;
+  }
+  .map-fallback.show{ display:flex; }
+  .map-fallback h3{ font-size:15px; font-weight:700; color:var(--navy); }
+  .map-fallback p{ font-size:12.5px; color:var(--muted); line-height:1.75; max-width:420px; }
+  .map-fallback code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
+    background:#EEF2F7; color:#5A6B85; padding:1px 6px; border-radius:5px;
+  }
+
+  /* 滚动条 */
+  .timeline::-webkit-scrollbar{ width:7px; }
+  .timeline::-webkit-scrollbar-track{ background:transparent; }
+  .timeline::-webkit-scrollbar-thumb{ background:#DCE3EC; border-radius:4px; }
+  .timeline::-webkit-scrollbar-thumb:hover{ background:#C6D0DC; }
+
+  /* 信息窗（腾讯地图默认会给内容容器加 nowrap，必须显式重置，否则中文不换行被截断） */
+  .iw{ width:256px; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+  .iw, .iw *{ white-space:normal !important; word-break:break-word; box-sizing:border-box; }
+  .iw-top{ display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+  .iw-idx{
+    width:20px; height:20px; border-radius:6px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800; color:#fff;
+  }
+  .iw-time{ font-size:11px; font-weight:700; color:#7A8B9E; }
+  .iw-name{ font-size:14px; font-weight:700; color:#0A2540; margin-bottom:5px; }
+  .iw-desc{ font-size:12px; line-height:1.6; color:#5A6B85; }
+  .iw-foot{
+    margin-top:8px; padding-top:8px; border-top:1px solid #EEF2F7;
+    font-size:11px; color:#7A8B9E; display:flex; flex-wrap:wrap; gap:3px 10px;
+  }
+
+  /* ==================== 响应式 ==================== */
+  @media (max-width:1240px){
+    .banner-meta{ position:static; transform:none; margin-top:22px; }
+    .banner-inner{ padding:32px 26px 30px; }
+    .banner-title{ font-size:38px; }
+  }
+  @media (max-width:1080px){
+    body{ padding:14px; }
+    .page{ height:auto; }
+    .main{ flex-direction:column; }
+    .sidebar{ width:100%; height:520px; }
+    .map-wrap{ height:460px; }
+    .banner-title{ font-size:31px; }
+    .banner-meta .item{ min-width:80px; padding:6px 13px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ==================== BANNER ==================== -->
+  <header class="banner">
+    <div class="banner-inner">
+      <span class="banner-tag" id="bTag">CHENGDU · 成 都</span>
+      <h1 class="banner-title" id="bTitle">烟火<em class="accent">蓉城</em>，慢煮三日</h1>
+      <p class="banner-sub" id="bSub">宽窄巷子的盖碗茶、草堂的诗、熊猫的憨、青城的道、九眼桥的夜 —— 三天时间，把成都的三千年慢慢过一遍。</p>
+    </div>
+    <div class="banner-meta" id="bMeta"></div>
+  </header>
+
+  <!-- ==================== DAY TABS ==================== -->
+  <nav class="tabbar"><div class="day-tabs" id="dayTabs"></div></nav>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main">
+    <aside class="sidebar card">
+      <div class="sidebar-head">
+        <div class="sh-left">
+          <span class="sh-title" id="shTitle">—</span>
+          <span class="sh-sub" id="shSub">—</span>
+        </div>
+        <span class="sh-badge" id="shBadge">—</span>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </aside>
+
+    <section class="map-wrap card">
+      <div id="map"></div>
+      <div class="map-chip"><span class="mc-dot"></span><span id="mapChipText">—</span></div>
+      <div class="map-legend">
+        <span class="lg"><i class="sw" style="background:linear-gradient(135deg,var(--scenic-1),var(--scenic-2))"></i>景点</span>
+        <span class="lg"><i class="sw" style="background:linear-gradient(135deg,var(--food-1),var(--food-2))"></i>美食</span>
+        <span class="lg"><i class="sw" style="background:linear-gradient(135deg,var(--culture-1),var(--culture-2))"></i>文化</span>
+        <span class="lg"><i class="sw" style="background:linear-gradient(135deg,var(--shop-1),var(--shop-2))"></i>购物</span>
+      </div>
+      <div class="map-fallback" id="mapFallback">
+        <h3>地图未能加载</h3>
+        <p>本页地图底图使用腾讯地图 JSAPI GL，Key 由 WorkBuddy 本地代理注入（页面源码中不含明文 Key），
+           因此需在 <b>WorkBuddy 预览面板</b> 中打开。直接双击本地 <code>.html</code> 文件时，代理不可用，地图与路线将无法显示。</p>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script>
+/* ==========================================================================
+   1. 行程数据（坐标为腾讯地图 GCJ-02，已通过腾讯位置服务 WebService 解析）
+   ========================================================================== */
+const TYPE_META = {
+  scenic:  { label:'景点', c1:'#34D399', c2:'#059669', soft:'#ECFDF5', ink:'#047857' },
+  food:    { label:'美食', c1:'#FBBF24', c2:'#EA580C', soft:'#FFF7ED', ink:'#C2410C' },
+  culture: { label:'文化', c1:'#8B85FF', c2:'#4F46E5', soft:'#EEF0FF', ink:'#4338CA' },
+  shop:    { label:'购物', c1:'#F472B6', c2:'#DB2777', soft:'#FDF2F8', ink:'#BE185D' }
+};
+
+const TRIP = {
+  city:'成都',
+  tag:'CHENGDU · 成 都',
+  title:'烟火<em class="accent">蓉城</em>，慢煮三日',
+  subtitle:'宽窄巷子的盖碗茶、草堂的诗、熊猫的憨、青城的道、九眼桥的夜 —— 三天时间，把成都的三千年慢慢过一遍。',
+  center:[30.66, 104.06]
+};
+
+const ITINERARY = [
+  {
+    day:1, date:'10/09', label:'DAY 1', title:'老城人文 · 市井烟火',
+    pois:[
+      { id:'d1p1', time:'09:00', typeKey:'scenic', name:'人民公园 · 鹤鸣茶社',
+        desc:'百年老茶馆里泡一碗盖碗茶，成都的慢生活从清晨开始。',
+        lat:30.656930, lng:104.058613, duration:'1.5h', ticket:'免费 · 茶水¥20起', addr:'青羊区少城路12号',
+        tag:'城市公园 · 百年茶馆',
+        intro:'人民公园始建于1911年，是成都最老的公园。园内鹤鸣茶社建于1923年，竹椅、盖碗、长嘴铜壶，是"休闲之都"的活标本。采耳师傅穿行其间，一杯茶可以坐一上午。' },
+
+      { id:'d1p2', time:'11:00', typeKey:'culture', name:'宽窄巷子',
+        desc:'清代满城遗存的青砖巷子，川西民居与市井百态的交汇处。',
+        lat:30.663590, lng:104.053308, duration:'1.5h', ticket:'免费', addr:'青羊区长顺上街',
+        tag:'历史文化街区 · 老成都底片',
+        intro:'由宽巷子、窄巷子、井巷子三条平行街道组成，是康熙年间"满城"的遗存，也是成都唯一保存完好的清代古街。青砖黛瓦、拴马石、门头花窗，一砖一瓦都是老成都的底片。商业化较重，逛巷子比买东西更值得。' },
+
+      { id:'d1p3', time:'12:30', typeKey:'food', name:'奎星楼街',
+        desc:'本地人排队的苍蝇馆子一条街，川菜的生猛与街头烟火气。',
+        lat:30.668337, lng:104.053438, duration:'1.5h', ticket:'人均 ¥60-80', addr:'青羊区奎星楼街',
+        tag:'美食街区 · 本地人私藏',
+        intro:'成都老牌美食街，"冒椒火辣"冷锅串串发源于此，明婷饭店、马旺子川小馆等老字号扎堆。人均不高，但一碗红油、一把串串，是成都最真实的市井味道。饭点排号很长，建议错峰。' },
+
+      { id:'d1p4', time:'14:30', typeKey:'culture', name:'成都博物馆',
+        desc:'免费的城市通史馆，从古蜀到茶馆，一馆看尽成都三千年。',
+        lat:30.657331, lng:104.063760, duration:'2h', ticket:'免费 · 需预约', addr:'青羊区小河街1号',
+        tag:'国家一级博物馆 · 免费',
+        intro:'位于天府广场西侧，馆藏近20万件。常设展"花重锦官城"以时间为轴讲述成都从古蜀到近代的城市史，皮影木偶展厅是国内最大的一处。需提前在公众号实名预约，周一闭馆。' },
+
+      { id:'d1p5', time:'16:30', typeKey:'shop', name:'春熙路 · 太古里',
+        desc:'最时尚的商业街区，大慈寺的飞檐与橱窗玻璃隔街相望。',
+        lat:30.652310, lng:104.083920, duration:'2h', ticket:'免费', addr:'锦江区中纱帽街8号',
+        tag:'商圈 · 潮流地标',
+        intro:'春熙路是成都最老的商业街，隔壁的远洋太古里以"快耍慢活"为概念，把开放式街区与大慈寺古刹嵌在一起。IFS 楼顶的熊猫是必打卡机位，方所书店、大慈茶社都在步行范围内。' },
+
+      { id:'d1p6', time:'19:30', typeKey:'food', name:'玉林路小酒馆',
+        desc:'《成都》唱红的那家小酒馆，一杯酒配一把把把烧。',
+        lat:30.630660, lng:104.052149, duration:'2h', ticket:'人均 ¥80', addr:'武侯区玉林西路55号',
+        tag:'夜生活 · 民谣圣地',
+        intro:'玉林路是成都夜生活与民谣文化的原点。小酒馆（Little Bar）自1997年开张，是赵雷《成都》里"走到玉林路的尽头"的那家。周边串串、把把烧、冷淡杯扎堆，路边塑料凳一坐就是一晚。' }
+    ]
+  },
+  {
+    day:2, date:'10/10', label:'DAY 2', title:'熊猫萌宠 · 诗圣草堂',
+    pois:[
+      { id:'d2p1', time:'07:30', typeKey:'scenic', name:'成都大熊猫繁育研究基地',
+        desc:'全球最大的大熊猫迁地保护基地，早上是熊猫最活跃的时段。',
+        lat:30.736643, lng:104.143773, duration:'3h', ticket:'¥55 · 需预约', addr:'成华区熊猫大道1375号',
+        tag:'5A级景区 · 必看',
+        intro:'位于成华区北郊，占地约3570亩，生活着两百余只大熊猫。熊猫上午最活跃、午后多在睡觉，建议8点前入园直奔太阳产房与月亮产房。园内还有小熊猫、孔雀等，步行全程约3小时。' },
+
+      { id:'d2p2', time:'11:30', typeKey:'food', name:'建设巷小吃街',
+        desc:'电子科大旁的宝藏小吃街，钵钵鸡、烤脑花、蛋烘糕一路吃到撑。',
+        lat:30.671748, lng:104.104331, duration:'1h', ticket:'人均 ¥40', addr:'成华区建设巷',
+        tag:'小吃街 · 学生党最爱',
+        intro:'紧邻电子科技大学，是成都最出名的小吃聚集地之一。军屯锅盔、伤心凉粉、烤脑花、钵钵鸡、蛋烘糕、冰粉……人均三四十就能吃到扶墙出。工作日人少，周末热门摊位排队很长。' },
+
+      { id:'d2p3', time:'13:30', typeKey:'culture', name:'杜甫草堂',
+        desc:'诗圣杜甫寓居成都四年的故居，"安得广厦千万间"的诞生地。',
+        lat:30.660136, lng:104.028527, duration:'2h', ticket:'¥50', addr:'青羊区青华路37号',
+        tag:'全国重点文保 · 园林',
+        intro:'公元759年杜甫避乱入蜀，在浣花溪畔筑茅屋而居，留下诗作240余首。今草堂为明清重建，大廨、诗史堂、工部祠、茅屋故居沿中轴排开，竹林与水榭相间，是成都最有书卷气的园林。' },
+
+      { id:'d2p4', time:'15:30', typeKey:'culture', name:'武侯祠',
+        desc:'全国影响最大的三国遗迹，君臣合祀的祠庙与红墙竹影。',
+        lat:30.646202, lng:104.048001, duration:'1.5h', ticket:'¥50', addr:'武侯区武侯祠大街231号',
+        tag:'国家一级博物馆 · 三国圣地',
+        intro:'始建于公元223年，是中国唯一君臣合祀祠庙，纪念刘备与诸葛亮。惠陵、汉昭烈庙、武侯祠、三义庙沿中轴纵深排布，红墙夹道与翠竹构成著名的"红墙竹影"机位，是成都最容易出片的角落。' },
+
+      { id:'d2p5', time:'17:00', typeKey:'shop', name:'锦里古街',
+        desc:'夜灯亮起时最像蜀汉盛世，川剧脸谱、糖画与张飞牛肉。',
+        lat:30.645986, lng:104.049802, duration:'2h', ticket:'免费', addr:'武侯区武侯祠大街231号附1号',
+        tag:'特色商业街 · 夜景',
+        intro:'与武侯祠一墙之隔，以清末民初川西民居为蓝本复建，全长约550米。黄昏后红灯笼次第亮起，茶馆、戏台、酒肆、皮影、糖画、三大炮一路铺开。虽商业化，但夜景确实是成都最出片的一条街。' },
+
+      { id:'d2p6', time:'20:00', typeKey:'food', name:'九眼桥 · 兰桂坊',
+        desc:'锦江边的酒吧街，成都夜生活浓度最高的两公里。',
+        lat:30.641765, lng:104.084129, duration:'3h', ticket:'人均 ¥120', addr:'武侯区致民东路19号',
+        tag:'酒吧街 · 夜生活',
+        intro:'因明代九孔石桥得名，如今是成都酒吧与夜宵最密集的片区。合江亭下的兰桂坊、致民路的酒吧街，从清吧到 Live House 一应俱全；散场后一碗老妈蹄花或甜水面，才算把成都的夜走完。' }
+    ]
+  },
+  {
+    day:3, date:'10/11', label:'DAY 3', title:'青城问道 · 千年水利',
+    pois:[
+      { id:'d3p1', time:'07:30', typeKey:'scenic', name:'青城山（前山）',
+        desc:'"青城天下幽"，中国道教发源地之一，山间道观与古木清幽。',
+        lat:30.897381, lng:103.572193, duration:'4h', ticket:'¥80 · 索道另计', addr:'都江堰市青城山镇',
+        tag:'世界文化遗产 · 5A级景区',
+        intro:'中国四大道教名山之一，公元143年张道陵在此创立天师道。前山以建福宫、天师洞、上清宫为主，石阶全程穿行于古木清溪之间，"青城天下幽"名不虚传。登顶老君阁约需3-4小时，可乘索道省力。' },
+
+      { id:'d3p2', time:'12:30', typeKey:'food', name:'青城山下 · 老腊肉',
+        desc:'山脚农家柴火灶，青城山老腊肉配一锅白果炖鸡。',
+        lat:30.903259, lng:103.598600, duration:'1h', ticket:'人均 ¥70', addr:'都江堰市青城山镇青雨路',
+        tag:'农家菜 · 本地风味',
+        intro:'青城山镇一带的农家菜馆以"老腊肉"闻名——柏树枝熏制的腊肉切片蒸熟，肥而不腻；再配一锅白果炖鸡或川芎肘子，是爬山之后最妥帖的一顿。人均不贵，出品实在。' },
+
+      { id:'d3p3', time:'14:30', typeKey:'culture', name:'都江堰景区',
+        desc:'两千多年仍在运转的无坝引水工程，李冰父子的千古智慧。',
+        lat:30.994461, lng:103.613431, duration:'2.5h', ticket:'¥80', addr:'都江堰市公园路',
+        tag:'世界文化遗产 · 5A级景区',
+        intro:'由秦蜀郡守李冰父子于公元前256年主持修建，以鱼嘴分水堤、飞沙堰溢洪道、宝瓶口引水口三大主体工程，实现自动分水、排沙、控流，是世界水利史上的奇迹，至今仍灌溉着成都平原。从离堆公园入，过安澜索桥登二王庙俯瞰全景最佳。' },
+
+      { id:'d3p4', time:'16:00', typeKey:'scenic', name:'南桥 · 灌县古城',
+        desc:'廊桥飞檐下的岷江风口与古城街巷，傍晚风凉水响。',
+        lat:30.996627, lng:103.616040, duration:'1.5h', ticket:'免费', addr:'都江堰市幸福路',
+        tag:'古城 · 廊桥',
+        intro:'南桥横跨岷江内江，是灌县古城的南大门，桥身覆以飞檐彩绘的长廊，桥下江水奔涌生风。穿过南桥即进入灌县古城，青石板街两侧是川西民居与老字号。傍晚在桥上吹风看水，是都江堰最惬意的一刻。' },
+
+      { id:'d3p5', time:'18:00', typeKey:'food', name:'都江堰西街',
+        desc:'靠山临水的老街，豆花、尤兔头与一碗老荫茶。',
+        lat:30.998190, lng:103.614479, duration:'1.5h', ticket:'人均 ¥40', addr:'都江堰市西街',
+        tag:'老街 · 小吃',
+        intro:'紧邻宝瓶口，被誉为"都江堰的宽窄巷子"，是茶马古道西出成都的起点之一。街上老字号小吃密集：尤兔头、豆花、葱葱卷、张醪糟，配一碗老荫茶，人均三四十吃得舒服。饭后沿宝瓶口河堤散步看夜景。' },
+
+      { id:'d3p6', time:'20:30', typeKey:'culture', name:'蜀风雅韵 · 川剧变脸',
+        desc:'一环扣一环的川剧绝活：变脸、吐火、滚灯、手影戏。',
+        lat:30.660482, lng:104.045584, duration:'1.5h', ticket:'¥150-320', addr:'青羊区琴台路23号文化公园内',
+        tag:'非遗演出 · 夜场',
+        intro:'位于琴台路文化公园内，是成都最老牌的川剧戏园。一台演出囊括变脸、吐火、滚灯、手影戏、杖头木偶、二胡独奏等川剧绝活，以盖碗茶与采耳开场。演出约90分钟，建议提前订票选前排。' }
+    ]
+  }
+];
+
+/* ==========================================================================
+   2. 顶部徽章 / Banner
+   ========================================================================== */
+const TOTAL_POI = ITINERARY.reduce((n, d) => n + d.pois.length, 0);
+const BUDGET = 1680;
+
+function renderBanner(){
+  document.getElementById('bTag').textContent = TRIP.tag;
+  document.getElementById('bTitle').innerHTML = TRIP.title;
+  document.getElementById('bSub').textContent = TRIP.subtitle;
+  document.getElementById('bMeta').innerHTML = `
+    <div class="item"><span class="num">${ITINERARY.length}</span><span class="lbl">天行程</span></div>
+    <div class="item"><span class="num">${TOTAL_POI}</span><span class="lbl">必打卡 POI</span></div>
+    <div class="item"><span class="num"><i>¥</i>${BUDGET.toLocaleString('en-US')}</span><span class="lbl">人均预算</span></div>`;
+}
+
+/* ==========================================================================
+   3. 地图（腾讯地图 JSAPI GL）
+   ========================================================================== */
+let map, markerLayer, polylineLayer, infoWindow;
+let dayIdx = 0;
+let routeToken = 0;
+let mapReady = false;
+
+function pinSvg(num, c1, c2){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <path d="M17 1.6C8.4 1.6 1.5 8.5 1.5 17.1 1.5 28.5 17 42.4 17 42.4S32.5 28.5 32.5 17.1C32.5 8.5 25.6 1.6 17 1.6z"
+      fill="url(#g)" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="17" cy="17" r="9.6" fill="#ffffff" fill-opacity="0.96"/>
+    <text x="17" y="21.6" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+      font-size="13" font-weight="700" fill="${c2}">${num}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+function buildMarkerStyles(){
+  const styles = {};
+  Object.keys(TYPE_META).forEach(k => {
+    const t = TYPE_META[k];
+    for (let n = 1; n <= 9; n++){
+      styles[k + n] = new TMap.MarkerStyle({
+        width:34, height:44, anchor:{ x:17, y:42 }, src:pinSvg(n, t.c1, t.c2)
+      });
+    }
+  });
+  return styles;
+}
+
+function initMap(){
+  map = new TMap.Map('map', {
+    center:new TMap.LatLng(TRIP.center[0], TRIP.center[1]),
+    zoom:12,
+    viewMode:'2D'
+  });
+  // 注意：不使用 mapStyleId —— 自定义样式需在腾讯位置服务控制台为 Key 单独开通
+
+  markerLayer = new TMap.MultiMarker({
+    id:'poi-markers', map:map, styles:buildMarkerStyles(), geometries:[]
+  });
+
+  polylineLayer = new TMap.MultiPolyline({
+    id:'route-line', map:map,
+    styles:{
+      route:new TMap.PolylineStyle({
+        color:'#635BFF', width:7, borderWidth:4, borderColor:'#ffffff',
+        lineCap:'round', showArrow:true, arrowOptions:{ space:70 }
+      })
+    },
+    geometries:[]
+  });
+
+  infoWindow = new TMap.InfoWindow({
+    map:map, position:new TMap.LatLng(TRIP.center[0], TRIP.center[1]),
+    offset:{ x:0, y:-44 }, enableCustom:true, content:''
+  });
+  infoWindow.close();
+
+  // 点击地图点标记 → 联动左侧卡片
+  markerLayer.on('click', evt => {
+    const id = evt.geometry && evt.geometry.id;
+    if (!id) return;
+    const idx = ITINERARY[dayIdx].pois.findIndex(p => p.id === id);
+    if (idx < 0) return;
+    focusPoi(idx, { fly:false });
+  });
+
+  mapReady = true;
+  switchDay(0, { fly:false });
+}
+
+/* ==========================================================================
+   4. Tab / 列表 / 地图联动
+   ========================================================================== */
+function buildTabs(){
+  const wrap = document.getElementById('dayTabs');
+  wrap.innerHTML = ITINERARY.map((d, i) => `
+    <div class="day-tab${i === 0 ? ' active' : ''}" data-idx="${i}">
+      <span class="dtag">D${d.day}</span>
+      <span class="tbox">
+        <span class="t1">${d.label} · ${d.date}</span>
+        <span class="t2">${d.title}</span>
+      </span>
+    </div>`).join('');
+  wrap.querySelectorAll('.day-tab').forEach(el => {
+    el.addEventListener('click', () => switchDay(Number(el.dataset.idx)));
+  });
+}
+
+function renderTimeline(){
+  const day = ITINERARY[dayIdx];
+  const box = document.getElementById('timeline');
+  box.innerHTML = day.pois.map((p, i) => {
+    const t = TYPE_META[p.typeKey];
+    return `
+      <div class="tl-row" data-idx="${i}" style="--tc:${t.ink};--tc-soft:${t.soft};animation-delay:${i * 46}ms">
+        <div class="tl-time">${p.time}</div>
+        <div class="tl-rail"><span class="tl-dot"></span></div>
+        <div class="tl-card" data-id="${p.id}">
+          <div class="tl-head">
+            <span class="chip">${t.label}</span>
+            <span class="tl-name">${p.name}</span>
+            <span class="tl-dur">${p.duration}</span>
+          </div>
+          <p class="tl-desc">${p.desc}</p>
+          <div class="tl-meta"><span><b>门票</b> ${p.ticket}</span><span><b>位置</b> ${p.addr}</span></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  box.querySelectorAll('.tl-card').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = Number(el.parentElement.dataset.idx);
+      focusPoi(idx);
+    });
+  });
+
+  document.getElementById('shTitle').textContent = `${day.label} · ${day.title}`;
+  document.getElementById('shSub').textContent = `${day.date} · ${day.pois.length} 个站点`;
+  document.getElementById('shBadge').textContent = `${day.pois.length} POI`;
+  document.getElementById('mapChipText').innerHTML =
+    `<b>${day.label}</b> · ${day.pois.length} 个站点 · ${day.pois[0].time} 出发`;
+}
+
+function renderMarkers(){
+  const day = ITINERARY[dayIdx];
+  markerLayer.setGeometries(day.pois.map((p, i) => ({
+    id:p.id,
+    styleId:p.typeKey + (i + 1),
+    position:new TMap.LatLng(p.lat, p.lng),
+    properties:{ title:p.name }
+  })));
+
+  const bounds = new TMap.LatLngBounds();
+  day.pois.forEach(p => bounds.extend(new TMap.LatLng(p.lat, p.lng)));
+  map.fitBounds(bounds, { padding:80 });
+}
+
+/* 先画直线兜底（保证「按顺序连线」必定可见），再尝试用驾车路线替换 */
+function planRoute(){
+  const day = ITINERARY[dayIdx];
+  const pts = day.pois.map(p => new TMap.LatLng(p.lat, p.lng));
+  const token = ++routeToken;
+
+  if (pts.length < 2){ polylineLayer.setGeometries([]); return; }
+  polylineLayer.setGeometries([{ id:'route', styleId:'route', paths:pts }]);
+
+  if (typeof TMap.service === 'undefined' || !TMap.service.Driving) return;
+
+  try {
+    const svc = new TMap.service.Driving({ policy:'LEAST_TIME' });
+    const params = { from:pts[0], to:pts[pts.length - 1] };
+    if (pts.length > 2) params.waypoints = pts.slice(1, -1);
+
+    svc.search(params).then(res => {
+      if (token !== routeToken) return;                       // 已切天，丢弃过期结果
+      const route = res && res.result && res.result.routes && res.result.routes[0];
+      if (route && route.polyline && route.polyline.length){
+        polylineLayer.setGeometries([{ id:'route', styleId:'route', paths:route.polyline }]);
+      }
+    }).catch(() => { /* 保留直线兜底 */ });
+  } catch (e) { /* 保留直线兜底 */ }
+}
+
+function switchDay(idx, opts){
+  opts = opts || {};
+  dayIdx = idx;
+  document.querySelectorAll('.day-tab').forEach((el, i) => el.classList.toggle('active', i === idx));
+  renderTimeline();
+  if (!mapReady) return;
+  if (infoWindow) infoWindow.close();
+  renderMarkers();
+  planRoute();
+  if (opts.fly !== false){
+    const c = ITINERARY[idx].pois[0];
+    map.easeTo({ center:new TMap.LatLng(c.lat, c.lng), duration:520 });
+  }
+}
+
+/* 点击卡片 / 标记：地图平滑飞行到该点并弹出信息窗 */
+function focusPoi(idx, opts){
+  opts = opts || {};
+  const day = ITINERARY[dayIdx];
+  const p = day.pois[idx];
+  if (!p) return;
+  const t = TYPE_META[p.typeKey];
+
+  document.querySelectorAll('.tl-row').forEach((row, i) => {
+    row.classList.toggle('on', i === idx);
+  });
+  const card = document.querySelector(`.tl-card[data-id="${p.id}"]`);
+  if (card) card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  if (!mapReady) return;
+
+  if (opts.fly !== false){
+    map.easeTo({ center:new TMap.LatLng(p.lat, p.lng), zoom:15, duration:760 });
+  }
+
+  infoWindow.setPosition(new TMap.LatLng(p.lat, p.lng));
+  infoWindow.setContent(`
+    <div class="iw">
+      <div class="iw-top">
+        <span class="iw-idx" style="background:linear-gradient(135deg,${t.c1},${t.c2})">${idx + 1}</span>
+        <span class="iw-time">${p.time} · ${t.label}</span>
+      </div>
+      <div class="iw-name">${p.name}</div>
+      <div class="iw-desc">${p.intro}</div>
+      <div class="iw-foot"><span>${p.duration}</span><span>${p.ticket}</span></div>
+    </div>`);
+  infoWindow.open();
+}
+
+/* ==========================================================================
+   5. 启动
+   ========================================================================== */
+function showFallback(){
+  document.getElementById('mapFallback').classList.add('show');
+}
+
+window.addEventListener('load', () => {
+  renderBanner();
+  buildTabs();
+
+  if (typeof TMap === 'undefined'){
+    // SDK 未加载（例如直接双击本地文件，代理不可用）
+    renderTimeline();
+    document.getElementById('mapChipText').textContent = '地图不可用';
+    showFallback();
+    return;
+  }
+
+  try {
+    initMap();
+  } catch (e){
+    console.error('[map] 初始化失败', e);
+    renderTimeline();
+    showFallback();
+  }
+});
+</script>
+</body>
+</html>

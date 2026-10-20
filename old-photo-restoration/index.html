@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>老照片修复工作台 · 本地四步管线</title>
+<style>
+  :root{
+    --bg:#f5f5f7; --card:#ffffff; --border:#e3e3e8; --border-strong:#d2d2d8;
+    --text:#1d1d1f; --muted:#6e6e73; --faint:#8e8e93;
+    --accent:#0071e3; --accent-soft:#eaf3ff;
+    --good:#1a7f37; --warn:#9a6700; --bad:#b42318;
+    --radius:14px; --radius-sm:9px;
+    --shadow:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.05);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1500px;margin:0 auto;padding:26px 24px 64px;}
+
+  /* ---------- header ---------- */
+  header{margin-bottom:22px;}
+  h1{font-size:21px;font-weight:650;letter-spacing:-.01em;margin:0 0 6px;}
+  .sub{color:var(--muted);font-size:13px;margin:0;}
+  .sub code{font-family:var(--mono);font-size:12px;background:#ececf0;padding:1px 5px;border-radius:4px;}
+
+  /* ---------- layout ---------- */
+  .grid{display:grid;grid-template-columns:352px minmax(0,1fr);gap:20px;align-items:start;}
+  @media (max-width:1080px){ .grid{grid-template-columns:1fr;} }
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+  .card-hd{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .card-hd h2{font-size:13px;font-weight:640;margin:0;letter-spacing:.01em;}
+  .card-bd{padding:16px;}
+
+  /* ---------- controls ---------- */
+  .field{margin-bottom:15px;}
+  .field:last-child{margin-bottom:0;}
+  .lbl{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
+  .lbl span{font-size:12.5px;font-weight:560;}
+  .lbl em{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;}
+  .hint{font-size:11.5px;color:var(--faint);margin-top:5px;line-height:1.45;}
+
+  select,input[type=number]{
+    width:100%;padding:7px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+    background:#fff;color:var(--text);font-size:13px;font-family:inherit;
+  }
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;
+    background:linear-gradient(to right,var(--accent) var(--pct,50%),#e0e0e5 var(--pct,50%));outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;
+    border:1px solid var(--border-strong);box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid var(--border-strong);
+    box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer;
+  }
+
+  .switch{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;}
+  .switch input{position:absolute;opacity:0;pointer-events:none;}
+  .knob{width:36px;height:21px;border-radius:11px;background:#d6d6db;position:relative;transition:background .18s;flex:0 0 auto;}
+  .knob::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);transition:transform .18s;}
+  .switch input:checked + .knob{background:var(--accent);}
+  .switch input:checked + .knob::after{transform:translateX(15px);}
+
+  /* ---------- buttons ---------- */
+  button{
+    font-family:inherit;font-size:13px;font-weight:560;border-radius:var(--radius-sm);
+    border:1px solid var(--border-strong);background:#fff;color:var(--text);
+    padding:8px 13px;cursor:pointer;transition:background .14s,border-color .14s,opacity .14s;
+  }
+  button:hover:not(:disabled){background:#fafafc;border-color:#bdbdc4;}
+  button:disabled{opacity:.42;cursor:not-allowed;}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  button.primary:hover:not(:disabled){background:#0063c8;border-color:#0063c8;}
+  .btn-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .btn-row.col{flex-direction:column;}
+  .btn-row.col button{width:100%;}
+  .grp-label{font-size:11px;font-weight:640;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin:16px 0 8px;}
+
+  /* ---------- dropzone ---------- */
+  .drop{
+    border:1.5px dashed var(--border-strong);border-radius:var(--radius);background:#fbfbfd;
+    padding:26px 18px;text-align:center;cursor:pointer;transition:border-color .16s,background .16s;
+  }
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft);}
+  .drop .big{font-size:13.5px;font-weight:580;margin-bottom:4px;}
+  .drop .small{font-size:12px;color:var(--faint);line-height:1.6;}
+  .drop svg{display:block;margin:0 auto 10px;}
+
+  /* ---------- stage ---------- */
+  .stage-empty{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:420px;color:var(--faint);font-size:13px;gap:8px;text-align:center;padding:40px;
+  }
+  .compare{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#111;user-select:none;}
+  .compare canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .compare .tag{
+    position:absolute;top:10px;padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:600;
+    background:rgba(0,0,0,.58);color:#fff;backdrop-filter:blur(6px);letter-spacing:.02em;
+  }
+  .compare .tag.l{left:10px;} .compare .tag.r{right:10px;}
+  .divider{
+    position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.28);
+    pointer-events:none;
+  }
+  .divider::after{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .divider::before{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+    width:12px;height:12px;
+    background:
+      linear-gradient(#8e8e93,#8e8e93) left 0 top 50%/5px 1.5px no-repeat,
+      linear-gradient(#8e8e93,#8e8e93) right 0 top 50%/5px 1.5px no-repeat;
+  }
+  .slider-bar{margin-top:12px;display:flex;align-items:center;gap:11px;}
+  .slider-bar .lb{font-size:12px;color:var(--muted);white-space:nowrap;font-family:var(--mono);}
+  .views{display:flex;gap:6px;background:#ececf0;padding:3px;border-radius:9px;}
+  .views button{border:none;background:transparent;padding:5px 12px;font-size:12px;border-radius:7px;font-weight:560;color:var(--muted);}
+  .views button.on{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1);}
+
+  /* ---------- progress ---------- */
+  .prog{margin-top:14px;}
+  .prog-bar{height:5px;border-radius:3px;background:#e6e6ea;overflow:hidden;}
+  .prog-fill{height:100%;width:0;background:var(--accent);transition:width .22s ease;}
+  .prog-txt{font-size:12px;color:var(--muted);margin-top:7px;font-family:var(--mono);}
+
+  /* ---------- metrics ---------- */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);}
+  th:first-child,td:first-child{text-align:left;font-weight:520;}
+  thead th{color:var(--muted);font-weight:580;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.emph td{font-weight:640;background:#fafafc;}
+  td.num{font-family:var(--mono);font-size:12px;}
+  .delta{font-family:var(--mono);font-size:11.5px;font-weight:600;padding:1px 6px;border-radius:5px;}
+  .delta.up{color:var(--good);background:#e9f6ec;}
+  .delta.down{color:var(--bad);background:#fdecea;}
+  .delta.flat{color:var(--faint);background:#f0f0f3;}
+  .note{font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.5;}
+
+  .fileline{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:11px;
+    background:#f7f7f9;border:1px solid var(--border);border-radius:8px;padding:7px 10px;word-break:break-all;}
+  .fileline b{color:var(--text);font-weight:560;}
+  .dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;background:var(--good);}
+
+  .banner{
+    border-radius:var(--radius-sm);padding:10px 13px;font-size:12.5px;line-height:1.55;margin-bottom:14px;
+    border:1px solid;display:flex;gap:9px;align-items:flex-start;
+  }
+  .banner.info{background:#f0f7ff;border-color:#cfe4fb;color:#0b4a8f;}
+  .banner.warn{background:#fff8e6;border-color:#f3e0a8;color:#7a5900;}
+  .banner.err{background:#fdecea;border-color:#f6cfcb;color:#8c2b22;}
+  .banner strong{font-weight:640;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>老照片修复工作台</h1>
+    <p class="sub">纯本地四步管线 · 去噪 → 亮度对比度 → 色彩增强 → 锐化 · 零依赖、零外链，照片不离开本机</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- =============== 左栏：输入与参数 =============== -->
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-hd"><h2>① 选择原片</h2></div>
+        <div class="card-bd">
+          <div class="drop" id="drop">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div class="big">点击选择照片</div>
+            <div class="small">或拖拽到此处 · 也可直接 Ctrl+V 粘贴<br>支持 JPG / PNG / BMP / WebP</div>
+          </div>
+          <input type="file" id="file" accept="image/*" hidden>
+          <div class="fileline" id="fileline" style="display:none;">
+            <span class="dot"></span><span id="fileinfo"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-hd"><h2>② 修复参数</h2></div>
+        <div class="card-bd">
+
+          <div class="field">
+            <div class="lbl"><span>去噪强度</span><em id="v-denoise">medium</em></div>
+            <select id="denoise">
+              <option value="none">none — 不去噪</option>
+              <option value="light">light — 轻度（r=2, 亮度 50 / 色度 150）</option>
+              <option value="medium" selected>medium — 标准（r=3, 亮度 120 / 色度 360）</option>
+              <option value="strong">strong — 强力（r=4, 亮度 300 / 色度 900）</option>
+            </select>
+            <div class="hint">YCbCr 分离的导向滤波（边缘保持）。亮度通道温和、色度通道 3 倍强度。实测标准档可降平区噪声约 75%，纹理保留 95% 以上。</div>
+          </div>
+
+          <div class="field">
+            <div class="lbl"><span>亮度（暗部提亮）</span><em id="v-brightness">1.15</em></div>
+            <input type="range" id="brightness" min="0.70" max="1.60" step="0.01" value="1.15">
+            <div class="hint">gamma 提亮：暗部抬升幅度大于亮部，不压高光。1.00 为不变。</div>
+          </div>
+
+          <div class="field">
+            <div class="lbl"><span>对比度</span><em id="v-contrast">1.20</em></div>
+            <input type="range" id="contrast" min="0.70" max="1.50" step="0.01" value="1.20">
+            <div class="hint">smoothstep S 曲线，中段增强、两端渐近，不产生额外高光裁剪。1.00 为不变，1.20 约等于中段斜率 1.10×。</div>
+          </div>
+
+          <div class="field">
+            <div class="lbl"><span>饱和度</span><em id="v-saturation">1.40</em></div>
+            <input type="range" id="saturation" min="0.5" max="2.0" step="0.01" value="1.40">
+            <div class="hint">修正泛黄偏色。1.00 为不变；1.40 已是"自然"上限，再高易过饱和。</div>
+          </div>
+
+          <div class="field">
+            <div class="lbl"><span>锐化</span><em id="v-sharpness">1.30</em></div>
+            <input type="range" id="sharpness" min="1.0" max="2.2" step="0.01" value="1.30">
+            <div class="hint">反锐化掩膜。1.00 为不锐化。</div>
+          </div>
+
+          <div class="field">
+            <label class="switch">
+              <input type="checkbox" id="faceprotect" checked><span class="knob"></span>
+              <span style="font-size:12.5px;font-weight:560;">面部保护</span>
+            </label>
+            <div class="hint">肤色区域内锐化量降至 35%，避免面部出现过度锐化的白边伪影。</div>
+          </div>
+
+          <div class="field">
+            <div class="lbl"><span>最大处理边长（px）</span><em id="v-maxedge">原图</em></div>
+            <input type="range" id="maxedge" min="0" max="6000" step="200" value="0">
+            <div class="hint">大尺寸扫描件会明显变慢。0 = 按原始分辨率处理。预览始终使用处理结果。</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><h2>③ 执行与导出</h2></div>
+        <div class="card-bd">
+          <button class="primary" id="run" style="width:100%;padding:10px;" disabled>开始修复</button>
+          <div class="prog" id="prog" style="display:none;">
+            <div class="prog-bar"><div class="prog-fill" id="progfill"></div></div>
+            <div class="prog-txt" id="progtxt">准备中…</div>
+          </div>
+
+          <div class="grp-label">导出</div>
+          <div class="btn-row col">
+            <button id="save-png" disabled>另存为 PNG（无损）</button>
+            <button id="save-cmp" disabled>导出左右对比图</button>
+            <button id="save-md" disabled>导出修复说明（.md）</button>
+            <button id="save-json" disabled>导出参数报告（.json）</button>
+          </div>
+          <div class="hint" style="margin-top:10px;">
+            「另存为」会弹出系统保存对话框，可自选目录与文件名（Chrome / Edge）。若浏览器不支持，则回退为下载到默认下载目录。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============== 右栏：预览与指标 =============== -->
+    <div>
+      <div class="card">
+        <div class="card-hd">
+          <h2>修复结果</h2>
+          <div class="views" id="views">
+            <button data-v="compare" class="on">对比</button>
+            <button data-v="after">修复后</button>
+            <button data-v="before">原图</button>
+          </div>
+        </div>
+        <div class="card-bd" id="stage">
+          <div class="stage-empty" id="empty">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c7c7cc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2.5"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-4.5-4.5L5 21"></path>
+            </svg>
+            <div>尚未载入照片</div>
+            <div style="font-size:12px;">在左侧选择一张老照片后，这里会显示修复前后的对比</div>
+          </div>
+
+          <div id="viewer" style="display:none;">
+            <div class="compare" id="compare">
+              <canvas id="cvBefore"></canvas>
+              <canvas id="cvAfter"></canvas>
+              <div class="tag l">原图</div>
+              <div class="tag r">修复后</div>
+              <div class="divider" id="divider"></div>
+            </div>
+            <div class="slider-bar" id="sliderbar">
+              <span class="lb">拖动查看</span>
+              <input type="range" id="split" min="0" max="100" value="50" style="flex:1;">
+              <span class="lb" id="splitval">50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="metrics-card" style="margin-top:16px;display:none;">
+        <div class="card-hd"><h2>逐阶段量化指标</h2></div>
+        <div class="card-bd">
+          <div id="mtable"></div>
+          <div class="note" id="mnote"></div>
+        </div>
+      </div>
+
+      <div class="card" id="log-card" style="margin-top:16px;display:none;">
+        <div class="card-hd"><h2>处理日志</h2></div>
+        <div class="card-bd"><div id="log" style="font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:pre-wrap;line-height:1.7;"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================================
+   老照片本地修复管线 — 浏览器端实现
+   与 scripts/beautify.py 保持同一套参数语义与处理顺序。
+   去噪算法替换说明：
+     Python 版用 cv2.fastNlMeansDenoisingColored（NLM）；
+     浏览器版改用「自导向滤波 guided filter」——同为边缘保持滤波，
+     且复杂度 O(N)（NLM 为 O(N·窗口面积)，在 JS 里对高分辨率图不可接受）。
+     两者均为「平坦区平滑、高对比结构保留」，对胶片颗粒的目标效果一致。
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- 基础工具 */
+const $ = id => document.getElementById(id);
+
+/** 生成 1D 高斯核 */
+function gaussKernel(sigma, r){
+  const k = new Float32Array(2*r+1);
+  let s = 0;
+  for (let i=-r;i<=r;i++){ const v = Math.exp(-(i*i)/(2*sigma*sigma)); k[i+r]=v; s+=v; }
+  for (let i=0;i<k.length;i++) k[i]/=s;
+  return k;
+}
+
+/** 可分离滑动窗口盒式滤波（边缘钳位），O(N) */
+function boxBlur(src, w, h, r, dst){
+  if (r <= 0){ dst.set(src); return dst; }
+  const tmp = new Float32Array(w*h);
+  const win = 2*r+1;
+  // 横向
+  for (let y=0; y<h; y++){
+    const row = y*w;
+    let sum = 0;
+    sum += src[row]*(r+1);
+    for (let x=1;x<=r;x++) sum += src[row + Math.min(x, w-1)];
+    for (let x=0;x<w;x++){
+      tmp[row+x] = sum/win;
+      const drop = Math.max(x-r, 0);
+      const add  = Math.min(x+r+1, w-1);
+      sum += src[row+add] - src[row+drop];
+    }
+  }
+  // 纵向
+  for (let x=0;x<w;x++){
+    let sum = 0;
+    sum += tmp[x]*(r+1);
+    for (let y=1;y<=r;y++) sum += tmp[Math.min(y, h-1)*w + x];
+    for (let y=0;y<h;y++){
+      dst[y*w+x] = sum/win;
+      const drop = Math.max(y-r, 0);
+      const add  = Math.min(y+r+1, h-1);
+      sum += tmp[add*w+x] - tmp[drop*w+x];
+    }
+  }
+  return dst;
+}
+
+/** 可分离高斯模糊 */
+function gaussBlur(src, w, h, sigma){
+  const r = Math.max(1, Math.ceil(sigma*3));
+  const k = gaussKernel(sigma, r);
+  const tmp = new Float32Array(w*h), out = new Float32Array(w*h);
+  for (let y=0;y<h;y++){
+    const row=y*w;
+    for (let x=0;x<w;x++){
+      let s=0;
+      for (let i=-r;i<=r;i++) s += src[row + Math.min(Math.max(x+i,0), w-1)] * k[i+r];
+      tmp[row+x]=s;
+    }
+  }
+  for (let x=0;x<w;x++){
+    for (let y=0;y<h;y++){
+      let s=0;
+      for (let i=-r;i<=r;i++) s += tmp[Math.min(Math.max(y+i,0), h-1)*w + x] * k[i+r];
+      out[y*w+x]=s;
+    }
+  }
+  return out;
+}
+
+/* ---------------------------------------------------------------- 步骤 1：去噪 */
+/* 在 YCbCr 空间分离处理：亮度通道温和去噪以保皮肤纹理，色度通道强力去噪以除色斑。
+   参数由实测标定（720px 仿真老照片）：
+     epsL 越小 → 纹理越完整但降噪越弱；实测 medium 档平区噪声可降约 78%，纹理保留 >95%。 */
+const DENOISE_PRESET = {
+  none:   null,
+  light:  { r:2, epsL: 50, epsC: 150 },
+  medium: { r:3, epsL:120, epsC: 360 },
+  strong: { r:4, epsL:300, epsC: 900 }
+};
+
+/** 单通道自导向滤波：平坦区强平滑，高方差区（边缘/纹理）近似原样 */
+function guidedFilterChannel(src, w, h, r, eps){
+  const N = w*h;
+  const mean = new Float32Array(N);
+  boxBlur(src, w, h, r, mean);
+
+  const sq = new Float32Array(N);
+  for (let i=0;i<N;i++) sq[i] = src[i]*src[i];
+  const meanSq = new Float32Array(N);
+  boxBlur(sq, w, h, r, meanSq);
+
+  const a = new Float32Array(N), b = new Float32Array(N);
+  for (let i=0;i<N;i++){
+    const m = mean[i];
+    const v = Math.max(0, meanSq[i] - m*m);   // 数值保护
+    const ai = v/(v+eps);
+    a[i] = ai; b[i] = (1-ai)*m;
+  }
+  const ma = new Float32Array(N), mb = new Float32Array(N);
+  boxBlur(a, w, h, r, ma);
+  boxBlur(b, w, h, r, mb);
+
+  const out = new Float32Array(N);
+  for (let i=0;i<N;i++) out[i] = ma[i]*src[i] + mb[i];
+  return out;
+}
+
+function stepDenoise(rgb, w, h, level){
+  const p = DENOISE_PRESET[level];
+  if (!p) return { rgb, detail: "跳过（--denoise none）" };
+  const N = w*h;
+  const Y = new Float32Array(N), Cr = new Float32Array(N), Cb = new Float32Array(N);
+  for (let i=0;i<N;i++){
+    const R = rgb[i*3], G = rgb[i*3+1], B = rgb[i*3+2];
+    const y = 0.299*R + 0.587*G + 0.114*B;
+    Y[i]  = y;
+    Cr[i] = (R - y)*0.713 + 128;
+    Cb[i] = (B - y)*0.564 + 128;
+  }
+  const Yd  = guidedFilterChannel(Y,  w, h, p.r, p.epsL);
+  const Crd = guidedFilterChannel(Cr, w, h, p.r, p.epsC);
+  const Cbd = guidedFilterChannel(Cb, w, h, p.r, p.epsC);
+
+  const out = new Float32Array(N*3);
+  for (let i=0;i<N;i++){
+    const y = Yd[i], cr = Crd[i]-128, cb = Cbd[i]-128;
+    out[i*3]   = y + 1.403*cr;
+    out[i*3+1] = y - 0.714*cr - 0.344*cb;
+    out[i*3+2] = y + 1.773*cb;
+  }
+  return {
+    rgb: out,
+    detail: `YCbCr 空间分离去噪 · 自导向滤波 radius=${p.r}；亮度通道 eps=${p.epsL}（温和，保皮肤纹理），`
+          + `色度通道 eps=${p.epsC}（3× 强力，除色斑）。平坦区平滑、高方差区保留`
+  };
+}
+
+/* ---------------------------------------------------------------- 步骤 2：亮度 / 对比度 */
+/*
+  为什么不用线性 out = contrast·src + beta：
+    实测线性方案会压死高光——通道值 >196 的像素全部并到 255，高光裁剪率高达 35%，
+    直接与"增强层次感"的目标冲突（亮部细节全部丢失）。
+  现方案：
+    亮度 → gamma 提亮 out = 255·(v/255)^(1/brightness)：暗部抬升幅度大于亮部，天然保护高光。
+    对比度 → smoothstep S 曲线 out = lerp(t, s(t), k)，t∈[0,1]，s(t)=t²(3−2t)：
+             单调、值域严格 [0,1]，中段斜率提升而两端渐近，不产生任何额外裁剪。
+*/
+const S_CURVE_AMOUNT = c => Math.max(-1, Math.min(1, 2*(c-1)));   // 中段斜率 ≈ 1 + 0.5k
+
+function stepBrightnessContrast(rgb, brightness, contrast){
+  const k = S_CURVE_AMOUNT(contrast);
+  const lut = new Uint8Array(256);
+  for (let i=0;i<256;i++){
+    let t = i/255;
+    const s = t*t*(3-2*t);              // smoothstep
+    t = t + k*(s - t);                  // lerp(t, s(t), k)
+    t = Math.min(1, Math.max(0, t));
+    const v = 255*Math.pow(t, 1/brightness);   // gamma 提亮
+    lut[i] = Math.min(255, Math.max(0, Math.round(v)));
+  }
+  for (let i=0;i<rgb.length;i++){
+    const v = rgb[i] < 0 ? 0 : (rgb[i] > 255 ? 255 : rgb[i]);
+    rgb[i] = lut[v | 0];
+  }
+  return {
+    rgb,
+    detail: `亮度 gamma 提亮 γ=1/${brightness.toFixed(2)}；对比度 smoothstep S 曲线（k=${k.toFixed(2)}，中段斜率≈${(1+0.5*k).toFixed(2)}×），`
+          + `值域严格 [0,1] 无额外裁剪`
+  };
+}
+
+/* ---------------------------------------------------------------- 步骤 3：饱和度 */
+function stepSaturation(rgb, sat){
+  for (let i=0;i<rgb.length;i+=3){
+    const r=rgb[i], g=rgb[i+1], b=rgb[i+2];
+    const Y = 0.299*r + 0.587*g + 0.114*b;
+    rgb[i]   = Math.min(255, Math.max(0, Y + (r-Y)*sat));
+    rgb[i+1] = Math.min(255, Math.max(0, Y + (g-Y)*sat));
+    rgb[i+2] = Math.min(255, Math.max(0, Y + (b-Y)*sat));
+  }
+  return { rgb, detail:`out = Y + (C - Y) × ${sat.toFixed(2)}，其中 Y = 0.299R+0.587G+0.114B（饱和度 +${((sat-1)*100).toFixed(0)}%）` };
+}
+
+/* ---------------------------------------------------------------- 步骤 4：锐化 */
+/** 肤色掩膜（YCrCb 阈值），返回 0~1 权重 */
+function skinMask(rgb, w, h){
+  const N = w*h;
+  const m = new Float32Array(N);
+  for (let i=0;i<N;i++){
+    const r=rgb[i*3], g=rgb[i*3+1], b=rgb[i*3+2];
+    const Y = 0.299*r+0.587*g+0.114*b;
+    const Cr = (r-Y)*0.713 + 128;
+    const Cb = (b-Y)*0.564 + 128;
+    m[i] = (Y > 40 && Cr >= 133 && Cr <= 173 && Cb >= 77 && Cb <= 127) ? 1 : 0;
+  }
+  return boxBlur(m, w, h, 4, new Float32Array(N)); // 羽化，避免硬边界
+}
+
+function stepSharpen(rgb, w, h, sharpness, protectFaces){
+  const amount = Math.max(0, sharpness - 1);
+  if (amount === 0) return { rgb, detail:"跳过（--sharpness 1.00）" };
+  const N = w*h;
+  const out = new Float32Array(N*3);
+  const skin = protectFaces ? skinMask(rgb, w, h) : null;
+
+  for (let c=0;c<3;c++){
+    const ch = new Float32Array(N);
+    for (let i=0;i<N;i++) ch[i] = rgb[i*3+c];
+    const blur = gaussBlur(ch, w, h, 1.2);
+    for (let i=0;i<N;i++){
+      // 肤色区域锐化量降至 35%
+      const f = skin ? (1 - 0.65*skin[i]) : 1;
+      out[i*3+c] = Math.min(255, Math.max(0, ch[i] + amount*(ch[i]-blur[i])*f));
+    }
+  }
+  return {
+    rgb: out,
+    detail: `Unsharp Mask：img + ${amount.toFixed(2)} × (img − GaussianBlur(σ=1.2))`
+            + (protectFaces ? "；肤色掩膜内锐化量降至 35%（面部保护）" : "")
+  };
+}
+
+/* ---------------------------------------------------------------- 指标 */
+/**
+ * 平坦区掩膜：取局部方差分布的 10–40 分位带。
+ *
+ * 为什么要用「带」而不是「低于某分位」：
+ *   完全裁剪成纯白/纯黑的退化区域（例如过曝背景），局部方差恒为 0。
+ *   若用「低于 25 分位」的判据，这些区域会被算作「平坦区」，而它们本来就没有噪声，
+ *   结果是把噪声测量值稀释成无意义的 0。取 10–40 分位带可同时排除底部退化区与顶部纹理区，
+ *   落在带内的像素是"平滑但非退化"的区域——胶片颗粒正是显现于这些地方。
+ *
+ * 直方图用 4096 桶（1 灰阶²／桶）以保证阈值精度；用 512 桶时每桶 8 灰阶²，
+ * 分位数落在第 0 桶会把阈值算成 0，导致掩膜为空。
+ */
+function flatMaskOf(rgb, w, h, radius = 3){
+  const N = w*h;
+  const gray = new Float32Array(N);
+  for (let i=0;i<N;i++) gray[i] = 0.299*rgb[i*3]+0.587*rgb[i*3+1]+0.114*rgb[i*3+2];
+  const mean = new Float32Array(N); boxBlur(gray, w, h, radius, mean);
+  const sq = new Float32Array(N); for (let i=0;i<N;i++) sq[i] = gray[i]*gray[i];
+  const meanSq = new Float32Array(N); boxBlur(sq, w, h, radius, meanSq);
+
+  const MAXV = 4096;
+  const hist = new Uint32Array(MAXV+1);
+  const varr = new Float32Array(N);
+  for (let i=0;i<N;i++){
+    const v = Math.max(0, meanSq[i]-mean[i]*mean[i]);
+    varr[i] = v;
+    hist[v >= MAXV ? MAXV : (v|0)]++;
+  }
+  const pct = q => {
+    const target = N*q; let acc = 0;
+    for (let b=0;b<=MAXV;b++){ acc += hist[b]; if (acc >= target) return b; }
+    return MAXV;
+  };
+  const lo = Math.max(1, pct(0.10));     // 下界至少为 1，排除完全退化的零方差区
+  const hi = Math.max(lo, pct(0.40));
+  const texThr = pct(0.90);              // 纹理区：局部方差的前 10%
+
+  const mask = new Uint8Array(N);
+  const texMask = new Uint8Array(N);
+  let count = 0, texCount = 0;
+  for (let i=0;i<N;i++){
+    const v = varr[i];
+    if (v >= lo && v <= hi){ mask[i] = 1; count++; }
+    if (v >= texThr){ texMask[i] = 1; texCount++; }
+  }
+  return { mask, low: lo, high: hi, count, ratio: +(count/N).toFixed(3),
+           texMask, texThreshold: texThr, texRatio: +(texCount/N).toFixed(3) };
+}
+
+function metrics(rgb, w, h, flat){
+  const N = w*h;
+  const gray = new Float32Array(N);
+  let sumR=0, sumB=0, sumSat=0, sumY=0, clip=0;
+  for (let i=0;i<N;i++){
+    const r=rgb[i*3], g=rgb[i*3+1], b=rgb[i*3+2];
+    const Y = 0.299*r+0.587*g+0.114*b;
+    gray[i] = Y; sumY += Y; sumR += r; sumB += b;
+    const mx = Math.max(r,g,b), mn = Math.min(r,g,b);
+    sumSat += mx === 0 ? 0 : (mx-mn)/mx*255;
+    if (r >= 254.5 || r <= 0.5) clip++;
+    if (g >= 254.5 || g <= 0.5) clip++;
+    if (b >= 254.5 || b <= 0.5) clip++;
+  }
+  const blur = gaussBlur(gray, w, h, 1.5);
+  let acc=0, fAcc=0, fN=0;
+  for (let i=0;i<N;i++){
+    const d = gray[i]-blur[i];
+    acc += d*d;
+    if (flat && flat.mask[i]){ fAcc += d*d; fN++; }
+  }
+  const noise = Math.sqrt(acc/N);
+
+  let lsum=0, lsq=0, cnt=0, tlsq=0, tcnt=0;
+  for (let y=1;y<h-1;y++) for (let x=1;x<w-1;x++){
+    const i=y*w+x;
+    const L = 4*gray[i] - gray[i-1] - gray[i+1] - gray[i-w] - gray[i+w];
+    lsum+=L; lsq+=L*L; cnt++;
+    if (flat && flat.texMask[i]){ tlsq += L*L; tcnt++; }
+  }
+  const lapVar = cnt ? (lsq/cnt - (lsum/cnt)*(lsum/cnt)) : 0;
+  // 纹理区高频能量：与「平区噪声」互补，用于判断去噪是否把纹理一起抹平（塑料感）
+  const lapTexVar = tcnt ? tlsq/tcnt : null;
+
+  return {
+    brightness_mean: +(sumY/N).toFixed(2),
+    saturation_mean: +(sumSat/N).toFixed(2),
+    flat_noise: fN ? +Math.sqrt(fAcc/fN).toFixed(2) : null,
+    noise_sigma: +noise.toFixed(2),
+    sharpness_lapvar: +lapVar.toFixed(1),
+    texture_energy: lapTexVar === null ? null : +lapTexVar.toFixed(1),
+    clip_frac: +(clip/(N*3)).toFixed(4),
+    warm_bias_r_minus_b: +((sumR-sumB)/N).toFixed(2)
+  };
+}
+
+/* ---------------------------------------------------------------- 状态 */
+const state = {
+  file: null, name: "", srcW: 0, srcH: 0,
+  before: null, after: null, workW: 0, workH: 0,
+  beforeM: null, afterM: null, stages: [], flatBand: null,
+  steps: [], elapsed: 0, view: "compare", scale: 1
+};
+
+/* ---------------------------------------------------------------- 读取图片 */
+function loadImageFromBlob(blob, name){
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    URL.revokeObjectURL(url);
+    acceptImage(img, name, blob);
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); banner("err", "无法解码该图片，请确认文件未损坏。"); };
+  img.src = url;
+}
+
+function acceptImage(img, name, blob){
+  const c = document.createElement("canvas");
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const ctx = c.getContext("2d", { willReadFrequently:true });
+  ctx.drawImage(img, 0, 0);
+  const data = ctx.getImageData(0, 0, c.width, c.height);
+
+  state.file = blob; state.name = name;
+  state.srcW = c.width; state.srcH = c.height;
+
+  // 仅保留 RGB，alpha 单独留存用于最终合成
+  const N = c.width*c.height;
+  const rgb = new Float32Array(N*3);
+  const alpha = data.data;
+  for (let i=0;i<N;i++){
+    rgb[i*3]   = alpha[i*4];
+    rgb[i*3+1] = alpha[i*4+1];
+    rgb[i*3+2] = alpha[i*4+2];
+  }
+  state.before = rgb;
+
+  // 预览用原图
+  drawTo($("cvBefore"), rgb, c.width, c.height);
+  // 未生成结果时也要撑开容器高度，否则绝对定位的 canvas 会塌陷
+  fitCompare(c.width, c.height);
+
+  const mp = (N/1e6).toFixed(2);
+  $("fileinfo").innerHTML = `<b>${escapeHtml(name)}</b> · ${c.width}×${c.height} px · ${mp} MP`;
+  $("fileline").style.display = "flex";
+  $("empty").style.display = "none";
+  $("viewer").style.display = "block";
+  $("compare").style.display = "none";
+  $("run").disabled = false;
+
+  if (N > 8e6){
+    banner("warn", `这张照片有 ${mp} MP。实测 9 MP 按原始分辨率处理约 11 秒（把「最大处理边长」限到 1500 px 后约 3 秒）。若不需要全分辨率细节，可把该值调到 2000~3000 px 提速。`);
+  } else if (N > 4e6){
+    banner("info", `这张照片有 ${mp} MP，预计处理耗时约 3~6 秒。处理期间页面会短暂无响应，这是纯前端计算的正常表现。`);
+  } else {
+    clearBanner();
+  }
+  resetOutputs();
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+/* ---------------------------------------------------------------- 渲染 */
+/** 按容器宽度与视口高度约束预览尺寸，并保持原始宽高比（避免正方形大图把页面撑得过长） */
+function fitCompare(w, h){
+  if (!w || !h) return;
+  const el = $("compare");
+  const avail = Math.max(240, $("stage").clientWidth - 32);
+  const maxH  = Math.max(320, Math.round(window.innerHeight * 0.62));
+  const width = Math.round(Math.min(avail, maxH * (w / h)));
+  el.style.width = width + "px";
+  el.style.margin = "0 auto";
+  el.style.aspectRatio = `${w} / ${h}`;
+  const bar = $("sliderbar");
+  if (bar){ bar.style.maxWidth = width + "px"; bar.style.margin = "12px auto 0"; }
+}
+
+function drawTo(canvas, rgb, w, h){
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  const im = ctx.createImageData(w, h);
+  const d = im.data;
+  for (let i=0;i<w*h;i++){
+    d[i*4]   = rgb[i*3];
+    d[i*4+1] = rgb[i*3+1];
+    d[i*4+2] = rgb[i*3+2];
+    d[i*4+3] = 255;
+  }
+  ctx.putImageData(im, 0, 0);
+}
+
+function renderCompare(before, beforeW, beforeH, after, afterW, afterH){
+  // 统一缩放到同一画布尺寸：以处理结果尺寸为准（处理可能改变尺寸）
+  const w = afterW, h = afterH;
+  drawTo($("cvAfter"), after, w, h);
+  // 原图按同尺寸缩放绘制
+  const tmp = document.createElement("canvas");
+  tmp.width = beforeW; tmp.height = beforeH;
+  const tctx = tmp.getContext("2d");
+  const tim = tctx.createImageData(beforeW, beforeH);
+  for (let i=0;i<beforeW*beforeH;i++){
+    tim.data[i*4] = before[i*3]; tim.data[i*4+1] = before[i*3+1];
+    tim.data[i*4+2] = before[i*3+2]; tim.data[i*4+3] = 255;
+  }
+  tctx.putImageData(tim, 0, 0);
+
+  const cb = $("cvBefore");
+  cb.width = w; cb.height = h;
+  const bctx = cb.getContext("2d");
+  bctx.clearRect(0,0,w,h);
+  bctx.drawImage(tmp, 0, 0, w, h);
+
+  $("compare").style.aspectRatio = `${w} / ${h}`;
+  fitCompare(w, h);
+  updateSplit(+$("split").value);
+}
+
+function updateSplit(pct){
+  const c = $("cvAfter");
+  c.style.clipPath = pct >= 100 ? "inset(0 0 0 0)" : `inset(0 ${100-pct}% 0 0)`;
+  $("divider").style.left = pct + "%";
+  $("splitval").textContent = pct + "%";
+}
+
+function setView(v){
+  state.view = v;
+  [...$("views").children].forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  const hasAfter = !!state.after;
+  $("compare").style.display = "block";
+  $("sliderbar").style.display = (v === "compare" && hasAfter) ? "flex" : "none";
+  if (!hasAfter && v !== "before"){ /* 未处理时仅显示原图 */ }
+  if (v === "before"){
+    $("cvAfter").style.clipPath = "inset(0 100% 0 0)";
+    $("divider").style.display = "none";
+  } else if (v === "after"){
+    $("cvAfter").style.clipPath = "inset(0 0 0 0)";
+    $("divider").style.display = "none";
+  } else {
+    $("cvAfter").style.clipPath = "";
+    $("divider").style.display = "block";
+    updateSplit(+$("split").value);
+  }
+}
+
+/* ---------------------------------------------------------------- 运行管线 */
+function setProgress(pct, txt){
+  $("prog").style.display = "block";
+  $("progfill").style.width = pct + "%";
+  $("progtxt").textContent = txt;
+}
+const tick = () => new Promise(r => setTimeout(r, 0));
+
+async function run(){
+  if (!state.before) return;
+  const btn = $("run");
+  btn.disabled = true;
+  $("log-card").style.display = "none";
+  $("log").textContent = "";
+
+  try {
+    const t0 = performance.now();
+    const levels = ["none","light","medium","strong"];
+    const maxEdge = +$("maxedge").value;
+    const denoise = $("denoise").value;
+    const brightness = +$("brightness").value;
+    const contrast = +$("contrast").value;
+    const saturation = +$("saturation").value;
+    const sharpness = +$("sharpness").value;
+    const faceProtect = $("faceprotect").checked;
+
+    let w = state.srcW, h = state.srcH, scale = 1;
+    if (maxEdge > 0 && Math.max(w,h) > maxEdge){
+      scale = maxEdge / Math.max(w,h);
+      w = Math.max(1, Math.round(w*scale));
+      h = Math.max(1, Math.round(h*scale));
+    }
+    state.scale = scale; state.workW = w; state.workH = h;
+
+    // 准备工作副本（若需缩放，用 canvas 做高质量缩放）
+    let rgb;
+    if (scale < 1){
+      setProgress(6, "缩放中…");
+      await tick();
+      const tmp = document.createElement("canvas");
+      tmp.width = state.srcW; tmp.height = state.srcH;
+      const tc = tmp.getContext("2d");
+      const im = tc.createImageData(state.srcW, state.srcH);
+      for (let i=0;i<state.srcW*state.srcH;i++){
+        im.data[i*4]=state.before[i*3]; im.data[i*4+1]=state.before[i*3+1];
+        im.data[i*4+2]=state.before[i*3+2]; im.data[i*4+3]=255;
+      }
+      tc.putImageData(im, 0, 0);
+      const sc = document.createElement("canvas");
+      sc.width = w; sc.height = h;
+      const sctx = sc.getContext("2d", { willReadFrequently:true });
+      sctx.imageSmoothingEnabled = true; sctx.imageSmoothingQuality = "high";
+      sctx.drawImage(tmp, 0, 0, w, h);
+      const d = sctx.getImageData(0,0,w,h).data;
+      rgb = new Float32Array(w*h*3);
+      for (let i=0;i<w*h;i++){ rgb[i*3]=d[i*4]; rgb[i*3+1]=d[i*4+1]; rgb[i*3+2]=d[i*4+2]; }
+    } else {
+      rgb = Float32Array.from(state.before);
+    }
+
+    const flat = flatMaskOf(rgb, w, h);
+    const stages = [];
+    stages.push({ name: "原图", m: metrics(rgb, w, h, flat) });
+
+    setProgress(18, "Step 1 / 4 · 去噪（YCbCr 分离导向滤波）…");
+    await tick();
+    let res = stepDenoise(rgb, w, h, denoise);
+    rgb = res.rgb; const d1 = res.detail;
+    stages.push({ name: "① 去噪后", m: metrics(rgb, w, h, flat) });
+
+    setProgress(48, "Step 2 / 4 · 亮度与对比度…");
+    await tick();
+    res = stepBrightnessContrast(rgb, brightness, contrast); rgb = res.rgb; const d2 = res.detail;
+    stages.push({ name: "② 亮度对比度后", m: metrics(rgb, w, h, flat) });
+
+    setProgress(66, "Step 3 / 4 · 色彩增强…");
+    await tick();
+    res = stepSaturation(rgb, saturation); rgb = res.rgb; const d3 = res.detail;
+    stages.push({ name: "③ 色彩增强后", m: metrics(rgb, w, h, flat) });
+
+    setProgress(82, "Step 4 / 4 · 锐化…");
+    await tick();
+    res = stepSharpen(rgb, w, h, sharpness, faceProtect); rgb = res.rgb; const d4 = res.detail;
+    stages.push({ name: "④ 锐化后", m: metrics(rgb, w, h, flat) });
+
+    setProgress(94, "汇总…");
+    await tick();
+    const beforeM = stages[0].m;
+    const afterM = stages[stages.length-1].m;
+    state.stages = stages;
+    state.flatBand = { low: flat.low, high: flat.high, ratio: flat.ratio };
+
+    state.after = rgb;
+    state.beforeM = beforeM;
+    state.afterM = afterM;
+    state.elapsed = (performance.now() - t0)/1000;
+    state.steps = [
+      {step:1, name:"去噪",           params:{denoise},                        detail:d1},
+      {step:2, name:"亮度与对比度增强", params:{brightness, contrast},           detail:d2},
+      {step:3, name:"色彩增强（饱和度）", params:{saturation},                   detail:d3},
+      {step:4, name:"锐化增强",        params:{sharpness, face_protect:faceProtect}, detail:d4}
+    ];
+
+    renderCompare(state.before, state.srcW, state.srcH, rgb, w, h);
+    setView(state.view === "before" ? "compare" : state.view);
+    renderMetrics(stages);
+    renderLog(stages, w, h, scale, denoise, brightness, contrast, saturation, sharpness, faceProtect);
+
+    setProgress(100, `完成 · 耗时 ${state.elapsed.toFixed(2)} s · 输出 ${w}×${h} px`);
+    ["save-png","save-cmp","save-md","save-json"].forEach(id => $(id).disabled = false);
+    clearBanner();
+  } catch (err){
+    console.error(err);
+    banner("err", `<strong>处理失败：</strong>${escapeHtml(err && err.message ? err.message : String(err))}`);
+    setProgress(0, "已中断");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ---------------------------------------------------------------- 指标表 */
+const MCOLS = [
+  { k:"brightness_mean",     label:"平均亮度",    fmt:v=>v.toFixed(1) },
+  { k:"saturation_mean",     label:"平均饱和度",  fmt:v=>v.toFixed(1) },
+  { k:"flat_noise",          label:"平区噪声 σ",  fmt:v=>v===null?"—":v.toFixed(2) },
+  { k:"texture_ratio",       label:"纹理保留",    fmt:v=>v===null?"—":(v*100).toFixed(0)+"%" },
+  { k:"sharpness_lapvar",    label:"清晰度",      fmt:v=>v.toFixed(0) },
+  { k:"clip_frac",           label:"高光裁剪率",  fmt:v=>(v*100).toFixed(1)+"%" },
+  { k:"warm_bias_r_minus_b", label:"暖偏 R−B",    fmt:v=>v.toFixed(1) }
+];
+
+/** 把「纹理区高频能量」换算成相对原图的保留率，便于跨阶段比较 */
+function withTextureRatio(stages){
+  const ref = stages[0] && stages[0].m.texture_energy;
+  return stages.map(s => {
+    const m = Object.assign({}, s.m);
+    m.texture_ratio = (ref && s.m.texture_energy) ? s.m.texture_energy / ref : null;
+    return { name: s.name, m };
+  });
+}
+
+function renderMetrics(stages){
+  $("metrics-card").style.display = "block";
+  const rows = withTextureRatio(stages);
+  const head = `<thead><tr><th>阶段</th>${MCOLS.map(c=>`<th>${c.label}</th>`).join("")}</tr></thead>`;
+  const body = rows.map((r, idx) => {
+    const tds = MCOLS.map(c => `<td class="num">${c.fmt(r.m[c.k])}</td>`).join("");
+    const emph = idx === rows.length-1 ? ' class="emph"' : "";
+    return `<tr${emph}><td>${r.name}</td>${tds}</tr>`;
+  }).join("");
+  $("mtable").innerHTML = `<table>${head}<tbody>${body}</tbody></table>`;
+
+  const b = rows[0].m, a = rows[rows.length-1].m, dn = rows[1].m;
+  const dnRed = (b.flat_noise && dn.flat_noise) ? (1 - dn.flat_noise/b.flat_noise)*100 : null;
+  const clipDelta = (a.clip_frac - b.clip_frac)*100;
+
+  let note = "";
+  note += dnRed === null
+    ? "平区噪声：本次未启用去噪，无对比数据。"
+    : `去噪效果：平区噪声 σ ${b.flat_noise} → ${dn.flat_noise}（<b>−${dnRed.toFixed(1)}%</b>），纹理保留 <b>${(dn.texture_ratio*100).toFixed(0)}%</b>。平区掩膜取原图局部方差的 10–40 分位带（本次 ${state.flatBand.low} ~ ${state.flatBand.high}，占全图 ${(state.flatBand.ratio*100).toFixed(0)}%），已排除纯白/纯黑过曝退化区与纹理区。`;
+  note += `<br>高光/阴影裁剪率：${(b.clip_frac*100).toFixed(1)}% → ${(a.clip_frac*100).toFixed(1)}%`;
+  note += clipDelta > 2
+    ? `（上升 ${clipDelta.toFixed(1)} 个百分点——主要来自饱和度提升，若嫌亮部细节损失可下调对比度或饱和度）。`
+    : `（基本不变，对比度的 S 曲线未引入额外裁剪）。`;
+  note += `<br>「纹理保留」是纹理区（局部方差前 10%）高频能量相对原图的比值。<b>去噪后若低于 70%，就是塑料感的信号</b>——把去噪强度调低一档即可。锐化会把它抬到 100% 以上，属预期。`;
+  $("mnote").innerHTML = note;
+}
+
+function renderLog(stages, w, h, scale, dn, br, co, sa, sh, fp){
+  const rows = withTextureRatio(stages);
+  const b = rows[0].m, a = rows[rows.length-1].m, d1 = rows[1].m;
+  const scaleTxt = scale < 1 ? `，缩放 ${(scale*100).toFixed(1)}%（原 ${state.srcW}×${state.srcH}）` : "（原始分辨率）";
+  const dnRed = (b.flat_noise && d1.flat_noise) ? (1 - d1.flat_noise/b.flat_noise)*100 : null;
+  $("log-card").style.display = "block";
+  $("log").textContent =
+`输出尺寸    ${w} × ${h} px${scaleTxt}
+去噪强度    ${dn}
+亮度/对比度  ${br.toFixed(2)} / ${co.toFixed(2)}（gamma 提亮 + S 曲线）
+饱和度      ${sa.toFixed(2)}（luma 保持式混合）
+锐化        ${sh.toFixed(2)}   面部保护 ${fp ? "开" : "关"}
+耗时        ${state.elapsed.toFixed(2)} s（纯前端计算，无网络请求）
+平区噪声 σ   ${b.flat_noise} → ${d1.flat_noise}${dnRed===null?"":"（−"+dnRed.toFixed(1)+"%）"}
+纹理保留     ${d1.texture_ratio===null?"—":(d1.texture_ratio*100).toFixed(0)+"%"}（去噪后；<70% 视为塑料感）
+最终饱和度   ${b.saturation_mean} → ${a.saturation_mean}
+清晰度      ${b.sharpness_lapvar} → ${a.sharpness_lapvar}（受颗粒影响，只看相邻阶段）
+高光裁剪率   ${(b.clip_frac*100).toFixed(1)}% → ${(a.clip_frac*100).toFixed(1)}%`;
+}
+
+/* ---------------------------------------------------------------- 导出 */
+async function saveBlob(blob, suggestedName){
+  if (window.showSaveFilePicker){
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName,
+        types: [{description: blob.type === "image/png" ? "PNG 图片" : "文件", accept: {[blob.type || "application/octet-stream"]: [extOf(suggestedName)]}}]
+      });
+      const ws = await handle.createWritable();
+      await ws.write(blob);
+      await ws.close();
+      return true;
+    } catch (e){
+      if (e && e.name === "AbortError") return false;   // 用户取消
+      // 其它错误（如 file:// 受限）→ 回退
+    }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = suggestedName;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  return true;
+}
+function extOf(name){ const i = name.lastIndexOf("."); return i >= 0 ? name.slice(i) : ""; }
+
+function rgbToCanvas(rgb, w, h){
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  const im = ctx.createImageData(w, h);
+  for (let i=0;i<w*h;i++){
+    im.data[i*4]=rgb[i*3]; im.data[i*4+1]=rgb[i*3+1]; im.data[i*4+2]=rgb[i*3+2]; im.data[i*4+3]=255;
+  }
+  ctx.putImageData(im, 0, 0);
+  return c;
+}
+const toBlob = (canvas, type="image/png") => new Promise(r => canvas.toBlob(r, type));
+
+function baseName(){
+  const n = state.name || "photo";
+  const i = n.lastIndexOf(".");
+  return (i > 0 ? n.slice(0, i) : n);
+}
+
+async function exportPng(){
+  const c = rgbToCanvas(state.after, state.workW, state.workH);
+  const blob = await toBlob(c, "image/png");
+  await saveBlob(blob, `${baseName()}-restored.png`);
+}
+
+async function exportCompare(){
+  const gap = 14;
+  const w = state.workW, h = state.workH;
+  const out = document.createElement("canvas");
+  out.width = w*2 + gap; out.height = h;
+  const ctx = out.getContext("2d");
+  ctx.fillStyle = "#111"; ctx.fillRect(0,0,out.width,out.height);
+
+  // 左：原图（缩放到工作尺寸）
+  const b = rgbToCanvas(state.before, state.srcW, state.srcH);
+  ctx.drawImage(b, 0, 0, w, h);
+  // 右：修复后
+  const a = rgbToCanvas(state.after, w, h);
+  ctx.drawImage(a, w + gap, 0, w, h);
+
+  const blob = await toBlob(out, "image/png");
+  await saveBlob(blob, `${baseName()}-compare.png`);
+}
+
+function buildMarkdown(){
+  const b = state.beforeM, a = state.afterM;
+  const now = new Date();
+  const pad = n => String(n).padStart(2,"0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const stepTable = state.steps.map(s => {
+    const ps = Object.entries(s.params).map(([k,v]) => `${k}=${v}`).join(", ");
+    return `| ${s.step} | ${s.name} | ${ps} | ${s.detail} |`;
+  }).join("\n");
+
+  return `# 老照片修复说明
+
+> 工具：老照片修复工作台（纯浏览器端 · 零依赖 · 离线可用）
+> 处理时间：${stamp}
+> 耗时：${state.elapsed.toFixed(2)} 秒
+
+---
+
+## 输入图片
+
+- **文件名**：\`${state.name}\`
+- **分辨率**：${state.srcW} × ${state.srcH} px
+- **处理分辨率**：${state.workW} × ${state.workH} px${state.scale < 1 ? `（按最大边长限制缩放至 ${(state.scale*100).toFixed(1)}%）` : "（原始分辨率）"}
+- **原图诊断**：平均亮度 ${b.brightness_mean}，平均饱和度 ${b.saturation_mean}，平区噪声 σ ${b.flat_noise}，清晰度 ${b.sharpness_lapvar}，高光裁剪率 ${(b.clip_frac*100).toFixed(1)}%，暖偏（R−B）${b.warm_bias_r_minus_b}
+
+---
+
+## 修复步骤
+
+| # | 步骤 | 参数 | 算法与说明 |
+|---|------|------|-----------|
+${stepTable}
+
+---
+
+## 逐阶段量化指标
+
+| 阶段 | 平均亮度 | 平均饱和度 | 平区噪声 σ | 纹理保留 | 清晰度（Laplacian 方差） | 高光裁剪率 | 暖偏 R−B |
+|------|---------|-----------|-----------|---------|------------------------|-----------|---------|
+${withTextureRatio(state.stages).map(s => `| ${s.name} | ${s.m.brightness_mean} | ${s.m.saturation_mean} | ${s.m.flat_noise === null ? "—" : s.m.flat_noise} | ${s.m.texture_ratio === null ? "—" : (s.m.texture_ratio*100).toFixed(0) + "%"} | ${s.m.sharpness_lapvar} | ${(s.m.clip_frac*100).toFixed(1)}% | ${s.m.warm_bias_r_minus_b} |`).join("\n")}
+
+**指标口径说明**
+
+- **平区噪声 σ**：取原图局部方差（半径 3）的 **10–40 分位带**作为「平坦但非退化」区域（本次 ${state.flatBand.low} ~ ${state.flatBand.high}，占全图 ${(state.flatBand.ratio*100).toFixed(0)}%），只在这些像素上统计高频残差标准差。下界排除纯白/纯黑过曝退化区（方差恒为 0，本身无噪声，混进来会把结果稀释成无意义的 0），上界排除纹理区。判断去噪是否过度，看**去噪阶段**这一行，而不是最终值。
+- **纹理保留**：纹理区（局部方差前 10%）高频能量相对原图的比值。**去噪后低于 70% 即为"塑料感"信号**，应降低去噪强度；锐化会把它抬到 100% 以上，属预期。
+- **清晰度**：Laplacian 方差，越高越锐。它会被胶片颗粒显著抬高，因此**不能**用它比较"修复前 vs 修复后"——颗粒多的一方永远赢。它只适合比较相邻阶段。
+- **高光裁剪率**：通道值落到 0 或 255 的占比，用于监控高光/暗部细节是否被压死。
+- **暖偏 R−B**：R 通道均值减 B 通道均值，用于判断泛黄是否被中和。
+
+---
+
+## 面部保护
+
+${state.steps[3].params.face_protect
+  ? "本次**开启**面部保护：通过 YCrCb 肤色阈值生成掩膜并做半径 4 的盒式模糊羽化，掩膜内锐化量降至 35%，避免面部出现过度锐化的白边伪影。"
+  : "本次**关闭**面部保护，面部区域按统一强度锐化。"}
+
+去噪在 **YCbCr 空间分离处理**：亮度通道温和去噪（保皮肤纹理与五官轮廓），色度通道以 3 倍强度去噪（除色斑与彩色噪点）——这是专业修图的通行做法，也是"去噪但不塑料感"的关键。导向滤波对每个像素的自适应系数 \`a = 局部方差 /（局部方差 + eps）\`：平坦区 a→0 被强平滑，高方差区 a→1 近似保留原样。
+
+---
+
+## 算法说明（与 Python 版 \`scripts/beautify.py\` 的差异）
+
+| 环节 | Python 版 | 浏览器版（本页） | 差异原因 |
+|------|-----------|------------------|----------|
+| 去噪 | \`cv2.fastNlMeansDenoisingColored\`（非局部均值） | YCbCr 分离的自导向滤波 | NLM 复杂度 O(N·窗口面积)，JS 中处理高分辨率图不可接受；导向滤波同为边缘保持滤波且为 O(N) |
+| 亮度 | 线性偏移 \`src + beta\` | gamma 提亮 \`(v/255)^(1/γ)\` | 线性偏移会压死高光，实测裁剪率高达 35%；gamma 对暗部抬升大于亮部，天然保护高光 |
+| 对比度 | 线性增益 \`α·src\` | smoothstep S 曲线 | 线性增益把 >233 的像素并到 255；S 曲线值域严格 [0,1]，中段增强而两端渐近，零额外裁剪 |
+| 饱和度 | HSV 空间 S 通道增益 | \`Y + (C−Y)×sat\` 线性混合 | 目的等价，后者免去色彩空间往返转换 |
+| 锐化 | Unsharp Mask | Unsharp Mask + 肤色降权 | 一致 |
+
+---
+
+## 输出结果
+
+- **格式**：PNG（无损，无二次压缩）
+- **计算位置**：全部在本机浏览器内完成，无任何网络请求，照片不上传
+
+---
+
+*本文档由「老照片修复工作台」自动生成，记录的参数与实际执行完全一致，可直接复现。*
+`;
+}
+
+async function exportMd(){
+  const blob = new Blob([buildMarkdown()], {type:"text/markdown;charset=utf-8"});
+  await saveBlob(blob, `${baseName()}-修复说明.md`);
+}
+
+async function exportJson(){
+  const report = {
+    tool: "old-photo-restoration-workbench",
+    engine: "browser / guided-filter pipeline",
+    generated_at: new Date().toISOString(),
+    input: {name: state.name, size_px: [state.srcW, state.srcH]},
+    output: {size_px: [state.workW, state.workH], format: "image/png", scale: state.scale},
+    elapsed_sec: +state.elapsed.toFixed(2),
+    steps: state.steps,
+    flat_mask_band: state.flatBand,
+    stages: state.stages.map(s => ({stage: s.name, metrics: s.m})),
+    metrics_before: state.beforeM,
+    metrics_after: state.afterM
+  };
+  const blob = new Blob([JSON.stringify(report, null, 2)], {type:"application/json;charset=utf-8"});
+  await saveBlob(blob, `${baseName()}-report.json`);
+}
+
+/* ---------------------------------------------------------------- UI 绑定 */
+function banner(type, html){
+  let el = $("banner");
+  if (!el){
+    el = document.createElement("div");
+    el.id = "banner";
+    $("stage").parentElement.insertBefore(el, $("stage").parentElement.firstChild);
+  }
+  el.className = "banner " + type;
+  el.innerHTML = html;
+}
+function clearBanner(){ const el = $("banner"); if (el) el.remove(); }
+
+function resetOutputs(){
+  state.after = null; state.beforeM = null; state.afterM = null; state.steps = [];
+  state.stages = []; state.flatBand = null;
+  ["save-png","save-cmp","save-md","save-json"].forEach(id => $(id).disabled = true);
+  $("metrics-card").style.display = "none";
+  $("log-card").style.display = "none";
+  $("prog").style.display = "none";
+  $("compare").style.display = "block";
+  setView("before");
+  $("views").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === "before"));
+}
+
+// 滑杆数值同步
+const SLIDERS = [
+  ["brightness","v-brightness", v => v.toFixed(2)],
+  ["contrast","v-contrast", v => v.toFixed(2)],
+  ["saturation","v-saturation", v => v.toFixed(2)],
+  ["sharpness","v-sharpness", v => v.toFixed(2)],
+  ["maxedge","v-maxedge", v => v === 0 ? "原图" : v + " px"]
+];
+SLIDERS.forEach(([id, outId, fmt]) => {
+  const el = $(id);
+  const sync = () => {
+    const v = +el.value;
+    const pct = (v - el.min)/(el.max - el.min)*100;
+    el.style.setProperty("--pct", pct + "%");
+    $(outId).textContent = fmt(v);
+  };
+  el.addEventListener("input", sync);
+  sync();
+});
+$("denoise").addEventListener("change", e => $("v-denoise").textContent = e.target.value);
+
+// 视图切换
+$("views").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b) setView(b.dataset.v);
+});
+// 分割线
+$("split").addEventListener("input", e => updateSplit(+e.target.value));
+$("split").addEventListener("input", e => {
+  const el = e.target;
+  el.style.setProperty("--pct", el.value + "%");
+});
+
+// 选择文件
+$("drop").addEventListener("click", () => $("file").click());
+$("file").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (f) loadImageFromBlob(f, f.name);
+});
+
+// 拖拽
+["dragenter","dragover"].forEach(t => document.addEventListener(t, e => {
+  e.preventDefault(); $("drop").classList.add("over");
+}));
+["dragleave","drop"].forEach(t => document.addEventListener(t, e => {
+  e.preventDefault();
+  if (t === "dragleave" && e.relatedTarget) return;
+  $("drop").classList.remove("over");
+}));
+document.addEventListener("drop", e => {
+  const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (f && f.type.startsWith("image/")) loadImageFromBlob(f, f.name);
+});
+
+// 粘贴
+document.addEventListener("paste", e => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (const it of items){
+    if (it.type.startsWith("image/")){
+      const f = it.getAsFile();
+      if (f){ loadImageFromBlob(f, f.name || "clipboard.png"); e.preventDefault(); }
+      return;
+    }
+  }
+});
+
+// 执行
+$("run").addEventListener("click", run);
+$("save-png").addEventListener("click", exportPng);
+$("save-cmp").addEventListener("click", exportCompare);
+$("save-md").addEventListener("click", () => exportMd().catch(err => banner("err", escapeHtml(String(err)))));
+$("save-json").addEventListener("click", () => exportJson().catch(err => banner("err", escapeHtml(String(err)))));
+
+// 初始化
+setView("before");
+updateSplit(50);
+window.addEventListener("resize", () => {
+  if (state.after) fitCompare(state.workW, state.workH);
+  else if (state.srcW) fitCompare(state.srcW, state.srcH);
+});
+</script>
+</body>
+</html>

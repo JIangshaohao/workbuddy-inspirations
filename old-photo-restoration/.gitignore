@@ -1,0 +1,16 @@
+# 本灵感特有的忽略项（仓库级规则见根 .gitignore / AGENTS.md）
+
+# 验收用仿真素材（由 tools/make_test_photo.py 按需生成，不入库）
+tools/test-old.png
+tools/*.tmp.png
+
+# 修复产物（体积大，属于运行结果而非源码）
+output/*.png
+output/*.jpg
+output/*.json
+output/*.md
+!output/.gitkeep
+
+# Python 缓存
+__pycache__/
+*.pyc

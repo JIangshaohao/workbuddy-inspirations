@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS 加载动画合集 · 8 种纯 CSS Loading</title>
+<style>
+/* ============================================================
+   设计令牌
+   ============================================================ */
+:root{
+  --bg:#0a0c10;
+  --card-top:#171b21;
+  --card-bottom:#111419;
+  --stage:#0e1116;
+  --line:rgba(255,255,255,.07);
+  --line-strong:rgba(255,255,255,.16);
+  --text:#e8ecf1;
+  --muted:#8b95a5;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Courier New",monospace;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:var(--font);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 520px at 10% -12%, rgba(94,234,212,.07), transparent 62%),
+    radial-gradient(820px 520px at 90% -6%, rgba(129,140,248,.09), transparent 62%),
+    var(--bg);
+}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:56px 24px 80px;
+}
+
+/* ============================================================
+   页头
+   ============================================================ */
+.hero{
+  margin-bottom:40px;
+  animation:heroIn .55s cubic-bezier(.19,1,.22,1) both;
+}
+
+.eyebrow{
+  display:inline-block;
+  margin:0 0 14px;
+  padding:4px 11px;
+  border:1px solid rgba(94,234,212,.28);
+  border-radius:999px;
+  background:rgba(94,234,212,.07);
+  color:#5eead4;
+  font-size:12px;
+  letter-spacing:.04em;
+}
+
+.hero h1{
+  margin:0 0 12px;
+  font-size:clamp(26px,4vw,38px);
+  line-height:1.2;
+  letter-spacing:-.02em;
+  font-weight:600;
+  background:linear-gradient(100deg,#ffffff 20%,#9fb0c8 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  margin:0;
+  max-width:640px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.hero code{
+  font-family:var(--mono);
+  font-size:.88em;
+  padding:2px 6px;
+  border-radius:5px;
+  background:rgba(255,255,255,.06);
+  color:#cbd5e1;
+}
+
+@keyframes heroIn{
+  from{ opacity:0; transform:translateY(16px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+
+/* ============================================================
+   卡片网格
+   ============================================================ */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(252px,1fr));
+  gap:18px;
+}
+
+.card{
+  position:relative;
+  /* 网格项默认 min-width:auto，窄视口下会被最小内容宽度撑破两列布局 */
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,var(--card-top),var(--card-bottom));
+  transition:border-color .18s ease;
+  animation:cardIn .5s cubic-bezier(.215,.61,.355,1) both;
+}
+
+.card:hover{ border-color:var(--line-strong); }
+
+/* 顶部的品牌色辉光 */
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:radial-gradient(150px 92px at 50% -12%, var(--glow,rgba(255,255,255,.06)), transparent 70%);
+}
+
+.card:nth-child(1){ animation-delay:0s; }
+.card:nth-child(2){ animation-delay:.055s; }
+.card:nth-child(3){ animation-delay:.11s; }
+.card:nth-child(4){ animation-delay:.165s; }
+.card:nth-child(5){ animation-delay:.22s; }
+.card:nth-child(6){ animation-delay:.275s; }
+.card:nth-child(7){ animation-delay:.33s; }
+.card:nth-child(8){ animation-delay:.385s; }
+
+@keyframes cardIn{
+  from{ opacity:0; transform:translateY(14px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+
+/* 预览舞台 */
+.stage{
+  height:148px;
+  display:grid;
+  place-items:center;
+  margin-bottom:16px;
+  border:1px solid rgba(255,255,255,.045);
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,.035), rgba(255,255,255,0) 72%),
+    var(--stage);
+  overflow:hidden;
+}
+
+.meta{ margin-bottom:14px; }
+
+.meta h2{
+  margin:0 0 4px;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+
+.meta p{
+  margin:0;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.6;
+}
+
+/* 复制按钮 */
+.copy{
+  margin-top:auto;
+  width:100%;
+  padding:9px 12px;
+  font-family:inherit;
+  font-size:12.5px;
+  color:var(--text);
+  background:rgba(255,255,255,.045);
+  border:1px solid var(--line);
+  border-radius:9px;
+  cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+}
+
+.copy:hover{ background:rgba(255,255,255,.09); border-color:var(--line-strong); }
+.copy:active{ transform:scale(.98); }
+
+.copy.done{
+  color:var(--accent,var(--text));
+  border-color:var(--accent,var(--line-strong));
+  background:rgba(255,255,255,.06);
+}
+
+/* ============================================================
+   1 · 旋转圆环
+   ============================================================ */
+.ld-ring{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.12);
+  border-top-color:var(--c);
+  animation:ldSpin .9s linear infinite;
+  will-change:transform;
+}
+
+@keyframes ldSpin{ to{ transform:rotate(360deg); } }
+
+/* ============================================================
+   2 · 脉冲圆点
+   ============================================================ */
+.ld-dots{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.ld-dots i{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--c);
+  opacity:.3;
+  animation:ldPulse 1.1s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+
+.ld-dots i:nth-child(2){ animation-delay:.16s; }
+.ld-dots i:nth-child(3){ animation-delay:.32s; }
+
+@keyframes ldPulse{
+  0%,100%{ transform:scale(.7);  opacity:.3; }
+  50%    { transform:scale(1.15); opacity:1; }
+}
+
+/* ============================================================
+   3 · 弹跳柱条
+   ============================================================ */
+.ld-bars{
+  display:flex;
+  align-items:flex-end;
+  gap:5px;
+  height:52px;
+}
+
+.ld-bars i{
+  width:7px;
+  height:100%;
+  border-radius:4px;
+  background:linear-gradient(180deg,var(--c),var(--c2));
+  transform-origin:50% 100%;
+  transform:scaleY(.35);
+  animation:ldBar 1s ease-in-out infinite;
+  will-change:transform;
+}
+
+.ld-bars i:nth-child(1){ animation-delay:0s; }
+.ld-bars i:nth-child(2){ animation-delay:.12s; }
+.ld-bars i:nth-child(3){ animation-delay:.24s; }
+.ld-bars i:nth-child(4){ animation-delay:.12s; }
+.ld-bars i:nth-child(5){ animation-delay:0s; }
+
+@keyframes ldBar{
+  0%,100%{ transform:scaleY(.35); }
+  50%    { transform:scaleY(1); }
+}
+
+/* ============================================================
+   4 · 波纹圆圈
+   ============================================================ */
+.ld-ripple{
+  position:relative;
+  width:58px;
+  height:58px;
+}
+
+.ld-ripple i{
+  position:absolute;
+  inset:0;
+  border:2px solid var(--c);
+  border-radius:50%;
+  transform:scale(.25);
+  opacity:1;
+  animation:ldRipple 1.8s cubic-bezier(0,0,.2,1) infinite;
+  will-change:transform,opacity;
+}
+
+.ld-ripple i:nth-child(2){ animation-delay:.6s; }
+.ld-ripple i:nth-child(3){ animation-delay:1.2s; }
+
+.ld-ripple::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:7px;
+  height:7px;
+  margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;
+  background:var(--c);
+}
+
+@keyframes ldRipple{
+  0%  { transform:scale(.25); opacity:1; }
+  100%{ transform:scale(1);    opacity:0; }
+}
+
+/* ============================================================
+   5 · 渐变锥形旋转器
+   ============================================================ */
+.ld-conic{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,
+    rgba(167,139,250,0) 0%,
+    var(--c) 68%,
+    #ffffff 100%);
+  -webkit-mask:radial-gradient(farthest-side, rgba(0,0,0,0) calc(100% - 5px), #000 0);
+  mask:radial-gradient(farthest-side, rgba(0,0,0,0) calc(100% - 5px), #000 0);
+  animation:ldSpin .85s linear infinite;
+  will-change:transform;
+}
+
+/* ============================================================
+   6 · 打字指示器
+   ============================================================ */
+.ld-typing{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:11px 15px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px 16px 16px 5px;
+  background:#21262e;
+}
+
+.ld-typing i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--c);
+  animation:ldTyping 1.2s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+
+.ld-typing i:nth-child(2){ animation-delay:.15s; }
+.ld-typing i:nth-child(3){ animation-delay:.3s; }
+
+@keyframes ldTyping{
+  0%,60%,100%{ transform:translateY(0);    opacity:.45; }
+  30%        { transform:translateY(-6px); opacity:1; }
+}
+
+/* ============================================================
+   7 · 骨架屏微光
+   ============================================================ */
+.ld-skeleton{
+  width:152px;
+  max-width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.ld-skeleton .sk-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.ld-skeleton .sk-lines{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.ld-sk{
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,255,255,.075);
+  border-radius:6px;
+}
+
+.ld-sk::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.16) 50%,
+    rgba(255,255,255,0) 100%);
+  transform:translateX(-100%);
+  animation:ldShimmer 1.5s ease-in-out infinite;
+  will-change:transform;
+}
+
+.ld-skeleton .sk-avatar{ width:26px; height:26px; border-radius:50%; flex:none; }
+.ld-skeleton .sk-line  { height:8px; border-radius:4px; }
+.ld-skeleton .sk-line.short{ width:62%; }
+.ld-skeleton .sk-block { height:38px; border-radius:8px; }
+.ld-skeleton .sk-block::after{ animation-delay:.18s; }
+
+@keyframes ldShimmer{ to{ transform:translateX(100%); } }
+
+/* ============================================================
+   8 · DNA 双螺旋
+   ============================================================ */
+.ld-dna{
+  position:relative;
+  width:76px;
+  height:115px;
+}
+
+.ld-dna-row{
+  position:absolute;
+  left:50%;
+  top:calc(var(--i,0) * 26px);
+  width:0;
+  height:11px;
+}
+
+.ld-dna-rung{
+  position:absolute;
+  left:-17px;
+  top:4.5px;
+  width:34px;
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg,var(--c),var(--c2));
+  opacity:.45;
+  animation-name:ldDnaRung;
+  animation-duration:2.4s;
+  animation-timing-function:ease-in-out;
+  animation-iteration-count:infinite;
+  animation-delay:calc(var(--i,0) * -.28s);
+  will-change:transform;
+}
+
+.ld-dna-dot{
+  position:absolute;
+  left:-5.5px;
+  top:0;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  animation-duration:2.4s;
+  animation-timing-function:ease-in-out;
+  animation-iteration-count:infinite;
+  animation-delay:calc(var(--i,0) * -.28s);
+  will-change:transform;
+}
+
+.ld-dna-dot.a{ background:var(--c);  animation-name:ldDnaA; }
+.ld-dna-dot.b{ background:var(--c2); animation-name:ldDnaB; }
+
+@keyframes ldDnaA{
+  0%,100%{ transform:translateX(-16px) scale(.6); }
+  50%    { transform:translateX(16px)  scale(1.05); }
+}
+
+@keyframes ldDnaB{
+  0%,100%{ transform:translateX(16px)  scale(1.05); }
+  50%    { transform:translateX(-16px) scale(.6); }
+}
+
+@keyframes ldDnaRung{
+  0%,50%,100%{ transform:scaleX(1); }
+  25%,75%    { transform:scaleX(.08); }
+}
+
+/* ============================================================
+   减少动态效果降级
+   原则：移除位移/缩放/旋转，保留透明度变化来表达"进行中"
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  .hero{ animation:none; }
+  .card{ animation:none; }
+
+  /* 1 旋转圆环 */
+  .ld-ring{ animation:ldFadePulse 2s ease-in-out infinite; }
+
+  /* 2 脉冲圆点 */
+  .ld-dots{ animation:ldFadePulse 2s ease-in-out infinite; }
+  .ld-dots i{ animation:none; opacity:.85; transform:none; }
+
+  /* 3 弹跳柱条 */
+  .ld-bars{ animation:ldFadePulse 2s ease-in-out infinite; }
+  .ld-bars i{ animation:none; transform:scaleY(.75); }
+
+  /* 4 波纹圆圈 */
+  .ld-ripple i{ animation:none; }
+  .ld-ripple i:nth-child(1){ transform:scale(.5);  opacity:.55; }
+  .ld-ripple i:nth-child(2){ transform:scale(.75); opacity:.35; }
+  .ld-ripple i:nth-child(3){ transform:scale(1);   opacity:.18; }
+
+  /* 5 渐变锥形旋转器 */
+  .ld-conic{ animation:ldFadePulse 2s ease-in-out infinite; }
+
+  /* 6 打字指示器 */
+  .ld-typing{ animation:ldFadePulse 2s ease-in-out infinite; }
+  .ld-typing i{ animation:none; transform:none; opacity:.8; }
+
+  /* 7 骨架屏微光 */
+  .ld-skeleton{ animation:ldFadePulse 2s ease-in-out infinite; }
+  .ld-sk::after{ animation:none; opacity:0; }
+
+  /* 8 DNA 双螺旋 */
+  .ld-dna{ animation:ldFadePulse 2s ease-in-out infinite; }
+  .ld-dna-dot{ animation:none; }
+  .ld-dna-dot.a{ transform:translateX(-15px) scale(.9); }
+  .ld-dna-dot.b{ transform:translateX(15px)  scale(.9); }
+  .ld-dna-rung{ animation:none; transform:scaleX(.94); opacity:.5; }
+}
+
+@keyframes ldFadePulse{
+  0%,100%{ opacity:.45; }
+  50%    { opacity:1; }
+}
+
+@media (max-width:520px){
+  .wrap{ padding:36px 16px 56px; }
+  .grid{ grid-template-columns:1fr 1fr; gap:12px; }
+  .card{ padding:14px; border-radius:14px; }
+  .stage{ height:126px; margin-bottom:12px; }
+  .meta p{ display:none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">纯 CSS · 无外部依赖</p>
+    <h1>CSS 加载动画合集</h1>
+    <p>8 种常用 Loading 效果，全部由 <code>@keyframes</code> 与 <code>transform</code> 驱动，运行在合成层上。每个动画都带有 <code>prefers-reduced-motion</code> 降级方案。点击卡片底部的按钮即可复制对应的 CSS。</p>
+  </header>
+
+  <main class="grid">
+
+    <!-- 1 旋转圆环 -->
+    <article class="card" style="--c:#5eead4;--glow:rgba(94,234,212,.16);--accent:#5eead4;" data-anim="ring">
+      <div class="stage"><div class="ld-ring"></div></div>
+      <div class="meta">
+        <h2>旋转圆环</h2>
+        <p>单侧高亮描边匀速旋转，最经典的加载指示器。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 2 脉冲圆点 -->
+    <article class="card" style="--c:#818cf8;--glow:rgba(129,140,248,.16);--accent:#818cf8;" data-anim="dots">
+      <div class="stage"><div class="ld-dots"><i></i><i></i><i></i></div></div>
+      <div class="meta">
+        <h2>脉冲圆点</h2>
+        <p>三点依次缩放并淡入，节奏轻快，占用面积极小。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 3 弹跳柱条 -->
+    <article class="card" style="--c:#22d3ee;--c2:#0ea5e9;--glow:rgba(34,211,238,.16);--accent:#22d3ee;" data-anim="bars">
+      <div class="stage"><div class="ld-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="meta">
+        <h2>弹跳柱条</h2>
+        <p>五根柱条交错伸缩，音频可视化风格，适合媒体类加载。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 4 波纹圆圈 -->
+    <article class="card" style="--c:#34d399;--glow:rgba(52,211,153,.16);--accent:#34d399;" data-anim="ripple">
+      <div class="stage"><div class="ld-ripple"><i></i><i></i><i></i></div></div>
+      <div class="meta">
+        <h2>波纹圆圈</h2>
+        <p>涟漪由内向外扩散并淡出，带有雷达探测的层次感。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 5 渐变锥形旋转器 -->
+    <article class="card" style="--c:#a78bfa;--glow:rgba(167,139,250,.18);--accent:#a78bfa;" data-anim="conic">
+      <div class="stage"><div class="ld-conic"></div></div>
+      <div class="meta">
+        <h2>渐变锥形旋转器</h2>
+        <p>锥形渐变配合遮罩裁出圆环，拖尾过渡自然，现代质感强。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 6 打字指示器 -->
+    <article class="card" style="--c:#f472b6;--glow:rgba(244,114,182,.16);--accent:#f472b6;" data-anim="typing">
+      <div class="stage"><div class="ld-typing"><i></i><i></i><i></i></div></div>
+      <div class="meta">
+        <h2>打字指示器</h2>
+        <p>气泡内三点上浮，模拟对方正在输入，对话式 UI 必备。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 7 骨架屏微光 -->
+    <article class="card" style="--c:#60a5fa;--glow:rgba(96,165,250,.16);--accent:#60a5fa;" data-anim="skeleton">
+      <div class="stage">
+        <div class="ld-skeleton">
+          <div class="sk-row">
+            <div class="ld-sk sk-avatar"></div>
+            <div class="sk-lines">
+              <div class="ld-sk sk-line"></div>
+              <div class="ld-sk sk-line short"></div>
+            </div>
+          </div>
+          <div class="ld-sk sk-block"></div>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>骨架屏微光</h2>
+        <p>占位块上掠过一道高光，让内容加载过程不再突兀。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+    <!-- 8 DNA 双螺旋 -->
+    <article class="card" style="--c:#fbbf24;--c2:#f472b6;--glow:rgba(251,191,36,.16);--accent:#fbbf24;" data-anim="dna">
+      <div class="stage">
+        <div class="ld-dna">
+          <span class="ld-dna-row" style="--i:0"><i class="ld-dna-rung"></i><i class="ld-dna-dot a"></i><i class="ld-dna-dot b"></i></span>
+          <span class="ld-dna-row" style="--i:1"><i class="ld-dna-rung"></i><i class="ld-dna-dot a"></i><i class="ld-dna-dot b"></i></span>
+          <span class="ld-dna-row" style="--i:2"><i class="ld-dna-rung"></i><i class="ld-dna-dot a"></i><i class="ld-dna-dot b"></i></span>
+          <span class="ld-dna-row" style="--i:3"><i class="ld-dna-rung"></i><i class="ld-dna-dot a"></i><i class="ld-dna-dot b"></i></span>
+          <span class="ld-dna-row" style="--i:4"><i class="ld-dna-rung"></i><i class="ld-dna-dot a"></i><i class="ld-dna-dot b"></i></span>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>DNA 双螺旋</h2>
+        <p>双链反向摆动并在中点交汇，科技与生物题材的常见选择。</p>
+      </div>
+      <button class="copy" type="button">复制 CSS</button>
+    </article>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  var SNIPPETS = {
+    ring: [
+      '.spinner {',
+      '  width: 46px;',
+      '  height: 46px;',
+      '  border-radius: 50%;',
+      '  border: 3px solid rgba(255, 255, 255, 0.12);',
+      '  border-top-color: #5eead4; /* 换成你的主色 */',
+      '  animation: spin 0.9s linear infinite;',
+      '  will-change: transform;',
+      '}',
+      '',
+      '@keyframes spin {',
+      '  to { transform: rotate(360deg); }',
+      '}',
+      '',
+      '/* 减少动态效果：去掉旋转，保留透明度脉冲 */',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .spinner { animation: fadePulse 2s ease-in-out infinite; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    dots: [
+      '.dots {',
+      '  display: flex;',
+      '  align-items: center;',
+      '  gap: 9px;',
+      '}',
+      '',
+      '.dots span {',
+      '  width: 11px;',
+      '  height: 11px;',
+      '  border-radius: 50%;',
+      '  background: #818cf8;',
+      '  opacity: 0.3;',
+      '  animation: pulse 1.1s ease-in-out infinite;',
+      '  will-change: transform, opacity;',
+      '}',
+      '',
+      '.dots span:nth-child(2) { animation-delay: 0.16s; }',
+      '.dots span:nth-child(3) { animation-delay: 0.32s; }',
+      '',
+      '@keyframes pulse {',
+      '  0%, 100% { transform: scale(0.7); opacity: 0.3; }',
+      '  50% { transform: scale(1.15); opacity: 1; }',
+      '}',
+      '',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .dots { animation: fadePulse 2s ease-in-out infinite; }',
+      '  .dots span { animation: none; opacity: 0.85; transform: none; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    bars: [
+      '.bars {',
+      '  display: flex;',
+      '  align-items: flex-end;',
+      '  gap: 5px;',
+      '  height: 52px;',
+      '}',
+      '',
+      '.bars span {',
+      '  width: 7px;',
+      '  height: 100%;',
+      '  border-radius: 4px;',
+      '  background: linear-gradient(180deg, #22d3ee, #0ea5e9);',
+      '  transform-origin: 50% 100%;',
+      '  transform: scaleY(0.35);',
+      '  animation: barBounce 1s ease-in-out infinite;',
+      '  will-change: transform;',
+      '}',
+      '',
+      '/* 对称延迟，形成中间高两侧低的音浪感 */',
+      '.bars span:nth-child(1) { animation-delay: 0s; }',
+      '.bars span:nth-child(2) { animation-delay: 0.12s; }',
+      '.bars span:nth-child(3) { animation-delay: 0.24s; }',
+      '.bars span:nth-child(4) { animation-delay: 0.12s; }',
+      '.bars span:nth-child(5) { animation-delay: 0s; }',
+      '',
+      '@keyframes barBounce {',
+      '  0%, 100% { transform: scaleY(0.35); }',
+      '  50% { transform: scaleY(1); }',
+      '}',
+      '',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .bars { animation: fadePulse 2s ease-in-out infinite; }',
+      '  .bars span { animation: none; transform: scaleY(0.75); }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    ripple: [
+      '.ripple {',
+      '  position: relative;',
+      '  width: 58px;',
+      '  height: 58px;',
+      '}',
+      '',
+      '.ripple span {',
+      '  position: absolute;',
+      '  inset: 0;',
+      '  border: 2px solid #34d399;',
+      '  border-radius: 50%;',
+      '  transform: scale(0.25);',
+      '  animation: ripple 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;',
+      '  will-change: transform, opacity;',
+      '}',
+      '',
+      '.ripple span:nth-child(2) { animation-delay: 0.6s; }',
+      '.ripple span:nth-child(3) { animation-delay: 1.2s; }',
+      '',
+      '/* 中心静止圆点 */',
+      '.ripple::before {',
+      '  content: "";',
+      '  position: absolute;',
+      '  left: 50%;',
+      '  top: 50%;',
+      '  width: 7px;',
+      '  height: 7px;',
+      '  margin: -3.5px 0 0 -3.5px;',
+      '  border-radius: 50%;',
+      '  background: #34d399;',
+      '}',
+      '',
+      '@keyframes ripple {',
+      '  0% { transform: scale(0.25); opacity: 1; }',
+      '  100% { transform: scale(1); opacity: 0; }',
+      '}',
+      '',
+      '/* 减少动态效果：改为三层静态同心圆 */',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .ripple span { animation: none; }',
+      '  .ripple span:nth-child(1) { transform: scale(0.5); opacity: 0.55; }',
+      '  .ripple span:nth-child(2) { transform: scale(0.75); opacity: 0.35; }',
+      '  .ripple span:nth-child(3) { transform: scale(1); opacity: 0.18; }',
+      '}'
+    ].join('\n'),
+
+    conic: [
+      '.conic {',
+      '  width: 48px;',
+      '  height: 48px;',
+      '  border-radius: 50%;',
+      '  background: conic-gradient(from 0deg,',
+      '    rgba(167, 139, 250, 0) 0%,',
+      '    #a78bfa 68%,',
+      '    #ffffff 100%);',
+      '  /* 遮罩挖空中心，把实心圆变成圆环 */',
+      '  -webkit-mask: radial-gradient(farthest-side, rgba(0, 0, 0, 0) calc(100% - 5px), #000 0);',
+      '  mask: radial-gradient(farthest-side, rgba(0, 0, 0, 0) calc(100% - 5px), #000 0);',
+      '  animation: spin 0.85s linear infinite;',
+      '  will-change: transform;',
+      '}',
+      '',
+      '@keyframes spin {',
+      '  to { transform: rotate(360deg); }',
+      '}',
+      '',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .conic { animation: fadePulse 2s ease-in-out infinite; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    typing: [
+      '.typing {',
+      '  display: flex;',
+      '  align-items: center;',
+      '  gap: 5px;',
+      '  padding: 11px 15px;',
+      '  border-radius: 16px 16px 16px 5px; /* 左下角小尾巴 */',
+      '  background: #21262e;',
+      '}',
+      '',
+      '.typing span {',
+      '  width: 7px;',
+      '  height: 7px;',
+      '  border-radius: 50%;',
+      '  background: #f472b6;',
+      '  animation: typing 1.2s ease-in-out infinite;',
+      '  will-change: transform, opacity;',
+      '}',
+      '',
+      '.typing span:nth-child(2) { animation-delay: 0.15s; }',
+      '.typing span:nth-child(3) { animation-delay: 0.3s; }',
+      '',
+      '@keyframes typing {',
+      '  0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }',
+      '  30% { transform: translateY(-6px); opacity: 1; }',
+      '}',
+      '',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .typing { animation: fadePulse 2s ease-in-out infinite; }',
+      '  .typing span { animation: none; transform: none; opacity: 0.8; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    skeleton: [
+      '.sk {',
+      '  position: relative;',
+      '  overflow: hidden;',
+      '  background: rgba(255, 255, 255, 0.075);',
+      '}',
+      '',
+      '/* 用 ::after 承载高光，只做 translateX，不触发重排 */',
+      '.sk::after {',
+      '  content: "";',
+      '  position: absolute;',
+      '  inset: 0;',
+      '  background: linear-gradient(90deg,',
+      '    rgba(255, 255, 255, 0) 0%,',
+      '    rgba(255, 255, 255, 0.16) 50%,',
+      '    rgba(255, 255, 255, 0) 100%);',
+      '  transform: translateX(-100%);',
+      '  animation: shimmer 1.5s ease-in-out infinite;',
+      '  will-change: transform;',
+      '}',
+      '',
+      '@keyframes shimmer {',
+      '  to { transform: translateX(100%); }',
+      '}',
+      '',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .sk { animation: fadePulse 2s ease-in-out infinite; }',
+      '  .sk::after { animation: none; opacity: 0; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n'),
+
+    dna: [
+      '.dna {',
+      '  position: relative;',
+      '  width: 76px;',
+      '  height: 115px;',
+      '}',
+      '',
+      '/* 每一行是一个宽度为 0 的定位基准点，--i 为行序号 */',
+      '.dna-row {',
+      '  position: absolute;',
+      '  left: 50%;',
+      '  top: calc(var(--i, 0) * 26px);',
+      '  width: 0;',
+      '  height: 11px;',
+      '}',
+      '',
+      '.dna-dot {',
+      '  position: absolute;',
+      '  left: -5.5px;',
+      '  top: 0;',
+      '  width: 11px;',
+      '  height: 11px;',
+      '  border-radius: 50%;',
+      '  animation-duration: 2.4s;',
+      '  animation-timing-function: ease-in-out;',
+      '  animation-iteration-count: infinite;',
+      '  /* 负延迟制造行与行之间的相位差，拼出螺旋 */',
+      '  animation-delay: calc(var(--i, 0) * -0.28s);',
+      '  will-change: transform;',
+      '}',
+      '',
+      '.dna-dot.a { background: #fbbf24; animation-name: dnaA; }',
+      '.dna-dot.b { background: #f472b6; animation-name: dnaB; }',
+      '',
+      '/* 碱基对连线：交叉时收缩，展开时拉伸 */',
+      '.dna-rung {',
+      '  position: absolute;',
+      '  left: -17px;',
+      '  top: 4.5px;',
+      '  width: 34px;',
+      '  height: 2px;',
+      '  border-radius: 2px;',
+      '  background: linear-gradient(90deg, #fbbf24, #f472b6);',
+      '  opacity: 0.45;',
+      '  animation-name: dnaRung;',
+      '  animation-duration: 2.4s;',
+      '  animation-timing-function: ease-in-out;',
+      '  animation-iteration-count: infinite;',
+      '  animation-delay: calc(var(--i, 0) * -0.28s);',
+      '  will-change: transform;',
+      '}',
+      '',
+      '@keyframes dnaA {',
+      '  0%, 100% { transform: translateX(-16px) scale(0.6); }',
+      '  50% { transform: translateX(16px) scale(1.05); }',
+      '}',
+      '',
+      '@keyframes dnaB {',
+      '  0%, 100% { transform: translateX(16px) scale(1.05); }',
+      '  50% { transform: translateX(-16px) scale(0.6); }',
+      '}',
+      '',
+      '@keyframes dnaRung {',
+      '  0%, 50%, 100% { transform: scaleX(1); }',
+      '  25%, 75% { transform: scaleX(0.08); }',
+      '}',
+      '',
+      '/* 减少动态效果：拆成两条静态平行链 */',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .dna { animation: fadePulse 2s ease-in-out infinite; }',
+      '  .dna-dot { animation: none; }',
+      '  .dna-dot.a { transform: translateX(-15px) scale(0.9); }',
+      '  .dna-dot.b { transform: translateX(15px) scale(0.9); }',
+      '  .dna-rung { animation: none; transform: scaleX(0.94); opacity: 0.5; }',
+      '}',
+      '',
+      '@keyframes fadePulse {',
+      '  0%, 100% { opacity: 0.45; }',
+      '  50% { opacity: 1; }',
+      '}'
+    ].join('\n')
+  };
+
+  var RESET_DELAY = 1600;
+
+  function copyWithTextarea(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    var ok = false;
+    try {
+      ok = document.execCommand('copy');
+    } catch (err) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function writeClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () {
+        return true;
+      }).catch(function () {
+        return copyWithTextarea(text);
+      });
+    }
+    return Promise.resolve(copyWithTextarea(text));
+  }
+
+  function flash(btn, label, ok) {
+    btn.textContent = label;
+    btn.classList.toggle('done', ok);
+    if (btn._timer) {
+      clearTimeout(btn._timer);
+    }
+    btn._timer = setTimeout(function () {
+      btn.textContent = '复制 CSS';
+      btn.classList.remove('done');
+    }, RESET_DELAY);
+  }
+
+  var buttons = document.querySelectorAll('.copy');
+
+  Array.prototype.forEach.call(buttons, function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.card');
+      var css = (card && SNIPPETS[card.dataset.anim]) || '';
+
+      if (!css) {
+        flash(btn, '暂无可复制的 CSS', false);
+        return;
+      }
+
+      writeClipboard(css).then(function (ok) {
+        flash(btn, ok ? '已复制' : '复制失败，请手动选择', ok);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

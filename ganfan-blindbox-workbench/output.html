@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html data-page-node-id="RTKHLayhXmLPxp71BWow0A" lang="zh-CN">
+<head data-page-node-id="7uL0sm2dTUypVea50D5cY8">
+<script data-page-node-id="eKTwNyFelax7pAa7P61qIT" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="BoKh7qEuTWrO79QwlStQJh" charset="UTF-8">
+<meta data-page-node-id="geCDPgJwXBt8ssU8XZtK5J" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<title data-page-node-id="LvDpXGQzdaIICFuXMl1SMN" data-pnid-children="fzBM51NdLWOMr6xLra0ZMl">吃了吗您 · 干饭盲盒 v6</title>
+<style data-page-node-id="yn1F1ItfXWGZWSEyWiFaPV" data-pnid-children="JEIQlfwzwSG9foGvINcVNZ">
+  :root{
+    --bg:#fff3e3; --card:#ffffff; --ink:#2e2113; --sub:#9a7f6b;
+    --orange:#ff7a2f; --orange-d:#f2641a; --yellow:#ffc41f; --red:#ff4d5e;
+    --green:#2fc36b; --line:#f4e1c9; --shadow:0 5px 0 #eccba6;
+    --pink:#ff7eb3;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:linear-gradient(160deg,#fff3e3 0%,#ffe7d2 55%,#ffd9e6 100%);
+    background-attachment:fixed;
+    color:var(--ink);
+    max-width:480px; margin:0 auto; min-height:100vh;
+    padding-bottom:84px; position:relative; overflow-x:hidden;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(circle at 12% 18%, #ffe2b8 0 22px, transparent 23px),
+      radial-gradient(circle at 88% 30%, #ffd7c2 0 30px, transparent 31px),
+      radial-gradient(circle at 70% 82%, #ffe9a8 0 18px, transparent 19px),
+      radial-gradient(circle at 22% 78%, #ffd9e0 0 26px, transparent 27px);
+    opacity:.6;}
+  .topbar{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:14px 16px 4px;}
+  .logo{display:flex;align-items:center;justify-content:center;gap:2px;line-height:1;cursor:pointer;padding-bottom:2px;}
+  .logo .lt{font-weight:900;font-size:27px;letter-spacing:1px;color:#ffe9cf;
+    -webkit-text-stroke:1.8px #3a2a1a;text-shadow:1.5px 1.5px 0 rgba(58,42,26,.12);}
+  .logo .lt i{display:inline-block;font-style:normal;}
+  .logo .lt i:nth-child(1){transform:rotate(-11deg) translateY(5px);font-size:23px;}
+  .logo .lt i:nth-child(2){transform:rotate(6deg) translateY(-8px);font-size:36px;}
+  .logo .lt i:nth-child(3){transform:rotate(-4deg) translateY(3px);font-size:27px;}
+  .logo .lt i:nth-child(4){transform:rotate(12deg) translateY(-5px);font-size:31px;}
+  .logo:active{transform:scale(.97);}
+  .subbar{display:flex;align-items:center;gap:8px;}
+  .tagline{font-size:12px;color:var(--sub);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .wallet{margin-left:auto;background:var(--card);border:3px solid var(--ink);
+    border-radius:14px;padding:5px 10px;font-weight:800;font-size:14px;
+    box-shadow:var(--shadow);position:relative;display:flex;align-items:center;gap:3px;}
+  .wallet.low{background:#ffe0e0;border-color:var(--red);color:var(--red);}
+  .wallet .set{margin-left:6px;font-size:11px;background:var(--ink);color:#fff;
+    border-radius:8px;padding:2px 6px;cursor:pointer;}
+  .barwrap{height:10px;background:#f0e2cf;border-radius:8px;margin:4px 14px 0;overflow:hidden;border:2px solid var(--ink);}
+  .barfill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));transition:width .4s;border-radius:6px;}
+  .barfill.low{background:var(--red);}
+  /* 标题统一干净粗体，与餐次卡片（早餐/中餐…）同款风格，无涂鸦 */
+  .ttl,.todo h3,.secTitle,.modal .box h3{font-weight:900;color:var(--ink);}
+  .mealcard .nm{letter-spacing:1px;}
+
+  .todo{margin:8px 0 4px;background:var(--card);border:3px solid var(--ink);
+    border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);}
+  .todo h3{margin:0 0 6px;font-size:14px;display:flex;align-items:center;gap:6px;}
+  .crave-add{margin:0 14px 12px;background:linear-gradient(100deg,#fff3e0,#fff7ef);border:2px dashed var(--orange);
+    border-radius:16px;padding:12px 14px;font-size:13px;color:var(--sub);line-height:1.5;cursor:pointer;
+    box-shadow:var(--shadow);transition:transform .1s;}
+  .crave-add b{color:var(--orange-d);font-size:14px;}
+  .crave-add:active{transform:scale(.98);}
+  .sharebtn{display:block;width:100%;margin:14px 0 4px;background:var(--ink);color:#fff;border:none;
+    border-radius:14px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);}
+  .sharebtn:active{transform:scale(.98);}
+  .todo .row{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;color:var(--sub);}
+  .todo .row b{color:var(--ink);}
+  .todo .row.alert b{color:var(--red);}
+  .todo .row .go{margin-left:auto;font-size:11px;background:var(--orange);color:#fff;
+    border-radius:10px;padding:3px 8px;cursor:pointer;border:none;}
+
+  /* 主页网格：四卡大小一致，2列铺满 */
+  .mealgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 14px 16px;}
+  .mealcard{background:var(--card);border:3px solid var(--ink);border-radius:20px;
+    padding:20px 12px;text-align:center;box-shadow:var(--shadow);cursor:pointer;position:relative;
+    transition:transform .12s ease, box-shadow .12s ease;
+    min-height:132px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .mealcard:active{transform:scale(.95);box-shadow:0 2px 0 rgba(58,42,26,.25);}
+  .mealcard:hover{transform:translateY(-2px);}
+  .mealcard .nm{font-weight:900;font-size:18px;letter-spacing:1px;}
+  .mealcard .ds{font-size:11px;color:var(--sub);margin-top:6px;line-height:1.5;}
+  .mealcard .mic{width:46px;height:46px;margin:0 auto 8px;display:block;}
+  .mealcard .pick{margin-top:8px;font-size:12px;background:var(--green);color:#fff;border-radius:10px;padding:4px 10px;display:inline-block;word-break:break-all;max-width:90%;}
+  .mealcard.done{background:#f3fff6;}
+  .mealcard.done::after{content:"已抽";position:absolute;top:8px;right:8px;
+    background:var(--green);color:#fff;font-size:10px;font-weight:800;border-radius:8px;padding:2px 6px;transform:rotate(6deg);}
+  .mealcard.night{border-color:var(--ink);background:var(--card);}
+  .mealcard.locked{opacity:1;cursor:pointer;}
+  .mealcard.locked::after{content:"未抽";position:absolute;top:8px;right:8px;
+    background:var(--yellow);color:var(--ink);font-size:10px;font-weight:800;border-radius:8px;padding:2px 6px;transform:rotate(-4deg);}
+  .mealcard .rebtn{margin-top:10px;align-self:center;background:var(--orange);color:#fff;border:none;
+    border-radius:12px;padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);
+    transform:rotate(-2deg);}
+  .mealcard .rebtn:active{transform:scale(.92) rotate(-2deg);}
+
+  .page{padding:6px 14px 14px;display:none;}
+  .page.on{display:block;}
+
+  .mealhead{display:flex;align-items:center;gap:8px;margin:4px 0 10px;}
+  .mealhead .back{font-size:20px;cursor:pointer;background:var(--card);border:2px solid var(--ink);
+    border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);}
+  .mealhead .ttl{font-weight:900;font-size:17px;}
+  .mealhead .tip{margin-left:auto;font-size:11px;color:var(--sub);}
+
+  /* 抽卡弹层（盖在主页之上） */
+  .modal{position:fixed;inset:0;background:rgba(40,25,10,.5);display:none;align-items:center;justify-content:center;z-index:80;}
+  .modal.on{display:flex;}
+  .modal .box{background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:18px;width:90%;max-width:360px;max-height:92vh;overflow:auto;box-shadow:0 8px 0 #e8d4ba;}
+  .modal .box h3{margin:0 0 10px;font-size:17px;}
+  .modal .box input{width:100%;border:2px solid var(--line);border-radius:10px;padding:10px;font-size:18px;margin-bottom:12px;font-family:inherit;}
+  .modal .box .mbtns{display:flex;gap:10px;}
+  .modal .box .mbtns button{flex:1;border:3px solid var(--ink);border-radius:12px;padding:10px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow);}
+  .modal .box .mbtns .ok{background:var(--orange);color:#fff;}
+  .modal .box .mbtns .no{background:#eee;color:var(--sub);}
+  .quickrow{display:flex;gap:8px;margin-bottom:12px;}
+  .quickrow .qbtn{flex:1;border:2px solid var(--ink);border-radius:10px;padding:8px 4px;font-weight:800;font-size:13px;cursor:pointer;background:#fff7e9;color:var(--ink);box-shadow:var(--shadow);}
+  .quickrow .qbtn:active{transform:scale(.94);}
+  .quickrow .qbtn.rst{background:#ffe6cf;}
+  .addin{display:flex;align-items:center;gap:4px;flex:2;border:2px solid var(--ink);border-radius:10px;padding:4px 6px;background:#fff;}
+  .addin span{font-weight:900;color:var(--sub);font-size:14px;}
+  .addin input{width:46px;border:none;outline:none;font-size:14px;font-weight:800;color:var(--ink);text-align:center;}
+  .addin .qbtn{flex:none;padding:6px 12px;border:2px solid var(--ink);border-radius:8px;background:var(--orange);color:#fff;}
+  #nightPig svg{width:120px;height:120px;transition:transform .12s;}
+  #nightPig.tap svg{transform:scale(.85) rotate(-7deg);}
+
+  .stage{display:flex;justify-content:center;min-height:300px;align-items:center;position:relative;}
+  .gacha{width:230px;border:4px solid var(--ink);border-radius:20px;background:var(--card);
+    box-shadow:0 8px 0 #e8d4ba, 0 0 0 6px #fff inset;padding:14px;position:relative;overflow:hidden;}
+  .gacha.shake{animation:shk .12s linear 6;}
+  @keyframes shk{0%{transform:translateX(-6px) rotate(-2deg);}50%{transform:translateX(6px) rotate(2deg);}100%{transform:translateX(0) rotate(0);}}
+  .gacha .rart{font-size:11px;font-weight:900;letter-spacing:1px;}
+  .gacha .rar-n{color:#9a8a7a;} .gacha .rar-r{color:var(--orange-d);} .gacha .rar-l{color:#c038ff;}
+  .gacha .rar-l{text-shadow:0 0 8px #e0a3ff;}
+  .gacha .ill{height:128px;display:flex;align-items:center;justify-content:center;margin:6px 0;}
+  .gacha .ill svg{width:118px;height:118px;}
+  .gacha .fname{font-weight:900;font-size:19px;text-align:center;}
+  .gacha .ftags{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:6px 0;}
+  .tag{font-size:11px;border-radius:9px;padding:2px 7px;border:2px solid var(--ink);font-weight:700;}
+  .tag.taste-tian{background:#ffd9ec;color:#c2185b;}
+  .tag.taste-xian{background:#ffe6b3;color:#a86b00;}
+  .tag.taste-la{background:#ffc9c0;color:#d32f2f;}
+  .tag.taste-suan{background:#d9f0c0;color:#5a8a1a;}
+  .tag.taste-ku{background:#e0d4c0;color:#7a5a3a;}
+  .tag.kcal{background:#e8f0ff;color:#2a5aa8;}
+  .tag.crave{background:var(--yellow);}
+  .gacha .fdesc{font-size:12px;color:var(--sub);text-align:center;min-height:32px;line-height:1.4;}
+  .gacha .fprice{text-align:center;font-weight:800;font-size:13px;margin-top:4px;color:var(--orange-d);}
+  .gacha.eating{animation:eat .55s forwards;}
+  @keyframes eat{0%{transform:scale(1);}40%{transform:scale(1.08) rotate(-3deg);}100%{transform:scale(.1) rotate(20deg);opacity:0;}}
+  .gacha.trashing{animation:trash .55s forwards;}
+  @keyframes trash{0%{transform:translate(0,0) rotate(0);}60%{transform:translate(0,-30px) rotate(-12deg);}100%{transform:translate(0,360px) rotate(40deg);opacity:0;}}
+  .actrow{display:none;gap:10px;justify-content:center;margin-top:14px;}
+  .actrow button{font-size:15px;font-weight:800;border:3px solid var(--ink);border-radius:14px;
+    padding:10px 14px;cursor:pointer;box-shadow:var(--shadow);background:var(--card);}
+  .actrow .eat{background:var(--green);color:#fff;}
+  .actrow .toss{background:#cfcfcf;color:var(--ink);}
+  /* 揭卡动效升级：神秘面 → 翻牌揭晓 + 稀有光环 + 撒花 */
+  .gacha.mystery{display:flex;align-items:center;justify-content:center;font-size:46px;
+    color:var(--orange-d);font-weight:900;min-height:200px;letter-spacing:2px;}
+  .gacha.reveal{animation:pop .55s cubic-bezier(.2,1.5,.4,1);}
+  @keyframes pop{0%{transform:scale(.55) rotateY(90deg);opacity:0;}
+    60%{transform:scale(1.08) rotateY(0);opacity:1;}100%{transform:scale(1);}}
+  .gacha.reveal.rar-r{box-shadow:0 0 16px var(--orange), var(--shadow);border-color:var(--orange-d);}
+  .gacha.reveal.rar-l{box-shadow:0 0 22px #c87bff, var(--shadow);border-color:#a64bff;}
+  .confetti{position:absolute;width:9px;height:9px;border-radius:2px;pointer-events:none;top:46%;left:50%;z-index:5;}
+  @keyframes confettiGo{0%{transform:translate(-50%,-50%) scale(0) rotate(0);opacity:1;}
+    100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(540deg);opacity:0;}}
+  .pullbtn{display:block;margin:14px auto 0;font-size:18px;font-weight:900;color:#fff;
+    background:var(--orange);border:3px solid var(--ink);border-radius:16px;padding:12px 26px;
+    cursor:pointer;box-shadow:var(--shadow);}
+  .homebtn{display:none;margin:14px auto 0;font-size:16px;font-weight:800;color:var(--ink);
+    background:var(--yellow);border:3px solid var(--ink);border-radius:16px;padding:11px 24px;cursor:pointer;box-shadow:var(--shadow);}
+  .careword{display:none;text-align:center;font-size:15px;font-weight:800;color:var(--orange-d);
+    background:#fff3e0;border:2px dashed var(--orange);border-radius:14px;padding:14px;margin-top:14px;line-height:1.5;}
+  .grate{text-align:center;font-size:11px;color:var(--sub);margin-top:12px;letter-spacing:.3px;}
+  .trashbin{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);width:60px;height:60px;
+    display:none;z-index:85;pointer-events:none;}
+  .trashbin.show{display:block;animation:binpop .3s;}
+  @keyframes binpop{from{transform:translateX(-50%) scale(.4);}to{transform:translateX(-50%) scale(1);}}
+  .danuchan{position:fixed;left:0;top:30%;width:100%;height:0;pointer-events:none;z-index:85;overflow:visible;}
+  .danmu{position:absolute;white-space:nowrap;font-weight:900;font-size:18px;color:var(--orange-d);
+    text-shadow:1px 1px 0 #fff;animation:dm 2.4s linear forwards;}
+  @keyframes dm{from{left:100%;}to{left:-40%;}}
+
+  /* 菜品池目录 */
+  .addbox{background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:var(--shadow);}
+  .addbox input,.addbox textarea,.addbox select{width:100%;border:2px solid var(--line);border-radius:10px;
+    padding:9px;font-size:16px;margin-bottom:8px;font-family:inherit;background:#fffdf8;}
+  .addbox .lbl{font-size:12px;color:var(--sub);margin-bottom:2px;font-weight:700;}
+  .addbox .twocol{display:flex;gap:8px;}
+  .addbox .twocol>div{flex:1;}
+  .savebtn{width:100%;background:var(--orange);color:#fff;border:3px solid var(--ink);border-radius:14px;
+    padding:11px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);}
+  .secTitle{font-size:14px;font-weight:900;margin:14px 2px 6px;display:flex;align-items:center;gap:6px;}
+  .secTitle .ct{margin-left:auto;font-size:11px;color:var(--sub);font-weight:700;}
+  .collapseBtn{flex:none;font-size:12px;font-weight:800;color:var(--orange-d);background:var(--yellow);
+    border:2px solid var(--ink);border-radius:10px;padding:2px 9px;cursor:pointer;transform:rotate(-3deg);}
+  .collapseBtn:active{transform:scale(.94) rotate(-3deg);}
+  .tastechips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+  .tastechips .chip{font-size:12px;font-weight:800;border:2px solid var(--ink);border-radius:9px;padding:2px 9px;cursor:pointer;background:var(--card);}
+  .tastechips .chip.on{background:var(--orange);color:#fff;}
+  .tastechips .chip:active{transform:scale(.94);}
+  .rarow{display:flex;gap:8px;margin:4px 0 10px;}
+  .rarow .rchip{flex:1;text-align:center;font-size:12px;font-weight:800;border:2px solid var(--ink);border-radius:12px;padding:6px 2px;cursor:pointer;background:var(--card);box-shadow:var(--shadow);}
+  .rarow .rchip.on{background:var(--orange);color:#fff;}
+  .rarow .rchip:active{transform:scale(.94);}
+  .textlist{display:flex;flex-direction:column;gap:8px;}
+  .titem{background:var(--card);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:10px;position:relative;}
+  .titem .badge{font-size:10px;font-weight:800;border-radius:8px;padding:2px 6px;border:2px solid var(--ink);flex:none;}
+  .titem .badge.tian{background:#ffd9ec;color:#c2185b;} .titem .badge.xian{background:#ffe6b3;color:#a86b00;}
+  .titem .badge.la{background:#ffc9c0;color:#d32f2f;} .titem .badge.suan{background:#d9f0c0;color:#5a8a1a;}
+  .titem .badge.ku{background:#e0d4c0;color:#7a5a3a;}
+  .titem .main{flex:1;min-width:0;}
+  .titem .main .n{font-weight:900;font-size:15px;}
+  .titem .main .d{font-size:11px;color:var(--sub);margin-top:2px;line-height:1.35;}
+  .titem .meta{font-size:11px;color:var(--sub);flex:none;text-align:right;}
+  .titem.craveOnly{background:#fffaf0;border-style:dashed;}
+  .titem .star{position:absolute;top:6px;right:8px;font-size:9px;background:var(--yellow);color:var(--ink);border-radius:7px;padding:1px 5px;font-weight:800;}
+  .titem .del{flex:none;width:18px;height:18px;cursor:pointer;opacity:.55;display:flex;align-items:center;justify-content:center;}
+  .titem .del svg{width:18px;height:18px;display:block;}
+  .titem .del:active{opacity:1;transform:scale(.9);}
+
+  /* 记录页 */
+  .datebar{display:flex;gap:8px;align-items:center;margin-bottom:12px;}
+  .datebar input{flex:1;border:2px solid var(--line);border-radius:10px;padding:9px;font-size:15px;font-family:inherit;background:#fffdf8;}
+  .datebar button{background:var(--orange);color:#fff;border:3px solid var(--ink);border-radius:12px;padding:9px 14px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);font-size:14px;}
+  .reccard{background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);}
+  .reccard .h{font-weight:900;font-size:15px;display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+  .reccard .h .miss{margin-left:auto;font-size:11px;background:#eee;color:#999;border-radius:8px;padding:2px 6px;}
+  .reccard .body .n{font-weight:800;font-size:15px;}
+  .reccard .body .d{font-size:12px;color:var(--sub);margin-top:3px;line-height:1.4;}
+  .rectotal{background:var(--yellow);border:3px solid var(--ink);border-radius:16px;padding:12px;text-align:center;font-weight:900;box-shadow:var(--shadow);}
+  .empty{text-align:center;color:var(--sub);font-size:13px;padding:24px;}
+
+  /* 连续打卡面板 */
+  .streak{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .streak-main{display:flex;align-items:center;gap:12px;}
+  .streak-main .fire{font-size:34px;line-height:1;filter:drop-shadow(0 2px 0 #eccba6);}
+  .streak-num{font-weight:900;font-size:30px;color:var(--orange-d);line-height:1;}
+  .streak-num span{font-size:15px;color:var(--sub);font-weight:800;}
+  .streak-sub{font-size:12px;color:var(--sub);margin-top:3px;font-weight:700;}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0 4px;}
+  .cal .cc{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;border:2px solid var(--line);border-radius:9px;color:var(--sub);background:#fffaf2;}
+  .cal .cc.on{background:linear-gradient(135deg,var(--orange),var(--pink));color:#fff;border-color:var(--orange-d);box-shadow:0 2px 0 #eccba6;}
+  .ach{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px;}
+  .ach .badge{display:flex;align-items:center;gap:8px;border:2px dashed var(--line);border-radius:12px;padding:7px 9px;opacity:.55;}
+  .ach .badge.got{border-style:solid;border-color:var(--orange-d);background:#fff4e8;opacity:1;}
+  .ach .badge .bt{font-size:18px;line-height:1;}
+  .ach .badge .bx{font-size:11px;font-weight:800;color:var(--sub);line-height:1.25;}
+  .ach .badge.got .bx{color:var(--orange-d);}
+
+  /* 备份页 */
+  .backbox{background:var(--card);border:3px solid var(--ink);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
+  .backbox h3{margin:0 0 4px;font-size:16px;}
+  .backbox p{font-size:12px;color:var(--sub);line-height:1.5;margin:0 0 12px;}
+  .backbtn{display:block;width:100%;border:3px solid var(--ink);border-radius:14px;padding:12px;
+    font-size:15px;font-weight:800;cursor:pointer;margin-bottom:10px;box-shadow:var(--shadow);background:var(--card);}
+  .backbtn.ex{background:var(--green);color:#fff;}
+  .backbtn.im{background:var(--orange);color:#fff;}
+  .backbtn.cl{background:#ffd9d9;color:#c00;}
+  .backbtn.rs{background:#fff3e0;color:#e8730a;}
+  .hidden-file{display:none;}
+
+  /* 底部导航 */
+  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
+    display:flex;background:var(--card);border-top:3px solid var(--ink);z-index:50;}
+  .nav .tab{flex:1;text-align:center;padding:7px 1px 8px;font-size:10px;cursor:pointer;color:var(--sub);font-weight:700;}
+  .nav .tab .ni{width:24px;height:24px;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;}
+  .nav .tab.on{color:var(--orange-d);}
+  .nav .tab.on .ni{transform:rotate(-6deg) scale(1.1);}
+
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:9px 16px;border-radius:14px;font-size:13px;font-weight:700;z-index:90;opacity:0;transition:opacity .3s;pointer-events:none;}
+  .toast.on{opacity:1;}
+</style>
+</head>
+<body data-page-node-id="UNpwUOIxvVuI7L88oK4D9F">
+
+<div data-page-node-id="ZeCCjXqJ7ARa78hcam6i57" class="topbar">
+  <div data-page-node-id="tluzfiOjCbh2FBWGfjazR3" class="logo" id="logo">
+    <span data-page-node-id="8IjU6RAifYlKHK1UsYEMFX" class="lt"><i data-page-node-id="HFhkFlgJhx1lNOBmpSuF2Y"><!--pnid:jbmLhh5EgzV796V5qJPgJV-->吃</i><i data-page-node-id="bIlmm45c0s7Md69ABHsMR2"><!--pnid:a28h8AFTolMvH7S3T1Af9j-->了</i><i data-page-node-id="YLQGty1Ua3klFYXUsG3ndz"><!--pnid:zTeLLrDjm7gUexxb44F5jy-->吗</i><i data-page-node-id="OQUclT81h7un2rvHCq1zNJ"><!--pnid:atQVeNmH01OY9jfj05ACXp-->您</i></span>
+  </div>
+  <div data-page-node-id="rsHPYWRaqAbj5B1NFooCHQ" class="subbar">
+    <span data-page-node-id="PIjp9ZUJ9hi7YElebPj6u2" class="tagline"><!--pnid:aEL23wfsnWNSOnTTVvzYYe-->今天也要好好干饭 🍚</span>
+    <div data-page-node-id="Ni8Lv4m25x4K8CKBoREkdk" class="wallet" id="walletBox"><!--pnid:05DPFFD4xcP0zOSJIlt9CI-->🪙 饭票 ¥<span data-page-node-id="zkIw5mMLcLgFjdDAuSziIk" id="walletVal"><!--pnid:HJOJEbICoZaLeDpOLcVPCM-->40</span>
+      <span data-page-node-id="a98E28jsDcO4qWbh3Jko4P" class="set" id="setBtn"><!--pnid:rfnEdg5rLrtdO24qu4CLIe-->改</span>
+    </div>
+  </div>
+</div>
+<div data-page-node-id="hASoyEtv4zA637OK3UYrwp" class="barwrap"><div data-page-node-id="NTwvLbWM5qA8iJW1J95mGE" class="barfill" id="barFill" style="width:100%"></div></div>
+
+<!--pnid:rNW7B6gmdaE3jxPNesNQ6h--><!-- 主页 -->
+<div data-page-node-id="3qTGOb0eQHI72mxphRImkc" class="page on" id="p-home">
+  <!--pnid:uKlWBihyryeQ9eRkx4LnN5--><!-- 今天要处理：仅主页显示 -->
+  <div data-page-node-id="kmw5ydeJOvCWZnvF2dxOTr" class="todo" id="todoBox">
+    <h3 data-page-node-id="QAPTvVfcm0mSKBqb3vQq9R"><!--pnid:I9QVAyoeIdOuCABD4ESU9b-->🍜 馋虫在挠你</h3>
+    <div data-page-node-id="8O1CixBDEnyPRyUwh8Obxa" id="todoList"></div>
+  </div>
+  <div data-page-node-id="EEXFq594lnLiR9O7waWUn6" class="mealgrid">
+    <div data-page-node-id="XlrucO6WONSqsrGrVsXIWV" class="mealcard" data-meal="早餐" id="mc-早餐">
+      <span data-page-node-id="SiBxWoX11cJEJ91znLtbOF" class="mic" id="mi-早餐"></span>
+      <div data-page-node-id="v7GeKc2gUCmZqX2y0mJTeX" class="nm"><!--pnid:UXffhytlHsPuZ38su575Lt-->早餐</div>
+      <div data-page-node-id="IEssFp0LffUvBhAp7PUUR9" class="ds"><!--pnid:BJFhuY80RD3uyItImxp2GL-->睡饱了先投喂自己</div>
+      <div data-page-node-id="T4OWyrNDdQK0odvxCsvxZ1" class="pick" id="pk-早餐" style="display:none"></div>
+      <button data-page-node-id="aaDKhYZkvH7AHz57QYsQyW" class="rebtn" id="rb-早餐" style="display:none"><!--pnid:fEIkbqiY4QMVEsfQ8JmV1C-->↺ 重抽</button>
+    </div>
+    <div data-page-node-id="JMGiweMqrNAOYq7vFIYe7h" class="mealcard" data-meal="中餐" id="mc-中餐">
+      <span data-page-node-id="o8B2o4AecmuoQKJ5mMIHuc" class="mic" id="mi-中餐"></span>
+      <div data-page-node-id="us7fEpouPun1Ng080yz7Iq" class="nm"><!--pnid:mPgwz5wwz3TD3nvTfiCCuR-->中餐</div>
+      <div data-page-node-id="6tpXlvnA7612ytC6aiiuM6" class="ds"><!--pnid:Aw3wXcOTiJodg8havb8oCn-->中午这口最顶饱</div>
+      <div data-page-node-id="GilVVAkYA26jrqC3zCA3hD" class="pick" id="pk-中餐" style="display:none"></div>
+      <button data-page-node-id="HkY79KglE9h0t9PX3r5Pgc" class="rebtn" id="rb-中餐" style="display:none"><!--pnid:RgiIRhK56Ok8Sv2LQO2pje-->↺ 重抽</button>
+    </div>
+    <div data-page-node-id="wXox7W4ssVlTO5cYYTaIHV" class="mealcard" data-meal="晚餐" id="mc-晚餐">
+      <span data-page-node-id="85yw45ZkTEpA7HjJjOhTlI" class="mic" id="mi-晚餐"></span>
+      <div data-page-node-id="aWytMD5sRvzMAC6GoNNUzD" class="nm"><!--pnid:Q4cICMDiqnPej87qeNqjIJ-->晚餐</div>
+      <div data-page-node-id="CGC8laqkvWi7U8tK0ZTTNX" class="ds"><!--pnid:4VMc30GVtdXqJHLr6WnQqc-->一天最后的仪式感</div>
+      <div data-page-node-id="qKXbfZKl3XZG3qmK1t8I6J" class="pick" id="pk-晚餐" style="display:none"></div>
+      <button data-page-node-id="ieSmdOCTu0yooveYHCzZST" class="rebtn" id="rb-晚餐" style="display:none"><!--pnid:3oA462AKbbZ0gEs39DK0fa-->↺ 重抽</button>
+    </div>
+    <div data-page-node-id="QR5BueQs693I6c6FGU2Zd6" class="mealcard night" id="mc-night">
+      <span data-page-node-id="RBdBgHwkIEnHemr1woBOop" class="mic" id="mi-night"></span>
+      <div data-page-node-id="dtYKrTaDLSmvckRk2t5n4O" class="nm"><!--pnid:2WBYoRhUKLAVH4ILimFpmF-->宵夜</div>
+      <div data-page-node-id="FVqcYfl2KcTqS2zegLuEYt" class="ds"><!--pnid:JDYeN2z7PuspVTF5gPPDkt-->夜深了嘴别停</div>
+    </div>
+  </div>
+</div>
+
+<!--pnid:W0V8MT6XRR3X8Yo5sOiTJI--><!-- 抽卡弹层：盖在主页之上，不单独翻页 -->
+<div data-page-node-id="7ccn1AWGBl7QHbT7anLWAh" class="modal" id="gachaModal">
+  <div data-page-node-id="ErUkx7YNBgpk7JucKpqKwT" class="box">
+    <div data-page-node-id="jSVygRtwEWT17bBvrGdxcH" class="mealhead">
+      <div data-page-node-id="PF4Q66p7kt0LqOKSRx2sQq" class="back" id="gBack"><!--pnid:qwELAM3rtbxQP6me3SiJuN-->‹</div>
+      <div data-page-node-id="mDKNOcTOITltCCX7JLvdVU" class="ttl" id="gTitle"><!--pnid:knWaEedGrMsSXZFVnJYJNO-->抽卡</div>
+      <div data-page-node-id="okKrzDNKJYONwpmSOPLA1n" class="tip" id="gTip"></div>
+    </div>
+    <div data-page-node-id="LaA91oqpM1OHiq2nXAdzw0" class="stage" id="stage"></div>
+    <div data-page-node-id="vBX6PQGDE6W5VBovj9GmdZ" class="grate" id="gRate"></div>
+    <div data-page-node-id="7RqD8J6WQJDE6hHfp5azXJ" class="careword" id="careWord"></div>
+    <div data-page-node-id="W31k21KEQn2tG8RYkPYlBv" class="actrow" id="actRow">
+      <button data-page-node-id="IWtXnFTGwijRKcFVwxRtGo" class="eat" id="eatBtn"><!--pnid:Nu7rfHqMz8YaW1Nm7AfzRO-->😋 吃吃吃</button>
+      <button data-page-node-id="fFGfZfiqU4D01hcJzrxi1t" class="toss" id="tossBtn"><!--pnid:L5p7OdCjy3yh8e1AF09MYJ-->🗑️ 不要</button>
+    </div>
+    <button data-page-node-id="D3Ug5FOhkM6FK5HGExTrry" class="pullbtn" id="pullBtn"><!--pnid:wXYR4XE7pzEQqtdQcThNQP-->🎴 抽一张！</button>
+    <button data-page-node-id="qdRgLdnDGeLaSUgAvI2SHe" class="homebtn" id="homeBtn"><!--pnid:YfWISMzISsU9UpyLnTlm5j-->🏠 返回主页</button>
+    <div data-page-node-id="52yikDGVDBFicABCAKb4LG" class="trashbin" id="trashBin"></div>
+  </div>
+</div>
+
+<!--pnid:vwrTjVbrhPX3TDrqQtfMX4--><!-- 饭票余额不足确认弹层 -->
+<div data-page-node-id="DcLEBYdvqA7bR80yIdnMky" class="modal" id="walletModal">
+  <div data-page-node-id="xaIaYDktDqbcC0ijvBlQtk" class="box" style="text-align:center">
+    <div data-page-node-id="7zMjePAAzfagU2Ba2NHRXM" style="font-size:40px; margin-bottom:6px"><!--pnid:yoeT72PgrBN5gHDyS9uuFw-->🪙💸</div>
+    <div data-page-node-id="EJQkMccnoHeeNgC7IOCNcw" style="font-size:18px; font-weight:900; color:var(--red); line-height:1.5; margin:2px 4px 10px"><!--pnid:Vnr9IUxw1vIxLRsguu3udY-->饭票余额不足</div>
+    <div data-page-node-id="KxwAkxVHJRNr1f8vFTck16" id="walletTip" style="font-size:14px; color:#8a7060; line-height:1.7; margin-bottom:14px"></div>
+    <div data-page-node-id="kKcwDBgKjqj3u8F5fa6Tsw" class="mbtns">
+      <button data-page-node-id="7jizOP2fGSCGU9pChwoiBT" class="no" id="walletCancel"><!--pnid:dD30lt4C9RCdNQblwOMUvG-->再想想</button>
+      <button data-page-node-id="9xL97o2JajxeBMlEwq9qeO" class="ok" id="walletOk"><!--pnid:bWZXL8e5f92eeMJKvs25GN-->就是要吃 🤤</button>
+    </div>
+  </div>
+</div>
+
+<!--pnid:5aqlpwJ0BGaYiYWvA0xVTg--><!-- 今日三餐分享卡弹层 -->
+<div data-page-node-id="KldGAVQST2FqjKyTAd08TY" class="modal" id="cardModal">
+  <div data-page-node-id="c1UaZjJuUr82cg044iO3Pc" class="box" style="text-align:center">
+    <div data-page-node-id="xtVdm9280HkCbZRNQKn2kg" class="ttl" style="font-size:16px; margin-bottom:10px"><!--pnid:wuCmTYRtIV3HrU7r5xelzf-->今日三餐卡片</div>
+    <div data-page-node-id="CAaRTNMGvAk5gsven6tRLA" id="cardCanvasWrap" style="background:#fff; border:3px solid var(--ink); border-radius:14px; overflow:hidden"></div>
+    <div data-page-node-id="S2mFpa6dF4c6kZnNhmobWe" style="font-size:11px; color:#8a7060; margin:8px 0 4px"><!--pnid:ZpxxPj5H5SjAjXoJDNNkaT-->长按图片可保存 / 截图分享</div>
+    <div data-page-node-id="EIl3uASixJYe2iteBVfIg0" class="mbtns">
+      <button data-page-node-id="5SwO7mLrOUwNVh4zJOgpAx" class="no" id="cardClose"><!--pnid:7IsXyN70ofeluVW3Xh0iOi-->关闭</button>
+      <button data-page-node-id="gz8i2VUfsRY0dysyWtyoqw" class="ok" id="cardSave"><!--pnid:XHy1aTRg4ZRMKAVFd1f86F-->保存图片</button>
+    </div>
+  </div>
+</div>
+
+<!--pnid:mOjQR8IW96cJXZEizS1br8--><!-- 宵夜彩蛋弹窗 -->
+<div data-page-node-id="6YSpe5EdPKbdZHOiWoi3Se" class="modal" id="nightModal">
+  <div data-page-node-id="kS5mmICoc3bgxauQ1DSZ8q" class="box" style="text-align:center">
+    <div data-page-node-id="24mYfbLhqPJk9YA9coAE4D" class="mealhead"><div data-page-node-id="ai1djumfFDWgD97Uns5Pof" class="back" id="nightBack"><!--pnid:gpLDqKRLodc0MefqOYzmzV-->‹</div><div data-page-node-id="ZqddjuhDcmRBuxPRNVYdQF" class="ttl"><!--pnid:8to0un0QiddKJVoCLNBDYm-->宵夜 · 深夜放毒</div></div>
+    <div data-page-node-id="LL5EcCGGqBxVSEVIrMYQXS" id="nightTrick" style="font-size:18px; font-weight:900; color:var(--orange-d); line-height:1.6; margin:4px 6px 12px"></div>
+    <div data-page-node-id="ziMdWqroHO5nvbtDdxQ2Zo" id="nightPig" title="连点三下，提前开饭" style="cursor:pointer; display:inline-block"></div>
+    <div data-page-node-id="jihFi0WridDGynXYqz4EAo" style="font-size:12px; color:#8a7060; margin-top:12px; letter-spacing:.5px"><!--pnid:Hx7LqVhMeCZpoXM4ybILmV-->连点三下，提前开饭 🐷</div>
+  </div>
+</div>
+
+<!--pnid:T6McMJhU6jngcROtyZ30x4--><!-- 菜品池（目录式，合并馋清单） -->
+<div data-page-node-id="HNENipathiIDJTU77fcaXk" class="page" id="p-crave">
+  <div data-page-node-id="1tPOFnVgr3yvrNSNWW5zM9" class="mealhead">
+    <div data-page-node-id="9Uhwr9NtNO0PAqhPAYFIfj" class="back" id="cBack"><!--pnid:yFuV5RvKqosx2pmiIJqIfy-->‹</div>
+    <div data-page-node-id="BEKWQzv5A2OMZA2OxAES9U" class="ttl"><!--pnid:ex55IUNRIxuumXHzNL1yW0-->菜品池</div>
+  </div>
+  <div data-page-node-id="Me40EAgS8wds4s3vhtGkLi" class="crave-add" id="craveAdd"><!--pnid:vqvzdqCzIVIHauVKwLj9dp-->🍴 嘴又馋了？<b data-page-node-id="zjpV1wpGDq41iRQs9fv0Ul"><!--pnid:2GdBpiMz4pjRdlvSX53Rzh-->加道菜</b><!--pnid:itbyfiE1V7NyU3ZKdvsOLP-->进池子，下次就能被命运抽中～</div>
+  <div data-page-node-id="IpUlNw0W75yWJx6V6rCuel" class="addbox">
+    <div data-page-node-id="8Xqg4kBCHdif0uZveJu9aC" class="lbl"><!--pnid:xoD5xSzplGipRh101BEzeI-->菜名（加进卡池就能被抽到）</div>
+    <input data-page-node-id="E3k97xf1bV2YwI1fgdOkFh" id="crName" placeholder="例如：螺蛳粉、炸鸡、奶奶的红烧肉">
+    <div data-page-node-id="tGMzndKxdSIDfEBYjj2bdp" class="twocol">
+      <div data-page-node-id="rQ8PfOE0xhgVvjvLghkyCH"><div data-page-node-id="se6yWHWA1MiZf8J3KjxDXy" class="lbl"><!--pnid:6AsFcQWtZsOu8U89flMS8m-->口味（可自填）</div>
+        <input data-page-node-id="ybSgfcNVDczAHRRgPYyCO1" id="crTaste" list="tasteList" placeholder="点下面选或自己写" style="width:100%">
+        <datalist data-page-node-id="zuLZeJ67ETXdkZRu1fA7wB" id="tasteList">
+          <option data-page-node-id="VhcO7CMItlF0ZCQNdYY3IZ" value="甜"></option><option data-page-node-id="0UWyJmh4Ux6bFSOI9NYKxd" value="咸"></option><option data-page-node-id="J2oXroKglMInMGddq1B8hk" value="辣"></option><option data-page-node-id="rC5okVsIKmeJNemEDkZU35" value="酸"></option><option data-page-node-id="8K5yG0g1HgAfIJQnXokq4F" value="苦"></option><option data-page-node-id="A4rkNTLBn51SbToj7lp955" value="鲜"></option><option data-page-node-id="l49aJQHT567GSZuUCJUZGF" value="香"></option><option data-page-node-id="YCKEcLUETmVccG35i9kt7F" value="淡"></option><option data-page-node-id="bT48dUPTvgR47qHgUzZcon" value="臭">
+        </option></datalist>
+        <div data-page-node-id="lGtpTVmnie5QjqDGSKpCmk" class="tastechips" id="tasteChips"></div></div>
+      <div data-page-node-id="0rwLNndhLJlAEs6miD9B3t"><div data-page-node-id="oAKuJWfmVnwAlT7UBhK0dk" class="lbl"><!--pnid:0rI19TRB1dqgNLTiH1g026-->大卡(kcal)</div><input data-page-node-id="tyH2CNWmCqyt1SXxdaDejn" id="crKcal" placeholder="350" type="number"></div>
+    </div>
+    <div data-page-node-id="puHjWZc5MU5ATtA01iRsV1" class="lbl"><!--pnid:b2p4Aw98ROZnD5mVCIJGi1-->一句话简介</div>
+    <input data-page-node-id="IWZIWL6UyTYXrEczfkf3Bo" id="crDesc" placeholder="随便写点啥，比如：深夜灵魂慰藉">
+    <div data-page-node-id="GdSVZK8tiX15xe44fhDA3t" class="lbl"><!--pnid:I0d01MGL1ItNqCP47O2byq-->稀有度（影响抽中概率）</div>
+    <div data-page-node-id="FE1S9nY5Y2kgC4LOBaBovc" class="rarow" id="crRarRow">
+      <button data-page-node-id="jeWwqAwy4NMBNuPAgTaWZ6" class="rchip on" data-rar="n"><!--pnid:Q4B7A68QZARnjOVDt5QNgp-->普通 70%</button>
+      <button data-page-node-id="u3vbDUK6dcrctcXhhe3qkU" class="rchip" data-rar="r"><!--pnid:uUk5xUncqdJRRTZ08MsmYP-->稀有 25%</button>
+      <button data-page-node-id="1JQKAZ9sI5Gqy9IO1jjsa7" class="rchip" data-rar="l"><!--pnid:fx0wzeSGV51Cr3iCYIEOiD-->限定 5%</button>
+    </div>
+    <div data-page-node-id="ajBTSjCuKyc7RRbOoqrueT" class="lbl"><!--pnid:UyYMYLQc3LBKS4LnN9xIyh-->预估价格 ¥（收下时才扣饭票）</div>
+    <input data-page-node-id="q49c45wOUTm8553yCKYQ5R" id="crPrice" placeholder="25" type="number">
+    <button data-page-node-id="YilRAm1HCqDmdxc50SAkPB" class="savebtn" id="crSave"><!--pnid:A8kfBejeAEjfDqAyGoeANK-->➕ 馋了，加进卡池</button>
+  </div>
+  <div data-page-node-id="A7NmwCKjmo8Skoq7nxSeUz" class="secTitle"><!--pnid:NOeGFp6CWXtmood8U8LnY4-->📖 菜品池目录（池子里都有啥）<span data-page-node-id="jaCHSCYsjNHBHDbmLChnTI" class="ct" id="catCount"><!--pnid:AgDcGWwbKYlbWxmKowJWbM-->0 道</span>
+    <span data-page-node-id="QC6iOkHEz6Dt5UyO6PnEyC" class="collapseBtn" id="catToggle"><!--pnid:Xqq8VAnGvRgdGwvNe9h0Ae-->收起 ▲</span></div>
+  <div data-page-node-id="cuWYixCYTVUti2iDrf9W1T" class="textlist" id="catList"></div>
+</div>
+
+<!--pnid:zsrQIy77WaBbPd1eGBdahT--><!-- 记录页 -->
+<div data-page-node-id="yBRgiaClGGhqF3FKeC8kyM" class="page" id="p-rec">
+  <div data-page-node-id="JJO4CEAOcZj9PIt9qq7TYM" class="mealhead">
+    <div data-page-node-id="XZRL4N0YLXtB7dTVurnlrS" class="back" id="rBack"><!--pnid:oPneXXm9XuOy3j6MO5Oahz-->‹</div>
+    <div data-page-node-id="iMzsRRo2Pkygp2akoeoHvw" class="ttl"><!--pnid:Gfhg5gUlJmaxkaXDwLArBN-->📅 吃了啥记录</div>
+  </div>
+  <div data-page-node-id="S4E6oiTALaUvkTxesOPWNn" id="streakPanel"></div>
+  <button data-page-node-id="cjL3LEcNN12KsLFE3B37Yd" class="sharebtn" id="genCard"><!--pnid:fmQq45z0TUqmfWPA3PZhxs-->📸 生成今日三餐卡片</button>
+  <div data-page-node-id="OCxTqvmO9V5MdYMd6Wjcom" class="datebar">
+    <input data-page-node-id="VLvyzUfpAWrhZ7FvqsugwA" id="recDate" type="date">
+    <button data-page-node-id="0HRRdSkGlitxQsOTGicfQr" id="recGo"><!--pnid:3Cn6lNXMoco1RINWixEm6W-->查看</button>
+  </div>
+  <div data-page-node-id="10M2VK8Euob5HhA5XrcmuJ" id="recList"></div>
+  <div data-page-node-id="rcA9iPqn5NXaiwPO5jip9F" class="rectotal" id="recTotal"></div>
+</div>
+
+<!--pnid:PQmXZTotpgsQlb8CSvvM6i--><!-- 饭票设置弹层 -->
+<div data-page-node-id="u50et4jFlFQGTBy5pU1AfM" class="modal" id="setModal">
+  <div data-page-node-id="3ki6nFNvWlPCKm50IIaYji" class="box">
+    <h3 data-page-node-id="qL3r4aoVkR28cZVqSWsWct"><!--pnid:jVtVgk30Gf3jUS2upZUk2Y-->🎫 饭票</h3>
+    <div data-page-node-id="uUpmMmc4tPY0qUysk67ySU" id="setHint" style="font-size:12px; color:#8a7060; margin:-4px 0 10px"></div>
+    <input data-page-node-id="gWbMbfzto0nCRDZ7DFFyy5" id="setInput" placeholder="例如 50" type="number">
+    <div data-page-node-id="4FcOVm0XCtAP749NXPmEhv" class="quickrow">
+      <div data-page-node-id="CUVd7SJhRlqvfuKpbaKXmc" class="addin">
+        <span data-page-node-id="n7pQJNSqxC0oTjG5AMMDmF"><!--pnid:gD7QyFPZEBtA5df55qQ95P-->＋</span>
+        <input data-page-node-id="XwSu0apXpbJimhHnEke2wi" id="addInput" min="1" type="number" value="10">
+        <button data-page-node-id="hNxWjDddJ0NyzAATiPI3a1" class="qbtn" id="setAdd"><!--pnid:Pg9lIinaASWsV9jRRtJ11p-->加</button>
+      </div>
+      <button data-page-node-id="DC76NQzWihj7ZmmgSK9TBg" class="qbtn rst" id="setFix"><!--pnid:TPSel2lXdSRvVI6jFJaXze-->重置</button>
+    </div>
+    <div data-page-node-id="GlyKSFZmBkkNBHa8qfNn4a" class="mbtns">
+      <button data-page-node-id="Hw92HuWtGm8k6XVbTIuSyx" class="no" id="setCancel"><!--pnid:tPbANgwxFASmlfTBVq0uZc-->取消</button>
+      <button data-page-node-id="3wnzhKNKSyq3I0sa6rSUs6" class="ok" id="setOk"><!--pnid:89rilmd2EGj9VIb2DnUiym-->确定</button>
+    </div>
+  </div>
+</div>
+
+<!--pnid:y7vMrkabRojsuUJTDIi91T--><!-- 通用确认弹层 -->
+<div data-page-node-id="udhwnLtu6JVJ1G3LeqW345" class="modal" id="ynModal">
+  <div data-page-node-id="JOKkupxtOzadUKrJWfXfdQ" class="box" style="text-align:center">
+    <h3 data-page-node-id="4iAeRbmhgerpZGNPq14F4d" id="ynTitle"><!--pnid:4PBPkcKV9NpqEVqjJoGoek-->提示</h3>
+    <p data-page-node-id="QbJRLtmY5rPcFLH7hLajVB" id="ynText" style="font-size:14px; color:var(--sub); line-height:1.6; margin:10px 0 16px"></p>
+    <div data-page-node-id="dGCb3mr9cl3ZwwUDOKufTR" class="mbtns">
+      <button data-page-node-id="bqU9bZsjKucJKDE5tZzQ7r" class="no" id="ynNo"><!--pnid:Che6ud045oC5eFBCctvQxE-->取消</button>
+      <button data-page-node-id="pahmUWNvDYkAC5Wk68NTnl" class="ok" id="ynOk"><!--pnid:eGAGKupBaxcCGxQfJMmAT4-->确定</button>
+    </div>
+  </div>
+</div>
+
+<div data-page-node-id="OqTxeVmbseqZSELFXVAbBY" class="danuchan" id="danmuChan"></div>
+<div data-page-node-id="1iLjvn8I9EZdhrAdglWr2X" class="toast" id="toast"></div>
+
+<!--pnid:gc3SHb2R0DnATKZoc67Rbr--><!-- 底部导航 -->
+<div data-page-node-id="Jek60DbmGUrZIKPYxpJZd0" class="nav" id="nav">
+  <div data-page-node-id="VCnBtAvVwoXGHoPYcEOl7c" class="tab on" data-page="home"><div data-page-node-id="CSoiqnosrfc6kD6V9dmC2G" class="ni" id="navi-home"></div><!--pnid:okC9rzNfUAr2jMtFqMmqkU-->主页</div>
+  <div data-page-node-id="DyRua3sA4xFovBBQmWRawA" class="tab" data-page="crave"><div data-page-node-id="uK7urkuYs5LzRQxsKKitnx" class="ni" id="navi-crave"></div><!--pnid:VeFhemkLMzTHBHwGzQb3Dw-->菜品池</div>
+  <div data-page-node-id="i8JglPkDAngFgfQsQ94Wbu" class="tab" data-page="rec"><div data-page-node-id="r81oo19EfzPb3BNPSGUAEL" class="ni" id="navi-rec"></div><!--pnid:hKOXW5FP8XAc8fSTlATDB0-->记录</div>
+</div>
+
+<script data-page-node-id="QlDTws32XVgTPVVEzztsOI" data-pnid-children="1GepGY7toEYUHWbwpcuxeg">
+/* ===== case i18n layer (chilema-nin-workbench) — data stays zh-canonical, render layer translates ===== */
+var __sp = { searchParams: new URLSearchParams(location.search) };
+window.__LANG = __sp.searchParams.get('lang') === 'en' ? 'en' : 'zh';
+document.documentElement.lang = window.__LANG === 'en' ? 'en' : 'zh-CN';
+function __T(zh, en){ return window.__LANG === 'en' ? en : zh; }
+var __MEAL = {"早餐":"Breakfast","中餐":"Lunch","晚餐":"Dinner","宵夜":"Late-night"};
+function __trM(m){ return (window.__LANG === 'en' && __MEAL[m]) ? __MEAL[m] : m; }
+var __DICT = {
+/* chrome */
+"今天也要好好干饭 🍚":"Eat well today 🍚",
+"改":"Set",
+"🍜 馋虫在挠你":"🍜 Cravings are calling",
+"主页":"Home","记录":"Records","备份":"Backup","菜品池":"Dish Pool",
+"早餐":"Breakfast","中餐":"Lunch","晚餐":"Dinner","宵夜":"Late-night",
+"睡饱了先投喂自己":"Slept in? Feed yourself first",
+"中午这口最顶饱":"The midday meal that fills you up",
+"一天最后的仪式感":"The day's closing ritual",
+"夜深了嘴别停":"It's late — don't stop munching",
+"↺ 重抽":"↺ Redraw",
+"抽卡":"Draw",
+"😋 吃吃吃":"😋 Eat it",
+"🗑️ 不要":"🗑️ Toss it",
+"🎴 抽一张！":"🎴 Draw one!",
+"🎴 再抽一张":"🎴 Draw another",
+"🏠 返回主页":"🏠 Back home",
+"饭票余额不足":"Not enough meal tickets",
+"再想想":"Let me think",
+"就是要吃 🤤":"Eating it anyway 🤤",
+"今日三餐卡片":"Today's meals card",
+"长按图片可保存 / 截图分享":"Long-press to save / screenshot to share",
+"关闭":"Close","保存图片":"Save image",
+"宵夜 · 深夜放毒":"Late-night · midnight temptation",
+"连点三下，提前开饭 🐷":"Tap three times to eat early 🐷",
+"🍴 嘴又馋了？":"🍴 Craving something?",
+"加道菜":"Add a dish",
+"进池子，下次就能被命运抽中～":"to the pool — fate may draw it next time~",
+"菜名（加进卡池就能被抽到）":"Dish name (added dishes join the draw)",
+"口味（可自填）":"Taste (free entry)",
+"甜":"Sweet","咸":"Salty","辣":"Spicy","酸":"Sour","苦":"Bitter","鲜":"Umami","香":"Fragrant","淡":"Mild","臭":"Stinky",
+"大卡(kcal)":"Calories (kcal)",
+"一句话简介":"One-line intro",
+"稀有度（影响抽中概率）":"Rarity (affects draw odds)",
+"普通 70%":"Common 70%","稀有 25%":"Rare 25%","限定 5%":"Limited 5%",
+"预估价格 ¥（收下时才扣饭票）":"Price ¥ (charged only when you keep it)",
+"➕ 馋了，加进卡池":"➕ Craving — add it to the pool",
+"📖 菜品池目录（池子里都有啥）":"📖 Dish catalog (what's in the pool)",
+"收起 ▲":"Collapse ▲","展开 ▼":"Expand ▼",
+"📅 吃了啥记录":"📅 What I ate",
+"📸 生成今日三餐卡片":"📸 Make today's meals card",
+"查看":"View",
+"累计抽卡：":"Total draws:",
+" 次":" times","次":" times",
+"🎫 饭票":"🎫 Meal tickets","🪙 饭票 ¥":"🪙 Tickets ¥",
+"加":"Add","重置":"Reset","取消":"Cancel","确定":"OK","提示":"Notice",
+/* dynamic strings */
+"已抽过（可重抽）":"Drawn (redraw allowed)",
+"还没抽":"Not drawn yet",
+"点下面按钮，命运选你今天吃啥":"Tap the button below — fate picks what you eat",
+"馋了":"Craved",
+"0 · 钱包空空":"0 · wallet empty",
+"还空着肚子呢":" is still empty",
+"点我回点血":"tap me to top up",
+"饭票见底啦，":"Tickets all gone — ",
+"馋清单攒了 ":"Your craving list has ",
+" 道好吃的在叫你":" tasty dishes waiting",
+"今天都安排妥啦，干饭人冲鸭！🍚":"All set today — go get it, eater! 🍚",
+"开整":"Go","造饭":"Cook","吃它":"Eat it","补补":"Top up","瞅瞅":"Peek","去":"Go",
+"抽中概率 ·":"Draw odds ·",
+"自己加的菜也能被抽到，稀有度由你定":"Your own dishes can be drawn too — you set the rarity",
+"菜名不能为空":"Dish name can't be empty",
+"删除这道菜":"Remove this dish",
+"🐷 提前开饭！深夜放毒营业中～":"🐷 Early feast! Midnight snacks now serving~",
+"已吃✓":"Eaten ✓",
+"没记录":"No record",
+"这天没有吃饭记录 🍽️":"No meals recorded that day 🍽️",
+"（选别的日期，或今天去抽卡就会产生记录）":"(Pick another date, or draw today to create a record)",
+"这天合计":"Total for the day",
+"留着饭票下次吃～":"Save the tickets for next time~",
+"扔进垃圾桶，不扣饭票～":"Tossed — no tickets charged~",
+"请输入有效金额":"Please enter a valid amount",
+  "数据表连接失败，请在资料库中打开本页":"Data table connection failed — open this page inside the Library",
+  "记录同步失败，请重试":"Sync failed — please try again",
+  "记录删除失败，请重试":"Delete failed — please try again",
+  "加菜同步失败，请重试":"Couldn't sync the new dish — please try again",
+  "删除失败，请重试":"Delete failed — please try again",
+  "口味请从标签里选～":"Please pick a taste from the tags",
+  "数据加载失败，请刷新重试":"Data load failed — please refresh",
+  "小贴士：抽到限定的概率只有 5% 哦":"Tip: Limited dishes only have a 5% drop rate",
+  "本页数据存于资料库数据表，请在资料库中打开":"This page stores data in Library tables — open it inside the Library",
+"当前饭票 ¥":"Current tickets ¥",
+"，可充值或重设额度":" — top up or reset the budget",
+"当前已透支":"Currently overdrawn",
+"，充点饭票再战～":" — top up your tickets and go again~",
+"已保存图片":"Image saved",
+"导入恢复成功":"Import & restore successful",
+"清空全部数据":"Clear all data",
+"确定清空全部数据（含图鉴、记录、馋清单）？此操作不可撤销":"Clear all data (collection, records, craving list)? This cannot be undone",
+"重置今日三餐":"Reset today's meals",
+"确定重置今天的三餐记录？图鉴和馋清单不会受影响":"Reset today's three meal records? Collection and craving list are unaffected",
+"继续的话，饭票会变成 ":"If you continue, tickets become ","继续的话，饭票会变成":"If you continue, tickets become",
+"（允许负数）。":" (negative allowed).",
+"天":"days",
+"已达成":"Achieved",
+"这道 ":"This dish ","这道":"This dish",
+/* pool dishes: name + desc (zh canonical keys) */
+"豆浆油条":"Soy milk & youtiao","老搭档，油条蘸豆浆灵魂早餐":"The classic duo — youtiao dipped in soy milk",
+"小笼包":"Xiaolongbao","皮薄汤多，一口爆汁":"Thin skin, soup inside — one bite bursts",
+"肠粉":"Rice noodle rolls","滑溜溜米香，淋豉油绝了":"Silky rice rolls, amazing with soy sauce",
+"茶叶蛋配白粥":"Tea egg & congee","最朴素也最熨帖的清晨":"The plainest, coziest morning",
+"煎饼果子":"Jianbing crepe","脆薄脆加蛋，路边摊快乐":"Crispy crepe with egg, street-stall joy",
+"广式虾饺":"Cantonese shrimp dumplings","晶莹剔透，鲜掉眉毛":"Crystal-clear dumplings, ultra fresh",
+"牛肉粉":"Beef rice noodles","红油汤底，暖到胃里":"Chili-oil broth, warms you to the stomach",
+"番茄炒蛋":"Tomato & egg stir-fry","国民下饭神器，酸甜开胃":"The national rice-pairing dish, sweet & tangy",
+"黄焖鸡":"Braised chicken (huangmenji)","鸡肉软烂，汤汁拌饭一绝":"Tender chicken, gravy perfect over rice",
+"麻婆豆腐":"Mapo tofu","麻辣鲜香，米饭杀手":"Numbing, spicy, savory — rice killer",
+"红烧肉":"Braised pork belly","肥而不腻，米饭天敌":"Rich but not greasy, rice's best friend",
+"青椒肉丝":"Shredded pork & peppers","下饭三巨头之一":"One of the big three rice-pairing dishes",
+"酸辣土豆丝":"Hot & sour potato shreds","脆爽开胃，素菜之光":"Crunchy, appetizing, star of veggie dishes",
+"北京烤鸭":"Peking duck","皮脆肉嫩，限定大餐":"Crispy skin, tender meat — a limited feast",
+"水煮牛肉":"Sichuan boiled beef","麻辣滚烫，过瘾":"Boiling hot mala — so satisfying",
+"螺蛳粉":"Luosifen (snail noodles)","臭香之王，上头":"King of stinky-good, addictive",
+"火锅":"Hotpot","咕嘟咕嘟，团建必备":"Bubble bubble — team dinner essential",
+"烤鱼":"Grilled fish","外焦里嫩，配酒一流":"Crispy outside, tender inside, great with drinks",
+"西红柿鸡蛋面":"Tomato & egg noodles","深夜食堂同款治愈":"Midnight-diner style comfort",
+"炒饭":"Fried rice","蛋香米粒，剩菜救星":"Egg-y fragrant rice, leftovers' savior",
+"饺子":"Dumplings","一口一个，团圆感":"One bite each, tastes like reunion",
+"麻辣烫":"Mala tang","自选食材，想吃什么拿什么":"Pick your own ingredients, whatever you fancy",
+"烧烤":"BBQ skewers","深夜街头烟火气，孜然辣椒一把抓":"Late-night street vibes, cumin and chili in handfuls",
+"炸鸡":"Fried chicken","脆皮多汁，快乐源泉":"Crispy skin, juicy — pure happiness",
+"泡面":"Instant noodles","深夜灵魂慰藉，加蛋加肠":"Late-night soul comfort, add egg & sausage",
+"麻辣小龙虾":"Spicy crayfish","嘬手指的快乐，配冰啤":"Finger-licking joy, best with cold beer",
+"烤冷面":"Grilled cold noodles","东北夜宵顶流，酸甜酱香":"Dongbei's top late-night snack, sweet-tangy sauce",
+"关东煮":"Oden","热汤暖胃，深夜温柔":"Warm broth, late-night gentleness",
+"帝王蟹宵夜":"King crab feast","土豪级宵夜，限定欧皇":"Baller-level late-night, for the lucky few",
+/* night tricks */
+"命运戏弄大馋猪～":"Fate is teasing the greedy pig~",
+"大馋猪又被命运拿捏了":"The greedy pig got played by fate again",
+"宵夜之神：你本不该饿，可你就是饿了":"God of late-night: you shouldn't be hungry, yet here we are",
+"小猪饿得直哼哼，命运在偷笑":"The pig grumbles from hunger while fate snickers",
+"深夜放毒，是大馋猪的宿命":"Midnight temptation is the greedy pig's destiny",
+"肚子：我饿了。脑子：抽吗？肚子：抽！":"Stomach: I'm hungry. Brain: draw? Stomach: DRAW!",
+"别人睡前数羊，大馋猪睡前数菜":"Others count sheep; the greedy pig counts dishes",
+"这顿不吃，明天胖三斤的诅咒就解除了（才怪）":"Skip this meal and the +3-pound curse is lifted (yeah right)",
+"饿是假的，馋是真的，猪是认的":"Hunger is fake, craving is real, and pig is confirmed",
+"命运的饭勺，今晚偏要喂你这头猪":"Fate's ladle insists on feeding this pig tonight",
+"深夜的猪，是没有退路的":"A pig at midnight has no way back",
+"大馋猪的胃，是个无底洞":"The greedy pig's stomach is a bottomless pit",
+/* lucky + care */
+"欧皇附体！":"Blessed by RNG!","天选干饭人！":"The chosen eater!","这命也太好了":"What insane luck","锦鲤本鲤":"Literal lucky koi","今日宜炫饭":"Today is feast day",
+"好好吃饭，身体是革命的本钱 💪":"Eat well — your body is your capital 💪",
+"干饭不积极，思想有问题 🍚":"Slacking on meals? That's a mindset problem 🍚",
+"吃饱了才有力气备考呀（摸摸头）":"Eat up — you need fuel to study (head pat)",
+"今天的你也很努力吃饭了呢 ✨":"You ate so diligently today too ✨",
+"别饿着自己，胃会记仇的":"Don't starve yourself — your stomach holds grudges",
+"炫完这顿，烦恼少一半":"Finish this meal and half your worries vanish",
+"据说认真吃饭的人运气都不会太差":"They say good eaters never run out of luck",
+"干饭人，干饭魂，干饭都是人上人 🔥":"Eater's body, eater's soul — eaters reign supreme 🔥",
+"少吃一口是遗憾，多吃一口是幸福":"One bite less is a pity, one bite more is bliss",
+"你抽到的，都是命运最好的安排":"Whatever you drew is fate's best arrangement"
+};
+var __PAT = [
+  [/^(普通 N|稀有 R|限定 L)( · 馋了)?$/, function(m, g1, g2){ return {"普通 N":"Common N","稀有 R":"Rare R","限定 L":"Limited L"}[g1] + (g2 ? " · Craved" : ""); }],
+  [/^预估 ¥(\d+)（收下才扣饭票）$/, "Est. ¥$1 (charged when kept)"],
+  [/^已加进卡池：(.+)〔普通〕$/, "Added to pool: $1 [Common]"],
+  [/^已加进卡池：(.+)〔稀有〕$/, "Added to pool: $1 [Rare]"],
+  [/^已加进卡池：(.+)〔限定〕$/, "Added to pool: $1 [Limited]"],
+  [/^炫完啦！（(.+)已记录）$/, function(m, g1){ return "Done! (" + __trM(g1) + " recorded)"; }],
+  [/^(早餐|中餐|晚餐|宵夜)已清空，重新抽一张！$/, function(m, g1){ return __trM(g1) + " cleared — draw again!"; }],
+  [/^抽 (.+)$/, function(m, g1){ return "Draw " + __trM(g1); }],
+  [/^（本弹层只抽「(.+)」）$/, function(m, g1){ return "(Draws " + __trM(g1) + " only)"; }],
+  [/^还差 (\d+) 天$/, "$1 days to go"],
+  [/^(\d+) 天 · (已达成|还差 \d+ 天)$/, function(m, g1, g2){ return g1 + "-day · " + tr(g2, 1); }],
+  [/^连续干饭 · 最长 (\d+) 天$/, "Streak · best $1 days"],
+  [/^(\d+) 道$/, "$1 dishes"],
+  [/^(-?\d+) · 已透支$/, "$1 · overdrawn"],
+  [/^饭票透支出去 ¥(\d+) 啦，$/, "Overdrawn by ¥$1 — "],
+  [/^要 ¥(\d+)，你现在饭票只剩 ¥(-?\d+)。$/, "costs ¥$1 — you only have ¥$2 left."],
+  [/^这天没抽(.+)$/, function(m, g1){ return "No " + __trM(g1) + " drawn that day"; }],
+  [/^加了 ¥(\d+)，饭票 ¥(-?\d+)$/, "Added ¥$1 — tickets ¥$2"],
+  [/^已重置为默认额度 ¥(\d+)$/, "Reset to default ¥$1"],
+  [/^饭票已设为 ¥(\d+)$/, "Tickets set to ¥$1"],
+  [/^([甜咸辣酸苦鲜香淡臭]{1,2}) · (\d+) kcal · ¥(\d+)(?: · (.+))?$/, function(m, g1, g2, g3, g4){ return tr(g1, 1) + " · " + g2 + " kcal · ¥" + g3 + (g4 ? " · " + tr(g4, 1) : ""); }]
+];
+var __TERMS = Object.keys(__DICT).filter(function(k){ return k.length >= 2 && /[\u4e00-\u9fff]/.test(k); })
+  .sort(function(a,b){ return b.length - a.length; });
+function tr(s, depth){
+  if(window.__LANG !== 'en' || s == null) return s;
+  if(depth > 3) return s;
+  var raw = String(s);
+  var core = raw.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+  var lead = core.match(/^\s*/)[0], trail = core.match(/\s*$/)[0];
+  var t = core.slice(lead.length, core.length - trail.length);
+  if(!t) return raw;
+  if(Object.prototype.hasOwnProperty.call(__DICT, t)) return lead + __DICT[t] + trail;
+  for(var i = 0; i < __PAT.length; i++){ if(__PAT[i][0].test(t)) return lead + t.replace(__PAT[i][0], __PAT[i][1]) + trail; }
+  for(var j = 0; j < __TERMS.length; j++){ var k = __TERMS[j]; if(t.indexOf(k) !== -1) t = t.split(k).join(__DICT[k]); }
+  return lead + t + trail;
+}
+window.__tr = tr;
+var __ATTRS = [
+  ["#crName", "placeholder", "例如：螺蛳粉、炸鸡、奶奶的红烧肉", "e.g. noodles, fried chicken, grandma's braised pork"],
+  ["#crTaste", "placeholder", "点下面选或自己写", "Pick below or type your own"],
+  ["#crDesc", "placeholder", "随便写点啥，比如：深夜灵魂慰藉", "Anything, e.g. late-night comfort food"],
+  ["#setInput", "placeholder", "例如 50", "e.g. 50"],
+  ["#nightPig", "title", "连点三下，提前开饭", "Tap 3 times to eat early"]
+];
+function sweepAttrs(root){
+  var els = (root.querySelectorAll ? Array.prototype.slice.call(root.querySelectorAll("[title],[placeholder]")) : []);
+  if(root.nodeType === 1 && (root.hasAttribute("title") || root.hasAttribute("placeholder"))) els.push(root);
+  els.forEach(function(el){
+    ["title","placeholder"].forEach(function(a){
+      var v = el.getAttribute(a); if(!v) return;
+      var t = tr(v); if(t !== v) el.setAttribute(a, t);
+    });
+  });
+}
+function sweep(root){
+  var w = document.createTreeWalker(root || document, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+    var p = n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
+    var tn = p.nodeName;
+    if(tn === 'SCRIPT' || tn === 'STYLE' || tn === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+    if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT;
+  }});
+  var nodes = []; while(w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(function(n){ var t = tr(n.nodeValue); if(t !== n.nodeValue) n.nodeValue = t; });
+}
+var __mo = new MutationObserver(function(ms){
+  ms.forEach(function(m){
+    if(m.addedNodes && m.addedNodes.length) m.addedNodes.forEach(function(n){
+      if(n.nodeType === 1){ sweep(n); sweepAttrs(n); }
+      else if(n.nodeType === 3){ var t = tr(n.nodeValue); if(t !== n.nodeValue) n.nodeValue = t; }
+    });
+    if(m.type === 'characterData'){ var t2 = tr(m.target.nodeValue); if(t2 !== m.target.nodeValue) m.target.nodeValue = t2; }
+  });
+});
+document.addEventListener('DOMContentLoaded', function(){
+  sweep(document);
+  if(window.__LANG === 'en'){
+    __ATTRS.forEach(function(a){ var el = document.querySelector(a[0]); if(el) el.setAttribute(a[1], a[3]); });
+    sweepAttrs(document);
+    document.title = 'Chi Le Ma Nin · Meal Blind-Box v6';
+    var st = document.createElement('style');
+    st.textContent = 'html[lang="en"] .mealcard.done::after{content:"Drawn"}html[lang="en"] .mealcard.locked::after{content:"Draw"}';
+    document.head.appendChild(st);
+  }
+  var sb = document.querySelector('.subbar');
+  if(sb && !document.getElementById('langSwitch')){
+    var b = document.createElement('span');
+    b.id = 'langSwitch';
+    b.textContent = window.__LANG === 'en' ? '中文' : 'EN';
+    b.style.cssText = 'flex:none;font-size:11px;font-weight:800;border:2px solid var(--ink);border-radius:9px;padding:3px 8px;cursor:pointer;background:var(--card);box-shadow:var(--shadow);margin-left:6px;';
+    b.onclick = function(){
+      var u = new URL(location.href);
+      u.searchParams.set('lang', window.__LANG === 'en' ? 'zh' : 'en');
+      location.href = u.toString();
+    };
+    sb.appendChild(b);
+  }
+  __mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+});
+</script>
+
+<script data-page-node-id="oTKhX3sigajoM1v8VWHvXT" data-pnid-children="jTt20KEaq3BfFrPRGAitW8">
+/* ============ 抽象手绘风 SVG 插画（抽卡卡面用） ============ */
+function art(name){ if(ART[name]) return ART[name]; var kw=svgByKeyword(name); if(kw) return kw; return autoArt(name); }
+function svgByKeyword(name){
+  name=name.toLowerCase();
+  var stroke='stroke="#3a2a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var K=[
+    ["小龙虾,虾滑,虾仁,皮皮虾,基围虾,大虾,白虾,青虾,对虾,河虾,海虾", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><path d="M30 54 Q50 34 70 54 Q62 60 50 60 Q38 60 30 54Z" fill="#e8503a" '+stroke+'/><path d="M30 48 q-12 -8 -18 -20" fill="#e8503a" '+stroke+'/><path d="M70 48 q12 -8 18 -20" fill="#e8503a" '+stroke+'/><circle cx="40" cy="50" r="2.5" fill="#fff"/><circle cx="60" cy="50" r="2.5" fill="#fff"/></svg>'],
+    ["帝王蟹,大闸蟹,螃蟹,蟹,梭子蟹,花蟹", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><ellipse cx="50" cy="52" rx="22" ry="12" fill="#d94a3a" '+stroke+'/><path d="M28 50 q-16 -10 -22 -24" fill="none" '+stroke+'/><path d="M72 50 q16 -10 22 -24" fill="none" '+stroke+'/><circle cx="44" cy="50" r="2.2" fill="#fff"/><circle cx="56" cy="50" r="2.2" fill="#fff"/></svg>'],
+    ["烤鱼,水煮鱼,酸菜鱼,鱼丸,鱼片,鲈鱼,鲫鱼,鱼", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><path d="M24 54 Q50 32 76 54 Q68 62 50 62 Q32 62 24 54Z" fill="#c8712e" '+stroke+'/><circle cx="34" cy="48" r="3" fill="#3a2a1a"/><path d="M72 52 q12 0 14 8 q-12 0 -14 -8" fill="#c8712e" '+stroke+'/></svg>'],
+    ["炸鸡,烤鸡,鸡腿,鸡翅,鸡爪,黄焖鸡,鸡", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><path d="M34 54 Q50 28 66 54 Q58 62 50 62 Q42 62 34 54Z" fill="#e8a23a" '+stroke+'/><path d="M38 50 l5 5 M52 46 l4 4 M58 52 l4 4" stroke="#caa" stroke-width="2"/><path d="M50 36 v-8" '+stroke+'/><circle cx="50" cy="26" r="3" fill="#ffd23f"/></svg>'],
+    ["烤鸭,盐水鸭,鸭腿,鸭脖,鸭", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><ellipse cx="50" cy="50" rx="24" ry="14" fill="#b8682a" '+stroke+'/><circle cx="34" cy="48" r="3" fill="#3a2a1a"/><path d="M72 48 q10 -2 10 6 q-10 2 -10 -6" fill="#b8682a" '+stroke+'/></svg>'],
+    ["牛排,肥牛,牛腩,牛肉,牛", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><ellipse cx="50" cy="50" rx="28" ry="16" fill="#a04a3a" '+stroke+'/><path d="M40 46 l6 6 l12 -10" stroke="#ffd23f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'],
+    ["羊肉串,羊排,羊肉,羊", '<svg viewBox="0 0 100 100"><rect x="20" y="62" width="60" height="6" rx="3" fill="#8a5a2a" '+stroke+'/><circle cx="34" cy="54" r="8" fill="#c8712e" '+stroke+'/><circle cx="50" cy="54" r="8" fill="#c8712e" '+stroke+'/><circle cx="66" cy="54" r="8" fill="#c8712e" '+stroke+'/></svg>'],
+    ["红烧肉,五花肉,猪蹄,排骨,猪肉,猪", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><rect x="34" y="42" width="32" height="22" rx="6" fill="#a04a3a" '+stroke+'/><path d="M40 48 l6 6 l10 -10" stroke="#ffd23f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'],
+    ["荷包蛋,茶叶蛋,炒蛋,蛋炒饭,鸡蛋,蛋", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><circle cx="50" cy="50" r="22" fill="#ffd23f" '+stroke+'/><circle cx="44" cy="46" r="5" fill="#fff" '+stroke+'/><circle cx="58" cy="54" r="5" fill="#fff" '+stroke+'/></svg>'],
+    ["麻婆豆腐,豆腐,豆花,豆干", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><rect x="34" y="42" width="16" height="16" rx="2" fill="#fff3e0" '+stroke+'/><rect x="54" y="44" width="14" height="14" rx="2" fill="#fff3e0" '+stroke+'/><path d="M38 38 q12 -6 24 0" stroke="#5a8a1a" stroke-width="2" fill="none"/></svg>'],
+    ["螺蛳粉,牛肉面,拉面,泡面,意面,拌面,炒面,面条,面", '<svg viewBox="0 0 100 100"><path d="M28 58 Q50 74 72 58 Q64 68 50 68 Q36 68 28 58Z" fill="#e23b3b" '+stroke+'/><path d="M32 54 Q50 36 68 54 Z" fill="#f7d27a" '+stroke+'/><path d="M38 48 q6 -12 12 0 q6 12 12 0" stroke="#e8b04a" stroke-width="2" fill="none"/></svg>'],
+    ["炒饭,盖饭,拌饭,饭团,米饭,饭", '<svg viewBox="0 0 100 100"><path d="M26 58 Q50 74 74 58 Q66 70 50 70 Q34 70 26 58Z" fill="#e8b04a" '+stroke+'/><path d="M30 54 Q50 38 70 54 Z" fill="#fff3d1" '+stroke+'/><circle cx="38" cy="50" r="3" fill="#3a2a1a"/><circle cx="50" cy="48" r="3" fill="#3a2a1a"/><circle cx="62" cy="50" r="3" fill="#3a2a1a"/></svg>'],
+    ["小笼包,汤包,生煎,包子,包", '<svg viewBox="0 0 100 100"><path d="M24 60 Q50 78 76 60 Q68 68 50 68 Q32 68 24 60Z" fill="#f3e3c0" '+stroke+'/><circle cx="50" cy="46" r="22" fill="#fbeed3" '+stroke+'/><path d="M40 40 q10 -8 20 0" stroke="#c9a86a" stroke-width="2" fill="none"/><circle cx="50" cy="32" r="3" fill="#fff" '+stroke+'/></svg>'],
+    ["水饺,煎饺,虾饺,饺子,饺", '<svg viewBox="0 0 100 100"><path d="M24 60 Q50 78 76 60 Q68 66 50 66 Q32 66 24 60Z" fill="#f3e3c0" '+stroke+'/><path d="M30 56 Q50 34 70 56 Z" fill="#ffe6e0" '+stroke+'/><path d="M40 50 l6 -8 l6 8 M52 50 l6 -8 l6 8" stroke="#e08" stroke-width="2" fill="none"/></svg>'],
+    ["手抓饼,葱油饼,煎饼,鸡蛋饼,饼", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><ellipse cx="50" cy="50" rx="28" ry="8" fill="#e8b04a" '+stroke+' transform="rotate(-8 50 50)"/><ellipse cx="50" cy="50" rx="20" ry="5" fill="#ffd23f" '+stroke+' transform="rotate(8 50 50)"/></svg>'],
+    ["烧烤,烤肉,烤串,烤", '<svg viewBox="0 0 100 100"><rect x="20" y="62" width="60" height="6" rx="3" fill="#8a5a2a" '+stroke+'/><circle cx="34" cy="54" r="8" fill="#c8712e" '+stroke+'/><rect x="48" y="46" width="10" height="16" rx="4" fill="#a0522d" '+stroke+'/><circle cx="66" cy="54" r="7" fill="#d98b3a" '+stroke+'/><path d="M34 46 q2 -8 0 -12 M58 46 q2 -8 0 -12" stroke="#ffd23f" stroke-width="3" fill="none"/></svg>'],
+    ["火锅", '<svg viewBox="0 0 100 100"><path d="M18 60 Q50 84 82 60 Q72 72 50 72 Q28 72 18 60Z" fill="#cf3b2e" '+stroke+'/><path d="M28 56 Q50 30 72 56 Z" fill="#e8503a" '+stroke+'/><path d="M40 44 q4 -10 0 -16 M54 44 q4 -10 0 -16" stroke="#ffd23f" stroke-width="3" fill="none"/><circle cx="50" cy="40" r="4" fill="#ffd23f"/></svg>'],
+    ["奶茶,豆浆,咖啡,可乐,饮料,果汁,牛奶,酸奶,饮品", '<svg viewBox="0 0 100 100"><path d="M34 28 L38 74 L62 74 L66 28 Z" fill="#fbeed3" '+stroke+'/><path d="M36 34 L38 68 L62 68 L64 34 Z" fill="#c0712e" opacity=".85"/><rect x="40" y="20" width="20" height="10" rx="3" fill="#e0d4c0" '+stroke+'/><path d="M42 40 q8 8 16 0" stroke="#fff" stroke-width="3" fill="none"/></svg>'],
+    ["汉堡", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="12" fill="#e8b04a" '+stroke+'/><path d="M20 54 Q50 34 80 54 Z" fill="#c8712e" '+stroke+'/><path d="M22 58 Q50 64 78 58" stroke="#5a8a1a" stroke-width="4" fill="none"/><path d="M24 54 Q50 48 76 54" stroke="#e8503a" stroke-width="3" fill="none"/></svg>'],
+    ["披萨", '<svg viewBox="0 0 100 100"><path d="M28 60 Q50 78 72 60 Q50 68 28 60Z" fill="#f3e3c0" '+stroke+'/><path d="M50 30 L28 60 L72 60 Z" fill="#e8b04a" '+stroke+'/><circle cx="42" cy="50" r="4" fill="#e8503a"/><circle cx="58" cy="52" r="4" fill="#e8503a"/><circle cx="50" cy="44" r="3" fill="#5a8a1a"/></svg>'],
+    ["寿司", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><rect x="30" y="46" width="40" height="16" rx="4" fill="#fff3d1" '+stroke+'/><ellipse cx="50" cy="44" rx="14" ry="10" fill="#e8503a" '+stroke+'/></svg>'],
+    ["蛋糕,面包,蛋挞,甜甜圈,甜点,糕点", '<svg viewBox="0 0 100 100"><path d="M24 60 Q50 76 76 60 Q68 68 50 68 Q32 68 24 60Z" fill="#f3e3c0" '+stroke+'/><path d="M28 56 Q50 34 72 56 Z" fill="#f7d27a" '+stroke+'/><path d="M36 46 q6 -6 12 0" stroke="#e8503a" stroke-width="3" fill="none"/><circle cx="50" cy="40" r="3" fill="#e8503a"/></svg>'],
+    ["冰淇淋,雪糕,冰棍,甜筒", '<svg viewBox="0 0 100 100"><path d="M38 28 L62 28 L50 70 Z" fill="#e8b04a" '+stroke+'/><circle cx="50" cy="30" r="16" fill="#ff9ec4" '+stroke+'/><circle cx="42" cy="26" r="5" fill="#ffd23f" '+stroke+'/><circle cx="58" cy="28" r="4" fill="#5bc77a" '+stroke+'/></svg>'],
+    ["西瓜,葡萄,草莓,桃子,橙子,苹果,香蕉,芒果,榴莲,水果", '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="22" fill="#ff6b4a" '+stroke+'/><path d="M50 30 q4 -8 10 -6" stroke="#5a8a1a" stroke-width="3" fill="none"/><circle cx="42" cy="48" r="2" fill="#fff" opacity=".6"/><circle cx="58" cy="56" r="2" fill="#fff" opacity=".6"/></svg>'],
+    ["青菜,白菜,菠菜,生菜,油麦菜,西兰花,花菜,芹菜,韭菜,空心菜,苋菜,茼蒿,蔬菜", '<svg viewBox="0 0 100 100"><path d="M50 70 V44" stroke="#5a8a1a" stroke-width="3" fill="none"/><ellipse cx="50" cy="40" rx="16" ry="12" fill="#5bc77a" '+stroke+'/><path d="M40 34 q10 -10 20 0" stroke="#3a8a1a" stroke-width="2" fill="none"/></svg>'],
+    ["西红柿,番茄,圣女果", '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="20" fill="#ff6b4a" '+stroke+'/><path d="M50 32 q4 -6 8 -2 M50 32 q-4 -6 -8 -2" stroke="#5a8a1a" stroke-width="3" fill="none"/><circle cx="44" cy="48" r="2" fill="#fff" opacity=".5"/></svg>'],
+    ["薯条,土豆,马铃薯", '<svg viewBox="0 0 100 100"><path d="M30 58 Q50 72 70 58 Q62 66 50 66 Q38 66 30 58Z" fill="#f3e3c0" '+stroke+'/><rect x="36" y="44" width="8" height="18" rx="2" fill="#ffd23f" '+stroke+'/><rect x="48" y="40" width="8" height="22" rx="2" fill="#ffd23f" '+stroke+'/><rect x="60" y="44" width="8" height="18" rx="2" fill="#ffd23f" '+stroke+'/></svg>'],
+    ["茄子", '<svg viewBox="0 0 100 100"><path d="M36 54 Q50 34 64 54 Q58 62 50 62 Q42 62 36 54Z" fill="#9b59b6" '+stroke+'/><path d="M50 36 v-8" stroke="#5a8a1a" stroke-width="3" fill="none"/><circle cx="44" cy="50" r="2" fill="#fff"/></svg>'],
+    ["辣椒,尖椒,青椒,红椒", '<svg viewBox="0 0 100 100"><path d="M34 54 Q50 30 66 54 Q58 62 50 62 Q42 62 34 54Z" fill="#e8503a" '+stroke+'/><path d="M30 52 q-8 -2 -10 6" fill="#e8503a" '+stroke+'/></svg>'],
+    ["黄瓜", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="30" ry="12" fill="#5bc77a" '+stroke+' transform="rotate(-12 50 54)"/><path d="M26 60 q-6 4 -8 10" fill="#5bc77a" '+stroke+'/></svg>'],
+    ["南瓜", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="22" ry="18" fill="#ff8a3d" '+stroke+'/><path d="M50 34 v-8" stroke="#5a8a1a" stroke-width="3" fill="none"/><path d="M40 46 q10 8 20 0" stroke="#c85a2e" stroke-width="2" fill="none"/></svg>'],
+    ["玉米", '<svg viewBox="0 0 100 100"><path d="M42 26 Q58 26 58 70 Q42 70 42 26Z" fill="#ffd23f" '+stroke+'/><path d="M46 34 h8 M46 42 h8 M46 50 h8 M46 58 h8" stroke="#e8b04a" stroke-width="2"/><path d="M42 26 q-6 -4 -8 -8 M58 26 q6 -4 8 -8" stroke="#5a8a1a" stroke-width="3" fill="none"/></svg>'],
+    ["香菇,金针菇,木耳,蘑菇", '<svg viewBox="0 0 100 100"><path d="M36 54 Q50 30 64 54 Z" fill="#a0683a" '+stroke+'/><rect x="46" y="54" width="8" height="14" fill="#e0d4c0" '+stroke+'/><circle cx="50" cy="46" r="2" fill="#fff"/></svg>'],
+    ["萝卜,胡萝卜,白萝卜", '<svg viewBox="0 0 100 100"><path d="M46 28 L54 28 L58 64 Q50 72 42 64 Z" fill="#ff8a3d" '+stroke+'/><path d="M48 28 q2 -8 6 -6 M52 28 q-2 -8 -6 -6" stroke="#5a8a1a" stroke-width="2" fill="none"/></svg>'],
+    ["洋葱", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="20" ry="22" fill="#d98b3a" '+stroke+'/><path d="M50 30 v-6" stroke="#5a8a1a" stroke-width="2" fill="none"/><path d="M42 44 q8 8 16 0" stroke="#a0522d" stroke-width="2" fill="none"/></svg>'],
+    ["大蒜,蒜头", '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="18" fill="#fff3d1" '+stroke+'/><path d="M46 36 q4 -8 8 0" stroke="#5a8a1a" stroke-width="2" fill="none"/><circle cx="44" cy="50" r="2" fill="#e0d4c0"/><circle cx="56" cy="54" r="2" fill="#e0d4c0"/></svg>'],
+    ["姜", '<svg viewBox="0 0 100 100"><path d="M38 54 Q50 34 62 54 Q58 64 50 64 Q42 64 38 54Z" fill="#d98b3a" '+stroke+'/><path d="M44 42 q-4 -8 0 -14" stroke="#5a8a1a" stroke-width="2" fill="none"/></svg>'],
+    ["葱", '<svg viewBox="0 0 100 100"><path d="M46 68 V36" stroke="#5a8a1a" stroke-width="4" fill="none"/><ellipse cx="50" cy="34" rx="10" ry="8" fill="#5bc77a" '+stroke+'/></svg>'],
+    ["香菜", '<svg viewBox="0 0 100 100"><path d="M50 70 V40" stroke="#5a8a1a" stroke-width="3" fill="none"/><path d="M40 38 q10 -14 20 0 q-10 10 -20 0Z" fill="#5bc77a" '+stroke+'/></svg>'],
+    ["芝麻", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f3e3c0" '+stroke+'/><circle cx="38" cy="52" r="3" fill="#e0d4c0" '+stroke+'/><circle cx="48" cy="50" r="3" fill="#e0d4c0" '+stroke+'/><circle cx="58" cy="54" r="3" fill="#e0d4c0" '+stroke+'/><circle cx="68" cy="50" r="3" fill="#e0d4c0" '+stroke+'/></svg>'],
+    ["花生,瓜子,核桃,杏仁,腰果,榛子,开心果,碧根果,松子,夏威夷果,坚果", '<svg viewBox="0 0 100 100"><ellipse cx="42" cy="54" rx="12" ry="16" fill="#c8712e" '+stroke+' transform="rotate(-20 42 54)"/><ellipse cx="58" cy="54" rx="12" ry="16" fill="#c8712e" '+stroke+' transform="rotate(20 58 54)"/></svg>'],
+    ["鱿鱼,章鱼,墨鱼,乌贼,八爪鱼", '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="48" rx="20" ry="16" fill="#e8503a" '+stroke+'/><path d="M36 58 q-6 10 -2 18 M50 62 v16 M64 58 q6 10 2 18" stroke="#e8503a" stroke-width="3" fill="none"/><circle cx="44" cy="44" r="2" fill="#fff"/><circle cx="56" cy="44" r="2" fill="#fff"/></svg>'],
+    ["生蚝,扇贝,花甲,蛤蜊,海螺,贝类,鲍鱼,海参", '<svg viewBox="0 0 100 100"><path d="M28 54 Q50 34 72 54 Q60 66 50 66 Q40 66 28 54Z" fill="#f7d27a" '+stroke+'/><path d="M30 54 Q50 60 70 54" stroke="#caa" stroke-width="2" fill="none"/></svg>'],
+    ["酒,啤酒,红酒,白酒,鸡尾酒", '<svg viewBox="0 0 100 100"><path d="M40 28 L40 60 Q50 70 60 60 L60 28 Z" fill="#c0712e" opacity=".6" '+stroke+'/><path d="M42 36 L42 58 Q50 64 58 58 L58 36 Z" fill="#ff6b4a" opacity=".5"/><rect x="44" y="22" width="12" height="8" rx="2" fill="#e0d4c0" '+stroke+'/></svg>']
+  ];
+  for(var i=0;i<K.length;i++){
+    var keys=K[i][0].split(",");
+    for(var j=0;j<keys.length;j++){ if(name.indexOf(keys[j])!==-1) return K[i][1]; }
+  }
+  return null;
+}
+var ART = {
+  "豆浆油条":'<svg viewBox="0 0 100 100"><path d="M20 60 Q50 78 80 60" stroke="#3a2a1a" stroke-width="3" fill="#f7e8c8"/><rect x="28" y="40" width="10" height="34" rx="5" fill="#e8b04a" stroke="#3a2a1a" stroke-width="3" transform="rotate(-12 33 57)"/><rect x="44" y="40" width="10" height="34" rx="5" fill="#e8b04a" stroke="#3a2a1a" stroke-width="3" transform="rotate(8 49 57)"/><circle cx="64" cy="50" r="13" fill="#fdf3da" stroke="#3a2a1a" stroke-width="3"/></svg>',
+  "小笼包":'<svg viewBox="0 0 100 100"><path d="M22 64 Q50 80 78 64 Q72 70 50 70 Q28 70 22 64Z" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><circle cx="50" cy="48" r="22" fill="#fbeed3" stroke="#3a2a1a" stroke-width="3"/><path d="M40 40 q10 -10 20 0 M44 36 q6 -6 12 0" stroke="#c9a86a" stroke-width="2" fill="none"/><circle cx="50" cy="32" r="3" fill="#fff" stroke="#3a2a1a" stroke-width="2"/></svg>',
+  "肠粉":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="14" fill="#f7f2e0" stroke="#3a2a1a" stroke-width="3"/><path d="M22 54 Q50 40 78 54" fill="#fff" stroke="#caa" stroke-width="2"/><ellipse cx="50" cy="52" rx="20" ry="6" fill="#e9dfb8"/><path d="M50 40 v-10" stroke="#3a2a1a" stroke-width="2"/><circle cx="50" cy="28" r="4" fill="#d33"/></svg>',
+  "广式虾饺":'<svg viewBox="0 0 100 100"><path d="M24 60 Q50 78 76 60 Q50 66 24 60Z" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M30 56 Q50 30 70 56 Q50 64 30 56Z" fill="#ffe6e0" stroke="#3a2a1a" stroke-width="3"/><path d="M40 48 l6 -8 l6 8 M52 48 l6 -8 l6 8" stroke="#e08" stroke-width="2" fill="none"/><circle cx="50" cy="46" r="3" fill="#fbb"/></svg>',
+  "番茄炒蛋":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="16" fill="#f7e8c8" stroke="#3a2a1a" stroke-width="3"/><circle cx="40" cy="52" r="12" fill="#ff6b4a" stroke="#3a2a1a" stroke-width="3"/><circle cx="62" cy="56" r="11" fill="#ffd23f" stroke="#3a2a1a" stroke-width="3"/><path d="M30 50 q20 -8 40 4" stroke="#e8b04a" stroke-width="3" fill="none"/></svg>',
+  "黄焖鸡":'<svg viewBox="0 0 100 100"><path d="M20 62 Q50 82 80 62 Q72 72 50 72 Q28 72 20 62Z" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M28 58 Q50 34 72 58 Z" fill="#d98b3a" stroke="#3a2a1a" stroke-width="3"/><rect x="44" y="44" width="12" height="12" rx="3" fill="#b5652a" stroke="#3a2a1a" stroke-width="2"/><path d="M50 34 v-8" stroke="#3a2a1a" stroke-width="2"/><circle cx="50" cy="24" r="4" fill="#5bc77a"/></svg>',
+  "麻婆豆腐":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="34" ry="15" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M26 54 Q50 36 74 54 Z" fill="#e8503a" stroke="#3a2a1a" stroke-width="3"/><rect x="40" y="46" width="11" height="11" rx="2" fill="#fff3e0" stroke="#3a2a1a" stroke-width="2"/><rect x="56" y="48" width="9" height="9" rx="2" fill="#fff3e0" stroke="#3a2a1a" stroke-width="2"/><path d="M50 38 v-8" stroke="#3a2a1a" stroke-width="2"/><circle cx="50" cy="28" r="3" fill="#ffd23f"/></svg>',
+  "北京烤鸭":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="14" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M30 56 Q50 30 70 56 Q60 62 50 62 Q40 62 30 56Z" fill="#c8712e" stroke="#3a2a1a" stroke-width="3"/><circle cx="68" cy="44" r="4" fill="#3a2a1a"/><path d="M70 44 q8 -2 8 4" stroke="#3a2a1a" stroke-width="3" fill="none"/></svg>',
+  "螺蛳粉":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="14" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M26 56 Q50 38 74 56 Z" fill="#e8c06a" stroke="#3a2a1a" stroke-width="3"/><path d="M38 52 q6 -10 12 0 q6 10 12 0" stroke="#caa" stroke-width="2" fill="none"/><circle cx="44" cy="50" r="3" fill="#d33"/><circle cx="60" cy="52" r="3" fill="#5a8a1a"/></svg>',
+  "火锅":'<svg viewBox="0 0 100 100"><path d="M18 60 Q50 84 82 60 Q72 72 50 72 Q28 72 18 60Z" fill="#cf3b2e" stroke="#3a2a1a" stroke-width="3"/><path d="M28 56 Q50 30 72 56 Z" fill="#e8503a" stroke="#3a2a1a" stroke-width="3"/><path d="M40 44 q4 -10 0 -16 M54 44 q4 -10 0 -16" stroke="#ffd23f" stroke-width="3" fill="none"/><circle cx="50" cy="40" r="4" fill="#ffd23f"/></svg>',
+  "烤鱼":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="36" ry="14" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M22 54 Q50 30 78 54 Q70 60 50 60 Q30 60 22 54Z" fill="#c8712e" stroke="#3a2a1a" stroke-width="3"/><circle cx="30" cy="48" r="3" fill="#3a2a1a"/><path d="M70 50 q10 -2 12 6 q-10 2 -12 -6" fill="#c8712e" stroke="#3a2a1a" stroke-width="2"/><path d="M50 38 v-8" stroke="#3a2a1a" stroke-width="2"/><circle cx="50" cy="27" r="3" fill="#ffd23f"/></svg>',
+  "惠州梅菜扣肉":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="14" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><rect x="30" y="42" width="16" height="14" rx="3" fill="#a0522d" stroke="#3a2a1a" stroke-width="2"/><rect x="52" y="44" width="16" height="12" rx="3" fill="#a0522d" stroke="#3a2a1a" stroke-width="2"/><path d="M40 40 q10 -8 20 0" stroke="#5a8a1a" stroke-width="3" fill="none"/></svg>',
+  "烧烤":'<svg viewBox="0 0 100 100"><rect x="20" y="62" width="60" height="6" rx="3" fill="#8a5a2a" stroke="#3a2a1a" stroke-width="3"/><circle cx="34" cy="54" r="8" fill="#c8712e" stroke="#3a2a1a" stroke-width="3"/><rect x="48" y="46" width="10" height="16" rx="4" fill="#a0522d" stroke="#3a2a1a" stroke-width="3"/><circle cx="66" cy="54" r="7" fill="#d98b3a" stroke="#3a2a1a" stroke-width="3"/><path d="M34 46 q2 -8 0 -12 M58 46 q2 -8 0 -12" stroke="#ffd23f" stroke-width="3" fill="none"/></svg>',
+  "炸鸡":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="13" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M34 54 Q50 28 66 54 Q58 60 50 60 Q42 60 34 54Z" fill="#e8a23a" stroke="#3a2a1a" stroke-width="3"/><path d="M40 50 l4 4 M52 46 l3 5 M58 52 l4 3" stroke="#caa" stroke-width="2"/><path d="M50 34 v-8" stroke="#3a2a1a" stroke-width="2"/><circle cx="50" cy="24" r="3" fill="#ffd23f"/></svg>',
+  "泡面":'<svg viewBox="0 0 100 100"><path d="M26 58 Q50 76 74 58 Q66 68 50 68 Q34 68 26 58Z" fill="#e23b3b" stroke="#3a2a1a" stroke-width="3"/><path d="M30 54 Q50 36 70 54 Z" fill="#f7d27a" stroke="#3a2a1a" stroke-width="3"/><path d="M40 48 q4 -10 0 -16 M52 48 q4 -10 0 -16 M62 50 q4 -8 0 -14" stroke="#e8b04a" stroke-width="2" fill="none"/><rect x="44" y="40" width="12" height="8" rx="2" fill="#fff" stroke="#3a2a1a" stroke-width="2"/></svg>',
+  "麻辣小龙虾":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="13" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M34 56 Q50 34 66 56 Q58 62 50 62 Q42 62 34 56Z" fill="#e23b3b" stroke="#3a2a1a" stroke-width="3"/><path d="M34 48 q-8 -10 -2 -16 M66 48 q8 -10 2 -16" stroke="#e23b3b" stroke-width="4" fill="none"/><circle cx="42" cy="50" r="3" fill="#fff"/><circle cx="58" cy="50" r="3" fill="#fff"/></svg>',
+  "帝王蟹宵夜":'<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="34" ry="13" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/><path d="M40 56 Q50 40 60 56 Q55 62 50 62 Q45 62 40 56Z" fill="#d94a3a" stroke="#3a2a1a" stroke-width="3"/><path d="M40 52 q-14 -6 -20 -18 M60 52 q14 -6 20 -18" stroke="#d94a3a" stroke-width="4" fill="none"/><circle cx="46" cy="52" r="2" fill="#fff"/><circle cx="54" cy="52" r="2" fill="#fff"/></svg>'
+};
+var AUTO_COLORS=["#ff8a3d","#ffd23f","#5bc77a","#ff6b8a","#5aa8e0","#c071e0","#e0a23a"];
+function autoArt(name){
+  var seed=0; for(var i=0;i<name.length;i++) seed+=name.charCodeAt(i)*(i+1);
+  var c1=AUTO_COLORS[seed%AUTO_COLORS.length];
+  var c2=AUTO_COLORS[(seed>>2)%AUTO_COLORS.length];
+  var r1=18+(seed%8), r2=12+((seed>>3)%8);
+  var rot=(seed%40)-20;
+  return '<svg viewBox="0 0 100 100">'
+    + '<ellipse cx="50" cy="66" rx="36" ry="14" fill="#f3e3c0" stroke="#3a2a1a" stroke-width="3"/>'
+    + '<g transform="rotate('+rot+' 50 46)">'
+    + '<circle cx="44" cy="46" r="'+r1+'" fill="'+c1+'" stroke="#3a2a1a" stroke-width="3"/>'
+    + '<circle cx="62" cy="50" r="'+r2+'" fill="'+c2+'" stroke="#3a2a1a" stroke-width="3"/>'
+    + '<path d="M40 38 q4 -10 0 -16 M58 40 q4 -10 0 -16" stroke="#3a2a1a" stroke-width="3" fill="none"/>'
+    + '<circle cx="44" cy="44" r="3" fill="#fff"/><circle cx="62" cy="48" r="3" fill="#fff"/></g>'
+    + '<text x="50" y="90" font-size="11" text-anchor="middle" fill="#8a7060" font-family="sans-serif">'+(name.length>5?name.slice(0,5)+'…':name)+'</text></svg>';
+}
+
+/* ============ 抽象手绘 UI 图标（涂鸦风） ============ */
+function uiIcon(type){
+  var s='stroke="#3a2a1a" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var sh='stroke="#3a2a1a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"';
+  switch(type){
+    case "home": return '<svg viewBox="0 0 32 32"><path d="M5 17 L16 6 L27 18" '+s+'/><path d="M8 16 L8 26 L24 25 L24 15" '+s+'/><path d="M13 26 L13 19 L20 19 L20 26" '+s+'/><path d="M15.5 6.5 L16 6" '+sh+'/></svg>';
+    case "gacha": return '<svg viewBox="0 0 32 32"><path d="M7 10 q9 -4 18 0 L25 26 q-9 4 -18 0 Z" '+s+'/><circle cx="16" cy="17" r="5.5" fill="#ff8a3d" '+sh+'/><path d="M11 10 q5 -6 10 0" '+s+'/><path d="M14 26 L18 26" '+s+'/></svg>';
+    case "crave": return '<svg viewBox="0 0 32 32"><path d="M9 15 L23 15 L21 26 L11 26 Z" '+s+'/><path d="M9 15 L23 15" '+s+'/><path d="M5 15 q3 -3 6 0" '+s+'/><path d="M27 15 q-3 -3 -6 0" '+s+'/><path d="M12 10 q4 -3 8 0" '+s+'/></svg>';
+    case "rec": return '<svg viewBox="0 0 32 32"><path d="M7 9 L25 8 L25 26 L7 25 Z" '+s+'/><path d="M11 8 L11 5 M21 9 L21 5" '+s+'/><path d="M10 14 L22 13 M10 19 L22 18" '+s+'/></svg>';
+    case "back": return '<svg viewBox="0 0 32 32"><path d="M8 11 L24 10 L24 25 L8 26 Z" '+s+'/><path d="M8 11 L16 8 L24 10" '+s+'/><path d="M13 16 L19 15" '+s+'/></svg>';
+    case "night": return '<svg viewBox="0 0 40 40">'
+      +'<ellipse cx="20" cy="22" rx="13" ry="11" fill="#ff9ec4" stroke="#3a2a1a" stroke-width="2.6" stroke-linejoin="round"/>'
+      +'<circle cx="14" cy="18" r="1.9" fill="#3a2a1a"/><circle cx="26" cy="18" r="1.9" fill="#3a2a1a"/>'
+      +'<ellipse cx="20" cy="25" rx="4" ry="3" fill="#ff6b8a" stroke="#3a2a1a" stroke-width="2"/>'
+      +'<path d="M16 25 q4 3 8 0" stroke="#3a2a1a" stroke-width="1.6" fill="none"/>'
+      +'<circle cx="6" cy="14" r="2.6" fill="#ff9ec4" stroke="#3a2a1a" stroke-width="2.6"/>'
+      +'<circle cx="34" cy="14" r="2.6" fill="#ff9ec4" stroke="#3a2a1a" stroke-width="2.6"/></svg>';
+    case "morning": return '<svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="#ffd24d" stroke="#3a2a1a" stroke-width="3"/><path d="M20 4 V8 M30 15 H34 M10 15 H6 M27 8 L30 5 M13 8 L10 5" stroke="#3a2a1a" stroke-width="2.4" stroke-linecap="round"/><path d="M11 27 q9 -7 18 0" fill="none" stroke="#3a2a1a" stroke-width="3" stroke-linecap="round"/><path d="M14 31 q6 -4 12 0" fill="none" stroke="#ff8a3d" stroke-width="2.6" stroke-linecap="round"/></svg>';
+    case "noon": return '<svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="9" fill="#ff8a3d" stroke="#3a2a1a" stroke-width="3"/><path d="M20 3 V7 M33 16 H37 M7 16 H11 M31 6 L34 3 M9 6 L6 3 M31 26 L34 29 M9 26 L6 29" stroke="#3a2a1a" stroke-width="2.4" stroke-linecap="round"/><path d="M12 30 q8 -5 16 0" fill="none" stroke="#3a2a1a" stroke-width="3" stroke-linecap="round"/></svg>';
+    case "evening": return '<svg viewBox="0 0 40 40"><path d="M27 11 a11 11 0 1 0 5 15 a8 8 0 1 1 -5 -15Z" fill="#9b7bd4" stroke="#3a2a1a" stroke-width="3"/><circle cx="13" cy="27" r="1.6" fill="#fff"/><circle cx="9" cy="22" r="1.3" fill="#fff"/><circle cx="16" cy="20" r="1.1" fill="#fff"/></svg>';
+    case "trash": return '<svg viewBox="0 0 40 40"><path d="M11 13 H29 L27 34 H13 Z" fill="#cfcfcf" stroke="#3a2a1a" stroke-width="3"/><path d="M15 13 V9 H25 V13" '+s+'/><path d="M17 18 V29 M23 18 V29" stroke="#3a2a1a" stroke-width="2"/></svg>';
+    default: return '';
+  }
+}
+
+/* ============ 卡池数据 ============ */
+var POOL = {
+  "早餐":[
+    {name:"豆浆油条",taste:"甜",kcal:380,price:8,desc:"老搭档，油条蘸豆浆灵魂早餐",rar:"n"},
+    {name:"小笼包",taste:"咸",kcal:220,price:15,desc:"皮薄汤多，一口爆汁",rar:"r"},
+    {name:"肠粉",taste:"咸",kcal:300,price:12,desc:"滑溜溜米香，淋豉油绝了",rar:"n"},
+    {name:"茶叶蛋配白粥",taste:"咸",kcal:200,price:6,desc:"最朴素也最熨帖的清晨",rar:"n"},
+    {name:"煎饼果子",taste:"咸",kcal:420,price:10,desc:"脆薄脆加蛋，路边摊快乐",rar:"n"},
+    {name:"广式虾饺",taste:"咸",kcal:180,price:20,desc:"晶莹剔透，鲜掉眉毛",rar:"r"},
+    {name:"牛肉粉",taste:"辣",kcal:480,price:14,desc:"红油汤底，暖到胃里",rar:"n"}
+  ],
+  "中餐":[
+    {name:"番茄炒蛋",taste:"咸",kcal:320,price:12,desc:"国民下饭神器，酸甜开胃",rar:"n"},
+    {name:"黄焖鸡",taste:"辣",kcal:560,price:22,desc:"鸡肉软烂，汤汁拌饭一绝",rar:"n"},
+    {name:"麻婆豆腐",taste:"辣",kcal:420,price:16,desc:"麻辣鲜香，米饭杀手",rar:"r"},
+    {name:"红烧肉",taste:"咸",kcal:600,price:28,desc:"肥而不腻，米饭天敌",rar:"r"},
+    {name:"青椒肉丝",taste:"咸",kcal:360,price:18,desc:"下饭三巨头之一",rar:"n"},
+    {name:"酸辣土豆丝",taste:"酸",kcal:240,price:10,desc:"脆爽开胃，素菜之光",rar:"n"},
+    {name:"北京烤鸭",taste:"咸",kcal:680,price:45,desc:"皮脆肉嫩，限定大餐",rar:"l"},
+    {name:"水煮牛肉",taste:"辣",kcal:520,price:38,desc:"麻辣滚烫，过瘾",rar:"r"}
+  ],
+  "晚餐":[
+    {name:"螺蛳粉",taste:"酸",kcal:550,price:18,desc:"臭香之王，上头",rar:"n"},
+    {name:"火锅",taste:"辣",kcal:800,price:80,desc:"咕嘟咕嘟，团建必备",rar:"l"},
+    {name:"烤鱼",taste:"辣",kcal:700,price:60,desc:"外焦里嫩，配酒一流",rar:"r"},
+    {name:"西红柿鸡蛋面",taste:"咸",kcal:400,price:12,desc:"深夜食堂同款治愈",rar:"n"},
+    {name:"炒饭",taste:"咸",kcal:520,price:14,desc:"蛋香米粒，剩菜救星",rar:"n"},
+    {name:"饺子",taste:"咸",kcal:450,price:20,desc:"一口一个，团圆感",rar:"r"},
+    {name:"麻辣烫",taste:"辣",kcal:480,price:25,desc:"自选食材，想吃什么拿什么",rar:"n"}
+  ],
+  "宵夜":[
+    {name:"烧烤",taste:"辣",kcal:650,price:50,desc:"深夜街头烟火气，孜然辣椒一把抓",rar:"r"},
+    {name:"炸鸡",taste:"咸",kcal:550,price:35,desc:"脆皮多汁，快乐源泉",rar:"n"},
+    {name:"泡面",taste:"咸",kcal:400,price:8,desc:"深夜灵魂慰藉，加蛋加肠",rar:"n"},
+    {name:"麻辣小龙虾",taste:"辣",kcal:500,price:68,desc:"嘬手指的快乐，配冰啤",rar:"r"},
+    {name:"烤冷面",taste:"咸",kcal:380,price:12,desc:"东北夜宵顶流，酸甜酱香",rar:"n"},
+    {name:"关东煮",taste:"鲜",kcal:280,price:18,desc:"热汤暖胃，深夜温柔",rar:"n"},
+    {name:"帝王蟹宵夜",taste:"鲜",kcal:300,price:200,desc:"土豪级宵夜，限定欧皇",rar:"l"}
+  ]
+};
+var NIGHT_MENU = ["烧烤","炸鸡","泡面","麻辣小龙虾","帝王蟹宵夜"];
+var LUCKY=["欧皇附体！","天选干饭人！","这命也太好了","锦鲤本鲤","今日宜炫饭"];
+var CARE = [
+  "好好吃饭，身体是革命的本钱 💪",
+  "干饭不积极，思想有问题 🍚",
+  "吃饱了才有力气备考呀（摸摸头）",
+  "今天的你也很努力吃饭了呢 ✨",
+  "别饿着自己，胃会记仇的",
+  "炫完这顿，烦恼少一半",
+  "据说认真吃饭的人运气都不会太差",
+  "干饭人，干饭魂，干饭都是人上人 🔥",
+  "少吃一口是遗憾，多吃一口是幸福",
+  "你抽到的，都是命运最好的安排"
+];
+
+/* ============ 状态（在线版：数据存资料库数据表） ============ */
+// 数据真源 = 「菜品池」「吃饭记录」两张数据表（databaseId 字面量）；state 仅为运行时缓存
+// 钱包锚点 anchor 与抽卡计数 drawCount 为设备游戏态存 localStorage；打卡/连续天数由吃饭记录派生
+var DB_POOL="komd1ZY7LY1QI8JfhST0zr";
+var DB_REC="IkagYbTEezIbu7PgapjVnX";
+var DEF_WALLET=50;
+var state = { anchor:DEF_WALLET, wallet:DEF_WALLET, maxWallet:DEF_WALLET, picks:{}, crave:[], drawCount:0, today:{}, owned:{}, checkins:{}, bestStreak:0, base:null };
+function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function load(){
+  try{
+    var s=JSON.parse(localStorage.getItem("chilema_online"));
+    if(s){
+      state.anchor=(s.anchor!=null?s.anchor:DEF_WALLET);
+      state.drawCount=s.drawCount||0;
+    }
+  }catch(e){}
+  if(state.anchor==null) state.anchor=DEF_WALLET;
+  if(!state.base) state.base = JSON.parse(JSON.stringify(POOL));
+}
+function save(){ try{ localStorage.setItem("chilema_online", JSON.stringify({anchor:state.anchor, drawCount:state.drawCount})); }catch(e){} }
+load();
+/* ---- 资料库数据层 ---- */
+function sdk(){ return (window.__SMART_PAGE__ && window.__SMART_PAGE__.database) || null; }
+function pv(v){ if(v && typeof v==="object" && !Array.isArray(v)){ if("text" in v) return v.text; if("number" in v) return v.number; if("currency" in v) return v.currency; if("select" in v) return v.select; if("date" in v) return v.date; if("checkbox" in v) return v.checkbox; } return v; }
+var POOL_LIST=[], REC_LIST=[];
+var TASTES=["甜","咸","辣","酸","苦","鲜","香","淡","臭"];
+function rarName(r){ return r==="n"?"普通":(r==="r"?"稀有":"限定"); }
+function rarCode(t){ return t==="普通"?"n":(t==="稀有"?"r":"l"); }
+function qAll(dbId){
+  var db=sdk(); if(!db) return Promise.reject(new Error("database unavailable"));
+  var rows=[];
+  function page(cur){ return db.query(cur?{databaseId:dbId,pageSize:400,startCursor:cur}:{databaseId:dbId,pageSize:400}).then(function(res){ ((res&&res.results)||[]).forEach(function(r){ rows.push(r); }); if(res&&res.hasMore&&res.nextCursor&&rows.length<2500){ return page(res.nextCursor); } return rows; }); }
+  return page(null);
+}
+function ridOf(r){ return (r && (r.record_id||r.recordId||r.id)) || ""; }
+function reloadPool(){ return qAll(DB_POOL).then(function(rows){ POOL_LIST=rows.map(function(r){ return { rid:ridOf(r), name:pv(r["菜名"])||"", meal:pv(r["适合餐次"])||"", taste:pv(r["口味"])||"", kcal:pv(r["大卡"])||0, price:pv(r["预估价格"])||0, desc:pv(r["一句话简介"])||"", rar:rarCode(pv(r["稀有度"]))||"n", src:pv(r["来源"])||"默认池" }; }); rebuildPool(); }); }
+function reloadRecs(){ return qAll(DB_REC).then(function(rows){ REC_LIST=rows.map(function(r){ var d=String(pv(r["日期"])||""); return { rid:ridOf(r), date:d.slice(0,10), meal:pv(r["餐次"])||"", name:pv(r["菜名"])||"", taste:pv(r["口味"])||"", kcal:pv(r["大卡"])||0, price:pv(r["价格"])||0, rar:pv(r["稀有度"])||"", status:pv(r["状态"])||"已吃", od:pv(r["是否透支"])===true }; }); rebuildToday(); }); }
+function spentTotal(){ var s=0; REC_LIST.forEach(function(r){ if(r.status==="已吃") s+=(r.price||0); }); return s; }
+function syncWallet(){ state.wallet=state.anchor-spentTotal(); state.maxWallet=Math.max(DEF_WALLET,state.anchor); }
+function rebuildPool(){
+  state.base={"早餐":[],"中餐":[],"晚餐":[],"宵夜":[]};
+  state.crave=[];
+  POOL_LIST.forEach(function(r){
+    if(r.src==="自己加"){ state.crave.push({name:r.name,taste:r.taste,kcal:r.kcal,price:r.price,desc:r.desc,meal:"馋",rar:r.rar,rid:r.rid}); }
+    else if(state.base[r.meal]){ state.base[r.meal].push({name:r.name,taste:r.taste,kcal:r.kcal,price:r.price,desc:r.desc,rar:r.rar,rid:r.rid}); }
+  });
+}
+function rebuildToday(){
+  state.today={};
+  REC_LIST.forEach(function(r){
+    if(r.status!=="已吃" || !r.date || !r.meal) return;
+    if(!state.today[r.date]) state.today[r.date]={};
+    state.today[r.date][r.meal]={name:r.name,taste:r.taste,kcal:r.kcal,price:r.price,rar:rarCode(r.rar)};
+  });
+}
+function recRid(date,meal){ var hit=null; REC_LIST.forEach(function(r){ if(r.date===date && r.meal===meal && r.status==="已吃") hit=r.rid; }); return hit; }
+function dbFail(){ toast("数据表连接失败，请在资料库中打开本页"); }
+
+/* ============ 连续打卡 ============ */
+function keyOf(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function markCheckin(){ /* 在线版：打卡由吃饭记录派生，无需单独写入 */ }
+function checkinDays(){ var d={},k,m; for(k in state.today){ m=state.today[k]||{}; if(m["早餐"]||m["中餐"]||m["晚餐"]||m["宵夜"]) d[k]=true; } return d; }
+function bestStreakCalc(){ var ks=Object.keys(checkinDays()).sort(), best=0, run=0, prev=null, i, cur, pd;
+  for(i=0;i<ks.length;i++){ cur=new Date(ks[i]+"T00:00:00"); pd=prev?new Date(prev+"T00:00:00"):null; run=(pd&&(cur-pd)===86400000)?run+1:1; if(run>best) best=run; prev=ks[i]; }
+  return best; }
+function computeStreak(){
+  var c=checkinDays(), d=new Date(), streak=0;
+  if(!c[todayKey()]) d.setDate(d.getDate()-1); // 今天还没打卡则从昨天起算
+  while(c[keyOf(d)]){ streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+var ACH=[
+  {d:3,  t:"🥉", x:"连续干饭 3 天"},
+  {d:7,  t:"🥈", x:"连续干饭 7 天"},
+  {d:14, t:"🥇", x:"连续干饭 14 天"},
+  {d:30, t:"👑", x:"连续干饭 30 天"}
+];
+function renderStreak(){
+  var panel=document.getElementById("streakPanel"); if(!panel) return;
+  var c=checkinDays(), cur=computeStreak(), best=bestStreakCalc(), cells="";
+  var today=new Date();
+  for(var i=27;i>=0;i--){
+    var d=new Date(today); d.setDate(d.getDate()-i);
+    var on=c[keyOf(d)]?" on":"";
+    cells+='<div class="cc'+on+'">'+d.getDate()+'</div>';
+  }
+  var ach="";
+  ACH.forEach(function(a){
+    var got=best>=a.d;
+    var left=got?a.x:("还差 "+(a.d-cur)+" 天");
+    ach+='<div class="badge'+(got?" got":"")+'"><div class="bx" style="font-size:13px;">'+a.d+' 天 · '+(got?"已达成":"还差 "+(a.d-cur)+" 天")+'</div></div>';
+  });
+  var joke="";
+  panel.innerHTML='<div class="streak">'
+    +'<div class="streak-main"><div class="fire">🔥</div><div>'
+    +'<div class="streak-num">'+cur+' <span>天</span></div>'
+    +'<div class="streak-sub">连续干饭 · 最长 '+best+' 天</div></div></div>'
+    +'<div class="cal">'+cells+'</div></div>';
+}
+/* 撒花：稀有R/限定L 抽中时来一波 */
+function burstConfetti(){
+  var stage=document.getElementById("stage"); if(!stage) return;
+  var colors=["#ff7a2f","#ffc41f","#ff4d5e","#2fc36b","#ff7eb3","#a64bff"];
+  for(var i=0;i<18;i++){
+    var p=document.createElement("div"); p.className="confetti";
+    var ang=Math.random()*Math.PI*2, dist=60+Math.random()*120;
+    p.style.setProperty("--dx",(Math.cos(ang)*dist).toFixed(0)+"px");
+    p.style.setProperty("--dy",(Math.sin(ang)*dist - 40).toFixed(0)+"px");
+    p.style.background=colors[i%colors.length];
+    p.style.animation="confettiGo "+(0.8+Math.random()*0.5).toFixed(2)+"s ease-out forwards";
+    stage.appendChild(p);
+    (function(el){ setTimeout(function(){ el.remove(); },1300); })(p);
+  }
+}
+
+/* ============ 渲染 ============ */
+function fullPool(meal){
+  var arr = (state.base && state.base[meal]) ? state.base[meal].slice() : [];
+  state.crave.forEach(function(c){ arr.push({name:c.name,taste:c.taste,kcal:c.kcal,price:c.price,desc:c.desc,rar:"n",crave:true}); });
+  return arr;
+}
+function drawCard(pool){
+  var roll=Math.random();
+  var t = roll<0.70?"n":(roll<0.95?"r":"l");
+  var f=pool.filter(function(p){return p.rar===t;});
+  if(!f.length) f=pool;
+  return f[Math.floor(Math.random()*f.length)];
+}
+function makeCard(it){
+  var rarTxt = it.rar==="n"?"普通 N":(it.rar==="r"?"稀有 R":"限定 L");
+  var rarCls = it.rar==="n"?"rar-n":(it.rar==="r"?"rar-r":"rar-l");
+  var tasteMap={甜:"tian",咸:"xian",辣:"la",酸:"suan",苦:"ku"};
+  var tk = tasteMap[it.taste]||"xian";
+  return '<div class="gacha" id="gachaCard">'
+    + '<div class="rart '+rarCls+'">'+rarTxt+(it.crave?' · 馋了':'')+'</div>'
+    + '<div class="ill">'+art(it.name)+'</div>'
+    + '<div class="fname">'+it.name+'</div>'
+    + '<div class="ftags"><span class="tag taste-'+tk+'">'+it.taste+'</span>'
+    + '<span class="tag kcal">'+it.kcal+' kcal</span>'
+    + (it.crave?'<span class="tag crave">馋了</span>':'')+'</div>'
+    + '<div class="fdesc">'+it.desc+'</div>'
+    + '<div class="fprice">预估 ¥'+it.price+'（收下才扣饭票）</div>'
+    + '</div>';
+}
+function renderWallet(){
+  var w=document.getElementById("walletVal"); w.textContent=state.wallet;
+  var box=document.getElementById("walletBox");
+  var pct = state.maxWallet>0 ? Math.max(0,state.wallet/state.maxWallet*100) : 0;
+  var bar=document.getElementById("barFill"); bar.style.width=pct+"%";
+  if(state.wallet<0){ box.classList.add("low"); bar.classList.add("low"); w.textContent=state.wallet+" · 已透支"; }
+  else if(state.wallet===0){ box.classList.add("low"); bar.classList.add("low"); w.textContent="0 · 钱包空空"; }
+  else { box.classList.remove("low"); bar.classList.remove("low"); }
+}
+function renderHome(){
+  ["早餐","中餐","晚餐"].forEach(function(m){
+    var mc=document.getElementById("mc-"+m);
+    var pk=document.getElementById("pk-"+m);
+    var rb=document.getElementById("rb-"+m);
+    var rec = state.today[todayKey()] ? state.today[todayKey()][m] : null;
+    if(rec){
+      mc.classList.add("done"); mc.classList.remove("locked");
+      pk.style.display="inline-block"; pk.textContent=rec.name;
+      rb.style.display="inline-block";
+    } else {
+      mc.classList.remove("done"); mc.classList.add("locked");
+      pk.style.display="none";
+      rb.style.display="none";
+    }
+  });
+  // 今天要处理（俏皮版）
+  var tl=document.getElementById("todoList"); tl.innerHTML="";
+  var rows=[];
+  var MEAL_GO={ "早餐":"开整","中餐":"造饭","晚餐":"吃它","set":"补补","crave":"瞅瞅" };
+  ["早餐","中餐","晚餐"].forEach(function(m){
+    var rec = state.today[todayKey()] ? state.today[todayKey()][m] : null;
+    if(!rec) rows.push({txt:"<b>"+m+"</b>还空着肚子呢", go:m});
+  });
+  if(state.wallet<0) rows.push({txt:"饭票透支出去 ¥"+(-state.wallet)+" 啦，<b>点我回点血</b>", alert:true, go:"set"});
+  else if(state.wallet===0) rows.push({txt:"饭票见底啦，<b>点我回点血</b>", alert:true, go:"set"});
+  if(state.crave.length>=5) rows.push({txt:"馋清单攒了 <b>"+state.crave.length+"</b> 道好吃的在叫你", go:"crave"});
+  if(!rows.length) tl.innerHTML='<div class="row"><b>今天都安排妥啦，干饭人冲鸭！🍚</b></div>';
+  rows.forEach(function(r){
+    var d=document.createElement("div"); d.className="row"+(r.alert?" alert":"");
+    var lbl = MEAL_GO[r.go] || "去";
+    d.innerHTML='<span>'+r.txt+'</span>'+(r.go?'<button class="go" data-go="'+r.go+'">'+lbl+'</button>':'');
+    tl.appendChild(d);
+  });
+}
+/* 菜品池目录：基础池(state.base) + 我加的(馋了) + 新发现(抽中没见过的)，有界、不随抽卡无限增长 */
+function catalog(){
+  var seen={}, items=[];
+  function add(o,src,meal){ var key=o.name+"@"+meal; if(seen[key]) return; seen[key]=1; items.push({name:o.name,taste:o.taste,kcal:o.kcal,price:o.price,desc:o.desc,src:src,meal:meal}); }
+  ["早餐","中餐","晚餐","宵夜"].forEach(function(m){
+    (state.base[m]||[]).forEach(function(p){ add(p,"基础",m); });
+  });
+  state.crave.forEach(function(c){ add(c,"我加的",c.meal||"馋"); });
+  Object.keys(state.owned).forEach(function(k){ var o=state.owned[k]; add(o,o.src||"新发现",o.meal||"馋"); });
+  return items;
+}
+var DEL_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="#3a2a1a" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>';
+function renderCatalog(){
+  var list=document.getElementById("catList"); list.innerHTML="";
+  var items=catalog();
+  document.getElementById("catCount").textContent=items.length+" 道";
+  if(!items.length) list.innerHTML='<div class="empty">池子空空，上面加一道菜试试～</div>';
+  items.forEach(function(o){
+    var badgeCls={甜:"tian",咸:"xian",辣:"la",酸:"suan",苦:"ku"}[o.taste]||"xian";
+    var d=document.createElement("div"); d.className="titem"+(o.src==="我加的"?" craveOnly":"");
+    d.innerHTML='<span class="badge '+badgeCls+'">'+o.taste+'</span>'
+      +'<div class="main"><div class="n">'+o.name+'</div><div class="d">'+(o.desc||'')+'</div></div>'
+      +'<div class="meta">'+o.kcal+'kcal<br>¥'+o.price+'</div>'
+      +'<span class="del" title="删除这道菜">'+DEL_SVG+'</span>';
+    d.querySelector(".del").onclick=function(e){
+      e.stopPropagation();
+      delDish(o);
+    };
+    list.appendChild(d);
+  });
+  document.getElementById("catList").style.display=catCollapsed?"none":"flex";
+  document.getElementById("catToggle").textContent=catCollapsed?"展开 ▼":"收起 ▲";
+}
+function delDish(o){
+  var db=sdk(); if(!db){ dbFail(); return; }
+  var isCrave=(o.src==="我加的");
+  var row=null;
+  POOL_LIST.forEach(function(r){ if(!row && r.name===o.name && ((isCrave&&r.src==="自己加")||(!isCrave&&r.src==="默认池"))) row=r; });
+  if(!row || !row.rid){ toast("删除失败，请重试"); return; }
+  db.deleteRecord({databaseId:DB_POOL, recordId:row.rid}).then(function(){ return reloadPool(); }).then(function(){ renderCatalog(); renderHome(); }).catch(function(err){ console.error("[database] 删除失败:", err); toast("删除失败，请重试"); });
+}
+var catCollapsed=false;
+function toggleCatalog(){
+  catCollapsed=!catCollapsed;
+  document.getElementById("catList").style.display=catCollapsed?"none":"flex";
+  document.getElementById("catToggle").textContent=catCollapsed?"展开 ▼":"收起 ▲";
+}
+document.getElementById("catToggle").onclick=function(e){ e.stopPropagation(); toggleCatalog(); };
+function renderRecord(){
+  renderStreak();
+  var dt=document.getElementById("recDate").value || todayKey();
+  var rec=state.today[dt]||{};
+  var list=document.getElementById("recList"); list.innerHTML="";
+  var totK=0, any=false;
+  ["早餐","中餐","晚餐"].forEach(function(m){
+    var p=rec[m];
+    var card=document.createElement("div"); card.className="reccard";
+    if(p){
+      any=true; totK+=p.kcal;
+      card.innerHTML='<div class="h">'+m+' <span class="miss" style="background:#5bc77a;color:#fff;">已吃✓</span></div>'
+        +'<div class="body"><div class="n">'+p.name+'</div>'
+        +'<div class="d">'+p.taste+' · '+p.kcal+' kcal · ¥'+p.price+(p.desc?' · '+p.desc:'')+'</div></div>';
+    } else {
+      card.innerHTML='<div class="h">'+m+' <span class="miss">没记录</span></div>'
+        +'<div class="body"><div class="n" style="color:#bbb;">这天没抽'+m+'</div></div>';
+    }
+    list.appendChild(card);
+  });
+  var tot=document.getElementById("recTotal");
+  if(!any) tot.innerHTML='这天没有吃饭记录 🍽️<br><span style="font-size:12px;color:#8a7060;">（选别的日期，或今天去抽卡就会产生记录）</span>';
+  else tot.innerHTML='这天合计 <span style="font-size:20px;">'+totK+' kcal</span>';
+}
+function renderNavIcons(){
+  document.getElementById("navi-home").innerHTML=uiIcon("home");
+  document.getElementById("navi-crave").innerHTML=uiIcon("crave");
+  document.getElementById("navi-rec").innerHTML=uiIcon("rec");
+  document.getElementById("trashBin").innerHTML=uiIcon("trash");
+  // 主页餐次抽象图标（含宵夜·小猪）
+  if(document.getElementById("mi-早餐")) document.getElementById("mi-早餐").innerHTML=uiIcon("morning");
+  if(document.getElementById("mi-中餐")) document.getElementById("mi-中餐").innerHTML=uiIcon("noon");
+  if(document.getElementById("mi-晚餐")) document.getElementById("mi-晚餐").innerHTML=uiIcon("evening");
+  if(document.getElementById("mi-night")) document.getElementById("mi-night").innerHTML=uiIcon("night");
+  // 宵夜彩蛋改为弹窗内连点小猪（见 showNightModal）
+}
+// 宵夜彩蛋：弹窗里连点小猪3下 → 提前开抽
+var NIGHT_TRICKS = [
+  "命运戏弄大馋猪～",
+  "大馋猪又被命运拿捏了",
+  "宵夜之神：你本不该饿，可你就是饿了",
+  "小猪饿得直哼哼，命运在偷笑",
+  "深夜放毒，是大馋猪的宿命",
+  "肚子：我饿了。脑子：抽吗？肚子：抽！",
+  "别人睡前数羊，大馋猪睡前数菜",
+  "这顿不吃，明天胖三斤的诅咒就解除了（才怪）",
+  "饿是假的，馋是真的，猪是认的",
+  "命运的饭勺，今晚偏要喂你这头猪",
+  "深夜的猪，是没有退路的",
+  "大馋猪的胃，是个无底洞"
+];
+var nightPigTaps=0, nightPigT=0, lastNightTrick="";
+function showNightModal(){
+  var t;
+  do { t = NIGHT_TRICKS[Math.floor(Math.random()*NIGHT_TRICKS.length)]; }
+  while(NIGHT_TRICKS.length>1 && t===lastNightTrick);
+  lastNightTrick=t;
+  document.getElementById("nightTrick").textContent = t;
+  document.getElementById("nightModal").classList.add("on");
+}
+function closeNightModal(){ document.getElementById("nightModal").classList.remove("on"); }
+function eggNight(){
+  closeNightModal();
+  toast("🐷 提前开饭！深夜放毒营业中～");
+  openGacha("宵夜");
+}
+// 弹窗内小猪：连点3下开饭
+(function(){
+  var pig=document.getElementById("nightPig");
+  if(pig){
+    pig.innerHTML=uiIcon("night");
+    pig.addEventListener("click", function(e){
+      e.stopPropagation();
+      pig.classList.add("tap");
+      setTimeout(function(){ pig.classList.remove("tap"); },120);
+      var now=Date.now();
+      if(now-nightPigT>800) nightPigTaps=0;
+      nightPigT=now; nightPigTaps++;
+      if(nightPigTaps>=3){ nightPigTaps=0; eggNight(); }
+    });
+  }
+  var nb=document.getElementById("nightBack");
+  if(nb) nb.onclick=closeNightModal;
+  var nm=document.getElementById("nightModal");
+  if(nm) nm.addEventListener("click", function(e){ if(e.target===this) closeNightModal(); });
+})();
+
+/* ============ 页面切换 ============ */
+var PAGES=["home","crave","rec"];
+function switchPage(p){
+  PAGES.forEach(function(x){ document.getElementById("p-"+x).classList.remove("on"); });
+  document.getElementById("p-"+p).classList.add("on");
+  document.querySelectorAll(".nav .tab").forEach(function(t){ t.classList.toggle("on", t.dataset.page===p); });
+  if(p==="home") renderHome();
+  if(p==="crave") renderCatalog();
+  if(p==="rec") renderRecord();
+}
+
+/* ============ 抽卡逻辑 ============ */
+var currentItem=null, currentMeal=null, busy=false, lockedMeal=null;
+function openGacha(meal){
+  currentMeal=meal; currentItem=null; lockedMeal=meal;
+  document.getElementById("gTitle").textContent="抽 "+meal;
+  var rec = state.today[todayKey()] ? state.today[todayKey()][meal] : null;
+  document.getElementById("gTip").textContent = rec?"已抽过（可重抽）":"还没抽";
+  document.getElementById("stage").innerHTML='<div style="color:#8a7060;font-size:14px;text-align:center;">点下面按钮，命运选你今天吃啥<br><br>（本弹层只抽「'+meal+'」）</div>';
+  document.getElementById("gRate").innerHTML='抽中概率 · <b style="color:#8a7060">普通 70%</b> · <b style="color:#e09a2a">稀有 25%</b> · <b style="color:#9b59d0">限定 5%</b><br><span style="font-size:10px;opacity:.85;">自己加的菜也能被抽到，稀有度由你定</span>';
+  document.getElementById("actRow").style.display="none";
+  document.getElementById("pullBtn").style.display="block";
+  document.getElementById("pullBtn").textContent="🎴 抽一张！";
+  document.getElementById("homeBtn").style.display="none";
+  document.getElementById("careWord").style.display="none";
+  document.getElementById("gachaModal").classList.add("on");
+}
+function closeGacha(){ document.getElementById("gachaModal").classList.remove("on"); }
+function danmu(txt){
+  var ch=document.getElementById("danmuChan");
+  var d=document.createElement("div"); d.className="danmu"; d.textContent=txt;
+  d.style.top=(10+Math.random()*40)+"%";
+  ch.appendChild(d); setTimeout(function(){ d.remove(); },2500);
+}
+function toast(t){
+  var el=document.getElementById("toast"); el.textContent=t; el.classList.add("on");
+  setTimeout(function(){ el.classList.remove("on"); },1800);
+}
+function confirmBox(title, text, onOk){
+  var m=document.getElementById("ynModal");
+  document.getElementById("ynTitle").textContent=title;
+  document.getElementById("ynText").textContent=text;
+  m.classList.add("on");
+  var yes=function(){ m.classList.remove("on"); document.getElementById("ynOk").onclick=null; document.getElementById("ynNo").onclick=null; onOk(); };
+  var no=function(){ m.classList.remove("on"); document.getElementById("ynOk").onclick=null; document.getElementById("ynNo").onclick=null; };
+  document.getElementById("ynOk").onclick=yes;
+  document.getElementById("ynNo").onclick=no;
+}
+
+/* ============ 主页餐次卡（独立互不干扰 + 可重抽） ============ */
+["早餐","中餐","晚餐"].forEach(function(m){
+  document.getElementById("mc-"+m).onclick=function(){
+    var rec = state.today[todayKey()] ? state.today[todayKey()][m] : null;
+    if(rec){ // 已抽：清掉这餐记录，重新抽（在线版同步删除数据表记录）
+      var delRid=recRid(todayKey(),m);
+      if(delRid && sdk()){ sdk().deleteRecord({databaseId:DB_REC, recordId:delRid}).then(function(){ return reloadRecs(); }).then(function(){ syncWallet(); save(); renderWallet(); renderHome(); }).catch(function(err){ console.error("[database] 删除失败:", err); toast("记录删除失败，请重试"); }); }
+      else { console.error("[database] 未找到可删除的记录"); toast("记录删除失败，请重试"); }
+      toast(m+"已清空，重新抽一张！");
+    }
+    openGacha(m);
+  };
+  document.getElementById("rb-"+m).onclick=function(e){
+    e.stopPropagation();
+    var rec = state.today[todayKey()] ? state.today[todayKey()][m] : null;
+    if(rec){ var delRid=recRid(todayKey(),m); if(delRid && sdk()){ sdk().deleteRecord({databaseId:DB_REC, recordId:delRid}).then(function(){ return reloadRecs(); }).then(function(){ syncWallet(); save(); renderWallet(); renderHome(); }).catch(function(err){ console.error("[database] 删除失败:", err); }); } }
+    toast(m+"已清空，重新抽一张！");
+    openGacha(m);
+  };
+});
+// 宵夜入口：单点 → 彩蛋弹窗（不再在下面展开）
+document.getElementById("mc-night").onclick=function(){ showNightModal(); };
+
+/* ============ 抽卡按钮（弹层内） ============ */
+document.getElementById("pullBtn").onclick=function(){
+  if(busy) return; busy=true;
+  var meal=lockedMeal||"早餐";
+  var pool=fullPool(meal);
+  currentItem=drawCard(pool); currentMeal=meal; state.drawCount++; save();
+  markCheckin();
+  var stage=document.getElementById("stage");
+  stage.innerHTML='<div class="gacha mystery shake">🎴</div>';
+  document.getElementById("actRow").style.display="none";
+  document.getElementById("homeBtn").style.display="none";
+  document.getElementById("careWord").style.display="none";
+  setTimeout(function(){
+    var rarCls=currentItem.rar==="n"?"rar-n":(currentItem.rar==="r"?"rar-r":"rar-l");
+    stage.innerHTML=makeCard(currentItem).replace('class="gacha"','class="gacha reveal '+rarCls+'"');
+    document.getElementById("actRow").style.display="flex";
+    if(currentItem.rar!=="n") burstConfetti();
+    if(currentItem.rar==="l") danmu(LUCKY[Math.floor(Math.random()*LUCKY.length)]);
+    busy=false;
+  },650);
+};
+document.getElementById("eatBtn").onclick=function(){
+  if(!currentItem) return;
+  var card=document.getElementById("gachaCard"); if(!card) return;
+  var meal=lockedMeal||currentMeal;
+  // 余额不足：先弹确认窗，确认后才允许负额度
+  if(currentItem.price > state.wallet){
+    document.getElementById("walletTip").innerHTML=
+      "这道 <b>"+currentItem.name+"</b> 要 ¥"+currentItem.price
+      +"，你现在饭票只剩 ¥"+state.wallet
+      +"。<br>继续的话，饭票会变成 <b style='color:var(--red)'>¥"+(state.wallet-currentItem.price)+"</b>（允许负数）。";
+    document.getElementById("walletModal").classList.add("on");
+    return;
+  }
+  doEat(meal);
+};
+function doEat(meal){
+  var card=document.getElementById("gachaCard"); if(!card) return;
+  card.classList.add("eating");
+  var db=sdk(); if(!db){ dbFail(); return; }
+  var key=todayKey();
+  var walletBefore=state.wallet;
+  var od=currentItem.price>walletBefore; // 透支吃下时记录透支标记（允许余额为负）
+  var props={ "日期":{date:key}, "餐次":{select:meal}, "菜名":{text:currentItem.name}, "口味":{select:currentItem.taste}, "大卡":{number:currentItem.kcal}, "价格":{number:currentItem.price}, "稀有度":{select:rarName(currentItem.rar)}, "状态":{select:"已吃"}, "是否透支":{checkbox:od} };
+  var old=recRid(key,meal); // 同餐重吃防御：先删旧记录再写
+  var wr = old ? db.deleteRecord({databaseId:DB_REC, recordId:old}).then(function(){ return db.addRecord({databaseId:DB_REC, properties:props}); })
+               : db.addRecord({databaseId:DB_REC, properties:props});
+  wr.then(function(){ return reloadRecs(); }).then(function(){
+    syncWallet(); save(); renderWallet(); renderHome();
+    setTimeout(function(){
+      document.getElementById("actRow").style.display="none";
+      var cw=document.getElementById("careWord");
+      cw.textContent=CARE[Math.floor(Math.random()*CARE.length)];
+      cw.style.display="block";
+      document.getElementById("pullBtn").style.display="none";
+      document.getElementById("homeBtn").style.display="block";
+      toast("炫完啦！（"+meal+"已记录）");
+    },560);
+  }).catch(function(err){ console.error("[database] 写入失败:", err); toast("记录同步失败，请重试"); });
+}
+document.getElementById("walletOk").onclick=function(){
+  document.getElementById("walletModal").classList.remove("on");
+  doEat(lockedMeal||currentMeal);
+};
+document.getElementById("walletCancel").onclick=function(){
+  document.getElementById("walletModal").classList.remove("on");
+  toast("留着饭票下次吃～");
+};
+document.getElementById("tossBtn").onclick=function(){
+  if(!currentItem) return;
+  var card=document.getElementById("gachaCard"); if(!card) return;
+  document.getElementById("trashBin").classList.add("show");
+  card.classList.add("trashing");
+  setTimeout(function(){
+    document.getElementById("actRow").style.display="none";
+    document.getElementById("trashBin").classList.remove("show");
+    document.getElementById("pullBtn").textContent="🎴 再抽一张";
+    toast("扔进垃圾桶，不扣饭票～");
+  },560);
+};
+document.getElementById("homeBtn").onclick=closeGacha;
+document.getElementById("gBack").onclick=closeGacha;
+
+/* ============ 馋了添加（加进卡池） ============ */
+
+// 口味快捷标签（点选填入输入框，也可在输入框自由写）
+var TASTE_CHIPS=["甜","咸","辣","酸","苦","鲜","香","淡","臭"];
+function renderTasteChips(){
+  var box=document.getElementById("tasteChips"); if(!box) return;
+  box.innerHTML="";
+  TASTE_CHIPS.forEach(function(t){
+    var c=document.createElement("span"); c.className="chip"; c.dataset.v=t; c.textContent=t;
+    c.onclick=function(){
+      document.getElementById("crTaste").value=t;
+      box.querySelectorAll(".chip").forEach(function(x){ x.classList.remove("on"); });
+      c.classList.add("on");
+    };
+    box.appendChild(c);
+  });
+}
+document.getElementById("crTaste").addEventListener("input",function(){
+  var v=this.value.trim();
+  document.querySelectorAll("#tasteChips .chip").forEach(function(x){ x.classList.toggle("on", x.dataset.v===v); });
+});
+
+document.getElementById("crSave").onclick=function(){
+  var name=document.getElementById("crName").value.trim();
+  if(!name){ toast("菜名不能为空"); return; }
+  var taste=document.getElementById("crTaste").value.trim()||"咸";
+  var kcal=parseInt(document.getElementById("crKcal").value)||300;
+  var desc=document.getElementById("crDesc").value.trim()||"来自馋清单";
+  var price=parseInt(document.getElementById("crPrice").value)||20;
+  var rarEl=document.querySelector("#crRarRow .rchip.on");
+  var rar=rarEl?rarEl.getAttribute("data-rar"):"n";
+  var db=sdk(); if(!db){ dbFail(); return; }
+  if(TASTES.indexOf(taste)<0){ toast("口味请从标签里选～"); return; }
+  db.addRecord({databaseId:DB_POOL, properties:{ "菜名":{text:name}, "口味":{select:taste}, "大卡":{number:kcal}, "预估价格":{number:price}, "稀有度":{select:rarName(rar)}, "一句话简介":{text:desc}, "来源":{select:"自己加"} }}).then(function(){ return reloadPool(); }).then(function(){ renderCatalog(); renderHome(); }).catch(function(err){ console.error("[database] 写入失败:", err); toast("加菜同步失败，请重试"); });
+  document.getElementById("crName").value=""; document.getElementById("crKcal").value="";
+  document.getElementById("crDesc").value=""; document.getElementById("crPrice").value="";
+  document.getElementById("crTaste").value="";
+  document.querySelectorAll("#tasteChips .chip").forEach(function(x){ x.classList.remove("on"); });
+  document.querySelectorAll("#crRarRow .rchip").forEach(function(x,i){ x.classList.toggle("on",i===0); });
+  toast("已加进卡池："+name+(rar==="n"?"〔普通〕":rar==="r"?"〔稀有〕":"〔限定〕"));
+};
+
+/* ============ 导航 ============ */
+document.querySelectorAll(".nav .tab").forEach(function(t){
+  t.onclick=function(){
+    var p=t.dataset.page;
+    if(p==="crave"){ switchPage("crave"); }
+    else if(p==="rec"){ switchPage("rec"); }
+    else if(p==="back"){ switchPage("back"); }
+    else { switchPage("home"); }
+  };
+});
+
+/* ============ 返回按钮 ============ */
+document.getElementById("cBack").onclick=function(){ switchPage("home"); };
+document.getElementById("rBack").onclick=function(){ switchPage("home"); };
+
+/* ============ 主页待办：行内按钮跳转 ============ */
+document.getElementById("todoList").addEventListener("click",function(e){
+  var b=e.target.closest(".go"); if(!b) return;
+  var g=b.dataset.go;
+  if(g==="crave"){ switchPage("crave"); }
+  else if(g==="set"){ document.getElementById("setBtn").click(); }
+  else if(g==="早餐"||g==="中餐"||g==="晚餐"){ openGacha(g); }
+});
+
+/* ============ 饭票设置 ============ */
+var setModal=document.getElementById("setModal");
+document.getElementById("setBtn").onclick=function(){
+  document.getElementById("setInput").value=state.wallet;
+  document.getElementById("setHint").innerHTML = state.wallet<0
+    ? "当前已透支 <b style='color:var(--red)'>¥"+state.wallet+"</b>，充点饭票再战～"
+    : "当前饭票 ¥"+state.wallet+"，可充值或重设额度";
+  setModal.classList.add("on");
+};
+document.getElementById("setCancel").onclick=function(){ setModal.classList.remove("on"); };
+// 自定义加饭票：读 addInput（默认 10），在当前基础上加
+document.getElementById("setAdd").onclick=function(){
+  var add=parseInt(document.getElementById("addInput").value);
+  if(isNaN(add)||add<1){ add=10; }
+  state.anchor=state.anchor+add;
+  syncWallet(); save(); renderWallet(); setModal.classList.remove("on"); toast("加了 ¥"+add+"，饭票 ¥"+state.wallet);
+};
+// 重置：恢复到默认额度 DEF_WALLET(50)
+document.getElementById("setFix").onclick=function(){
+  state.anchor=DEF_WALLET+spentTotal();
+  syncWallet(); save(); renderWallet(); setModal.classList.remove("on"); toast("已重置为默认额度 ¥"+DEF_WALLET);
+};
+document.getElementById("setOk").onclick=function(){
+  var v=parseInt(document.getElementById("setInput").value);
+  if(isNaN(v)||v<0){ toast("请输入有效金额"); return; }
+  state.anchor=v+spentTotal();
+  syncWallet(); save(); renderWallet(); setModal.classList.remove("on"); toast("饭票已设为 ¥"+v);
+};
+
+/* 菜品池「嘴又馋了？加道菜」引导 → 聚焦菜名输入框 */
+document.getElementById("craveAdd").onclick=function(){
+  switchPage("crave");
+  setTimeout(function(){ var el=document.getElementById("crName"); if(el){ el.focus(); el.scrollIntoView({behavior:"smooth",block:"center"}); } },160);
+};
+// 稀有度选择
+var crRarRow=document.getElementById("crRarRow");
+if(crRarRow){
+  crRarRow.addEventListener("click",function(e){
+    var b=e.target.closest(".rchip"); if(!b) return;
+    crRarRow.querySelectorAll(".rchip").forEach(function(x){ x.classList.remove("on"); });
+    b.classList.add("on");
+  });
+}
+
+/* ============ 记录页 ============ */
+document.getElementById("recDate").value=todayKey();
+document.getElementById("recGo").onclick=function(){ renderRecord(); };
+
+/* ============ 生成今日三餐分享卡 ============ */
+document.getElementById("genCard").onclick=function(){
+  var rec=state.today[todayKey()]||{};
+  var cv=document.createElement("canvas"); cv.width=600; cv.height=820;
+  var c=cv.getContext("2d");
+  // 背景
+  var g=c.createLinearGradient(0,0,0,820); g.addColorStop(0,"#fff3d6"); g.addColorStop(1,"#ffe6f0");
+  c.fillStyle=g; c.fillRect(0,0,600,820);
+  // 标题
+  c.fillStyle="#3a2a1a"; c.font="900 34px sans-serif"; c.textAlign="center";
+  c.fillText(__T("今天，我吃了这些","Today, I ate these"),300,70);
+  c.fillStyle="#8a7060"; c.font="600 16px sans-serif";
+  c.fillText(todayKey()+" · "+__T("干饭人专属卡片","a foodie's daily card"),300,100);
+  var meals=["早餐","中餐","晚餐"]; var y=160; var totK=0; var any=false;
+  meals.forEach(function(m){
+    var it=rec[m];
+    // 卡片块
+    c.fillStyle="#ffffff"; roundRect(c,40,y,520,170,18); c.fill();
+    c.strokeStyle="#3a2a1a"; c.lineWidth=3; roundRect(c,40,y,520,170,18); c.stroke();
+    c.textAlign="left";
+    c.fillStyle="#3a2a1a"; c.font="900 22px sans-serif"; c.fillText(__trM(m),64,y+42);
+    if(it){
+      any=true; totK+=it.kcal;
+      c.fillStyle="#ff8a3d"; c.font="900 26px sans-serif";
+      c.fillText(truncate(c,__tr(it.name),360),64,y+86);
+      c.fillStyle="#8a7060"; c.font="600 16px sans-serif";
+      c.fillText(__tr(it.taste)+" · "+it.kcal+" kcal · ¥"+it.price,64,y+122);
+    } else {
+      c.fillStyle="#bbb"; c.font="600 20px sans-serif";
+      c.fillText(__T("还没抽这一餐～","Not drawn yet~"),64,y+92);
+    }
+    y+=190;
+  });
+  // 底部
+  c.textAlign="center";
+  c.fillStyle="#f2701c"; c.font="900 22px sans-serif";
+  c.fillText(any?(__T("今日合计 ","Total today ")+totK+" kcal 🍚"):__T("今天还没开动呢，去抽卡吧！","Nothing yet — go draw your meals!"),300,y+10);
+  c.fillStyle="#8a7060"; c.font="700 15px sans-serif";
+  c.fillText(__T("—— 吃了吗您 · 干饭也要仪式感 ——","—— Chi Le Ma Nin · every meal deserves a little ceremony ——"),300,y+44);
+  var wrap=document.getElementById("cardCanvasWrap"); wrap.innerHTML="";
+  cv.style.width="100%"; cv.style.display="block"; wrap.appendChild(cv);
+  document.getElementById("cardModal").classList.add("on");
+};
+document.getElementById("cardClose").onclick=function(){ document.getElementById("cardModal").classList.remove("on"); };
+document.getElementById("cardSave").onclick=function(){
+  var cv=document.querySelector("#cardCanvasWrap canvas"); if(!cv) return;
+  var a=document.createElement("a"); a.href=cv.toDataURL("image/png");
+  a.download=__T("今日三餐_","my-meals_")+todayKey()+".png"; a.click(); toast("已保存图片");
+};
+function roundRect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function truncate(c,t,maxw){ if(c.measureText(t).width<=maxw) return t; while(t.length>1 && c.measureText(t+"…").width>maxw){ t=t.slice(0,-1); } return t+"…"; }
+
+// logo 彩蛋
+var logoHit=0;
+document.getElementById("logo").onclick=function(){ logoHit++; if(logoHit>=3){ logoHit=0; toast("小贴士：抽到限定的概率只有 5% 哦"); } };
+
+/* ============ 初始化 ============ */
+renderNavIcons(); renderTasteChips(); syncWallet(); renderWallet(); renderHome(); renderCatalog(); renderRecord();
+(function boot(){
+  var db=sdk();
+  if(!db){
+    var bar=document.createElement("div");
+    bar.style.cssText="position:fixed;left:0;right:0;top:0;z-index:9999;background:#ff4d5e;color:#fff;font-weight:800;font-size:13px;padding:8px 12px;text-align:center;";
+    bar.textContent="本页数据存于资料库数据表，请在资料库中打开";
+    document.body.appendChild(bar);
+    console.error("[database] __SMART_PAGE__.database 不可用：本页为资料库在线工作台");
+    return;
+  }
+  Promise.all([reloadPool(), reloadRecs()]).then(function(){ syncWallet(); renderWallet(); renderHome(); renderCatalog(); renderRecord(); }).catch(function(err){ console.error("[database] 初始化读取失败:", err); toast("数据加载失败，请刷新重试"); });
+})();
+</script>
+</body>
+</html>
