@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Query — Transform Data Quickly</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          schibsted: ['"Schibsted Grotesk"', 'system-ui', 'sans-serif'],
+          inter: ['Inter', 'system-ui', 'sans-serif'],
+          noto: ['"Noto Sans"', 'system-ui', 'sans-serif'],
+          fustat: ['Fustat', 'system-ui', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  /* 背景视频：115% 尺寸，水平居中，顶部锚定，object-top 取景
+     注意：Tailwind preflight 带 `img, video { max-width: 100% }`，会把 115% 宽度压回 100%。
+     这里用双类名提高特异性压制 preflight，保证 115% 生效。 */
+  .hero-video.hero-video {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 115%;
+    height: 115%;
+    max-width: none;
+    object-fit: cover;
+    object-position: top center;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 搜索卡：暗色半透明 + 背景模糊 */
+  .search-panel {
+    background: rgba(0, 0, 0, 0.24);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  /* 输入区：白色卡片 */
+  .composer {
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .composer input::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .composer input:focus {
+    outline: none;
+  }
+
+  /* Features 下拉 */
+  .dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+  }
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu,
+  .dropdown.is-open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* 焦点可见性 */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown-menu {
+      transition: none;
+    }
+  }
+</style>
+</head>
+
+<body class="font-noto bg-black text-black antialiased">
+
+<section class="hero relative min-h-[100dvh] w-full overflow-hidden">
+
+  <!-- 背景视频：循环播放 + 自研 rAF 淡入淡出 -->
+  <video
+    id="hero-video"
+    class="hero-video"
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+    tabindex="-1"
+  >
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260329_050842_be71947f-f16e-4a14-810c-06e83d23ddb5.mp4" type="video/mp4" />
+  </video>
+
+  <!-- 导航 -->
+  <header class="absolute inset-x-0 top-0 z-30 px-6 sm:px-10 lg:px-[120px] py-[16px]">
+    <nav class="flex items-center justify-between">
+      <a href="#" id="brand-logo" class="font-schibsted text-[24px] font-semibold tracking-[-1.44px] text-black">Logoipsum</a>
+
+      <ul class="hidden items-center gap-[34px] lg:flex">
+        <li><a href="#" class="font-schibsted text-[16px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">Platform</a></li>
+        <li class="dropdown relative">
+          <button type="button" class="flex items-center gap-[6px] font-schibsted text-[16px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">
+            Features
+            <svg class="h-[16px] w-[16px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+          </button>
+          <div class="dropdown-menu absolute left-1/2 top-[calc(100%+10px)] z-40 w-[200px] -translate-x-1/2 rounded-[12px] bg-white p-[6px] shadow-[0_12px_32px_rgba(0,0,0,0.14)]">
+            <a href="#" class="block rounded-[8px] px-[12px] py-[8px] font-schibsted text-[14px] font-medium text-black transition-colors hover:bg-[#f8f8f8]">Analytics</a>
+            <a href="#" class="block rounded-[8px] px-[12px] py-[8px] font-schibsted text-[14px] font-medium text-black transition-colors hover:bg-[#f8f8f8]">Automations</a>
+            <a href="#" class="block rounded-[8px] px-[12px] py-[8px] font-schibsted text-[14px] font-medium text-black transition-colors hover:bg-[#f8f8f8]">Integrations</a>
+          </div>
+        </li>
+        <li><a href="#" class="font-schibsted text-[16px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">Projects</a></li>
+        <li><a href="#" class="font-schibsted text-[16px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">Community</a></li>
+        <li><a href="#" class="font-schibsted text-[16px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">Contact</a></li>
+      </ul>
+
+      <div class="flex items-center gap-[12px]">
+        <a href="#" id="nav-signup" class="w-[82px] text-center font-schibsted text-[15px] font-medium tracking-[-0.2px] text-black transition-opacity hover:opacity-60">Sign Up</a>
+        <a href="#" id="nav-login" class="w-[101px] rounded-[10px] bg-black py-[10px] text-center font-schibsted text-[15px] font-medium tracking-[-0.2px] text-white transition-transform active:scale-[0.98]">Log In</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero 内容 -->
+  <div class="relative z-20 flex min-h-[100dvh] flex-col items-center px-6 sm:px-10 lg:px-[120px] pt-[132px] pb-[80px] lg:pt-[185px]">
+    <div class="-mt-[50px] flex w-full flex-col items-center">
+
+      <!-- 标题组 -->
+      <div class="flex flex-col items-center gap-[34px]">
+
+        <!-- 徽章 -->
+        <span id="hero-badge" class="inline-flex items-center gap-[10px] rounded-full bg-[#f8f8f8] py-[6px] pl-[6px] pr-[16px] shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+          <span class="inline-flex items-center gap-[6px] rounded-full bg-[#0e1311] px-[10px] py-[4px] font-inter text-[14px] font-normal leading-none text-white">
+            <svg class="h-[13px] w-[13px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            New
+          </span>
+          <span class="font-inter text-[14px] font-normal leading-none text-[#0e1311]">Discover what's possible</span>
+        </span>
+
+        <!-- 主标题 -->
+        <h1 class="font-fustat text-[40px] font-bold leading-none tracking-[-2.4px] text-black text-center sm:text-[56px] sm:tracking-[-3.4px] lg:text-[80px] lg:tracking-[-4.8px]">
+          Transform Data Quickly
+        </h1>
+
+        <!-- 副标题 -->
+        <p id="hero-subtitle" class="w-full max-w-[736px] md:w-[542px] font-fustat text-[17px] font-medium leading-[1.5] tracking-[-0.4px] text-[#505050] text-center lg:text-[20px]">
+          Upload your information and get powerful insights right away. Work smarter and achieve goals effortlessly.
+        </p>
+      </div>
+
+      <!-- 搜索卡 -->
+      <div class="mt-[44px] w-full max-w-[728px]">
+        <div class="search-panel flex min-h-[200px] flex-col gap-[10px] rounded-[18px] p-[12px] lg:h-[200px]">
+
+          <!-- 额度行 -->
+          <div id="credit-row" class="flex flex-wrap items-center justify-between gap-[8px] font-schibsted text-[12px] font-medium text-white">
+            <div class="flex items-center gap-[10px]">
+              <span>60/450 credits</span>
+              <button type="button" id="upgrade-btn" class="rounded-[8px] bg-[rgba(90,225,76,0.89)] px-[10px] py-[5px] font-schibsted text-[12px] font-medium text-[#0e1311] transition-transform active:scale-[0.98]">Upgrade</button>
+            </div>
+            <div class="flex items-center gap-[6px]">
+              <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l1.9 4.8 4.8 1.9-4.8 1.9L12 15.9l-1.9-4.8L5.3 9.2l4.8-1.9L12 2.5zM19 13.5l.95 2.4 2.4.95-2.4.95L19 20.2l-.95-2.4-2.4-.95 2.4-.95L19 13.5zM5.5 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" /></svg>
+              <span>Powered by GPT-4o</span>
+            </div>
+          </div>
+
+          <!-- 输入区 -->
+          <div class="composer flex min-h-0 flex-1 flex-col justify-between rounded-[12px] p-[10px] pl-[14px]">
+            <div class="flex items-start gap-[10px]">
+              <input
+                id="query-input"
+                type="text"
+                maxlength="3000"
+                placeholder="Type question..."
+                class="min-w-0 flex-1 bg-transparent font-noto text-[16px] leading-[1.4] text-black"
+              />
+              <button type="button" id="submit-btn" aria-label="Submit query" class="grid h-[36px] w-[36px] shrink-0 place-items-center rounded-full bg-black text-white transition-transform active:scale-[0.96]">
+                <svg class="h-[16px] w-[16px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+              </button>
+            </div>
+
+            <!-- 工具行 -->
+            <div id="toolbar" class="mt-[10px] flex items-center justify-between gap-[8px]">
+              <div id="toolbar-actions" class="flex min-w-0 flex-wrap items-center gap-[6px]">
+                <button type="button" class="inline-flex items-center gap-[6px] rounded-[6px] bg-[#f8f8f8] px-[10px] py-[6px] font-noto text-[13px] font-medium text-[#505050] transition-colors hover:bg-[#ececec]">
+                  <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
+                  Attach
+                </button>
+                <button type="button" class="inline-flex items-center gap-[6px] rounded-[6px] bg-[#f8f8f8] px-[10px] py-[6px] font-noto text-[13px] font-medium text-[#505050] transition-colors hover:bg-[#ececec]">
+                  <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><path d="M12 19v4" /></svg>
+                  Voice
+                </button>
+                <button type="button" class="inline-flex items-center gap-[6px] rounded-[6px] bg-[#f8f8f8] px-[10px] py-[6px] font-noto text-[13px] font-medium text-[#505050] transition-colors hover:bg-[#ececec]">
+                  <svg class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+                  Prompts
+                </button>
+              </div>
+              <span id="char-count" class="shrink-0 whitespace-nowrap font-noto text-[12px] font-normal text-[#505050]">0/3,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* ---------------- 视频淡入淡出（纯 rAF，不用 CSS transition） ---------------- */
+
+    var video = document.getElementById('hero-video');
+    if (video) {
+      var FADE_MS = 250;          // 淡入 / 淡出时长
+      var FADE_OUT_LEAD = 0.55;   // 距结尾剩余多少秒开始淡出
+      var LOOP_RESET_DELAY = 100; // ended 之后延迟多少毫秒重播
+
+      var rafId = null;       // 当前正在跑的动画帧
+      var fadingOut = false;  // 防止 timeupdate 重复触发淡出
+
+      var reduceMotion = window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function currentOpacity() {
+        var v = parseFloat(window.getComputedStyle(video).opacity);
+        return isNaN(v) ? 1 : v;
+      }
+
+      /** 取消正在运行的动画帧，避免两个淡入淡出互相打架 */
+      function cancelFade() {
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }
+
+      /**
+       * 从当前 opacity 出发渐变到 target（不跳变）
+       * @param {number} target   目标透明度
+       * @param {number} duration 毫秒
+       * @param {Function} [done] 完成回调
+       */
+      function fadeTo(target, duration, done) {
+        cancelFade();
+
+        if (reduceMotion) {
+          video.style.opacity = String(target);
+          if (typeof done === 'function') done();
+          return;
+        }
+
+        var from = currentOpacity();
+        var start = performance.now();
+
+        function step(now) {
+          var t = Math.min((now - start) / duration, 1);
+          video.style.opacity = (from + (target - from) * t).toFixed(3);
+          if (t < 1) {
+            rafId = requestAnimationFrame(step);
+          } else {
+            rafId = null;
+            if (typeof done === 'function') done();
+          }
+        }
+
+        rafId = requestAnimationFrame(step);
+      }
+
+      video.style.opacity = '0';
+
+      // 首次可播放：淡入
+      video.addEventListener('canplay', function handleReady() {
+        if (reduceMotion) {
+          video.style.opacity = '1';
+          video.play().catch(function () {});
+          return;
+        }
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+        fadeTo(1, FADE_MS);
+        video.removeEventListener('canplay', handleReady);
+      });
+
+      // 临近结尾：淡出
+      video.addEventListener('timeupdate', function () {
+        if (fadingOut) return;
+        if (!video.duration || !isFinite(video.duration)) return;
+        if (video.duration - video.currentTime <= FADE_OUT_LEAD) {
+          fadingOut = true;
+          fadeTo(0, FADE_MS);
+        }
+      });
+
+      // 播放结束：归零 → 延迟 → 重播 → 再次淡入
+      video.addEventListener('ended', function () {
+        // 必须先取消仍在运行的淡出帧，否则它会继续写 opacity，与下面的归零互相覆盖
+        cancelFade();
+        video.style.opacity = '0';
+        fadingOut = false;
+        setTimeout(function () {
+          video.currentTime = 0;
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+          fadeTo(1, FADE_MS);
+        }, LOOP_RESET_DELAY);
+      });
+    }
+
+    /* ---------------- 字数统计 ---------------- */
+
+    var input = document.getElementById('query-input');
+    var counter = document.getElementById('char-count');
+    if (input && counter) {
+      var format = function (n) { return n.toLocaleString('en-US'); };
+      var update = function () {
+        counter.textContent = format(input.value.length) + '/3,000';
+      };
+      input.addEventListener('input', update);
+      update();
+    }
+
+    /* ---------------- Features 下拉（触屏点击可开） ---------------- */
+
+    document.querySelectorAll('.dropdown').forEach(function (dd) {
+      var trigger = dd.querySelector('button');
+      if (!trigger) return;
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dd.classList.toggle('is-open');
+      });
+      document.addEventListener('click', function () {
+        dd.classList.remove('is-open');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

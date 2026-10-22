@@ -29,6 +29,7 @@
 | [vesper-ai-landing](./vesper-ai-landing) | 单视口视频背景落地页，点阵标题 Hero + 四项统计区（AI 平台 Landing） | `index.html`（样式 `styles.css`、逻辑 `main.js`） | 原生 HTML/CSS/JS；CloudFront 全屏背景视频 | 双击即开，需联网（视频与字体/图标走 CDN） |
 | [palomar-landing](./palomar-landing) | Palomar Labs 落地页像素级复刻：固定导航 + 全视口视频 Hero | `index.html`（样式 `styles.css`、逻辑 `main.js`） | 原生 HTML/CSS/JS，零依赖零构建；内联 SVG 图标 | 双击即开，需联网（视频与字体走 CDN） |
 | [asme-liquid-glass-landing](./asme-liquid-glass-landing) | Asme 液态玻璃落地页：全屏视频 Hero + 5 区块 + 滚动渐入 | `index.html` | 单文件 HTML + Tailwind CDN + 原生 JS；内联 SVG 图标 | 双击即开，需联网（视频/字体/样式走 CDN） |
+| [ai-query-hero-landing](./ai-query-hero-landing) | AI 搜索落地页单视口 Hero：全屏视频背景 + 毛玻璃搜索卡 + 自研 rAF 淡入淡出 | `index.html` | 单文件 HTML + Tailwind CDN + 原生 JS；CDP 验收脚本 `tools/verify.js`、`tools/verify-fade.js` | 双击即开，需联网（视频与字体走 CDN） |
 
 ## 快速开始
 

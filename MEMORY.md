@@ -40,6 +40,7 @@
 | `lumina-liquid-glass-footer` | LUMINA 液态玻璃落地页（全屏视频背景 + 渐变描边玻璃页脚） | 单文件 HTML + Tailwind v4 CDN + Lucide CDN | 已完成 | 原规格为 React + `motion/react`，用户偏好静态网页，故改为纯静态等价实现；社媒图标用内联 SVG（Lucide 已移除品牌图标） |
 | `palomar-landing` | Palomar Labs 落地页像素级复刻（固定导航 + 全视口视频 Hero） | 原生 HTML + CSS + JS（零框架零依赖零构建） | 已完成 | 三文件 `index.html`/`styles.css`/`main.js`；内联 SVG 图标；CDP 验收脚本 `tools/verify.js`（多断点截图 + 样式断言）；规格禁止 Footer/额外 section |
 | `asme-liquid-glass-landing` | Asme 液态玻璃品牌落地页（全屏视频 Hero + 5 区块 + 滚动渐入） | 单文件 HTML + Tailwind CDN + 原生 JS（零构建零依赖） | 已完成 | 入口 `index.html`；规格为 React+Vite+framer-motion，用户偏好静态改为纯静态等价实现；CloudFront 视频 + Google Fonts + 内联 SVG 图标 |
+| `ai-query-hero-landing` | AI 搜索落地页单视口 Hero（全屏视频背景 + 毛玻璃搜索卡 + 自研 rAF 淡入淡出） | 单文件 HTML + Tailwind CDN + 原生 JS（零构建零依赖） | 已完成 | 入口 `index.html`；淡入淡出 6 项逻辑断言全通过（`tools/verify-fade.js`）；规格为 React 组件描述，改为纯静态等价实现 |
 
 > 每新增一个灵感，必须在本表追加一行。
 
