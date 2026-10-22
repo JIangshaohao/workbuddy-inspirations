@@ -81,6 +81,7 @@
 - **滤波器的 `eps`/阈值必须实测定标，不能套教科书公式**：凭"0.11×255 的平方"拍出的 eps 会使自适应系数中位数只有 0.29，把纹理抹平。正确做法是做参数扫描，按目标权衡曲线（如"降噪强度 vs 纹理保留"）选点。
 - **不要用整图 Laplacian 方差论证"变清晰了"**：噪点/颗粒本身就是高频，颗粒多的一方永远赢。该指标只能在相邻处理阶段之间比较；跨"处理前/后"比较需要换成只统计纹理区能量的口径。
 - **`chrome --screenshot` 验证不了带运行时逻辑的单页**：该命令只截视口且不执行脚本。正确做法是 CDP：`Emulation.setDeviceMetricsOverride` + `DOM.setFileInputFiles` + `Runtime.evaluate({awaitPromise:true})`。Node 22 自带 `WebSocket`，无需额外依赖（已验证脚本见 `old-photo-restoration/tools/verify_page.js`）。
+- **`git push` 直连 github.com:443 会卡 21 秒后超时**：本机需走 Clash 混合端口 `127.0.0.1:7897`。不要改全局 `git config`，用一次性参数即可：`git -c http.proxy=http://127.0.0.1:7897 -c https.proxy=http://127.0.0.1:7897 push origin main`。探测可用端口：`Test-NetConnection 127.0.0.1 -Port <port> -InformationLevel Quiet`。
 
 ---
 
