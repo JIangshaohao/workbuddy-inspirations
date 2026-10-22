@@ -35,6 +35,7 @@
 | `netmusic-listening-portrait` | 网易云音乐「你的听歌画像」单文件数据报告 | HTML + 内联 SVG + Node 构建期预渲染 | 已完成 | 单文件 `index.html`（约 197KB，图片全内联）；数据来自本地 `NeteaseCloudMusicApi` 扫码登录；构建脚本在 `.workbuddy/tmp/netease-api/` |
 | `ganfan-blindbox-workbench` | 吃了吗您 · 干饭盲盒工作台（抽卡决定吃啥 + 饭票透支） | 单文件 HTML + 资料库运行时 SDK（零依赖零外链） | 已完成 | **一键做同款**复制产物；产物 `output.html`；托管于资料库页面 `fuLFSrmasJFqEEiSjogVYZ`，绑定数据表「菜品池」`komd1ZY7LY1QI8JfhST0zr`（29 行）与「吃饭记录」`IkagYbTEezIbu7PgapjVnX`（空表） |
 | `old-photo-restoration` | 老照片修复工作台（浏览器端四步修复管线 + 逐阶段量化指标） | 单文件 HTML + 原生 JS（零依赖零外链，算法自实现）；附 Python CLI 参考实现 | 已完成 | 主产物 `index.html`；CLI `scripts/beautify.py`；CDP 验收脚本 `tools/verify_page.js`（9 项指标口径，含 2 个历史回归项） |
+| `vesper-ai-landing` | 单视口视频背景落地页（点阵标题 Hero + 四项统计滚动） | 原生 HTML/CSS/JS 多文件（规格要求，例外于单文件约定）；CloudFront 背景视频 + CDN 字体 | 已完成 | 入口 `index.html`；`styles.css` + `main.js` + `assets/logo.webp` + `fonts/GeistPixel-Circle.woff2`；2026-10-22 从 Everyday 移入 |
 
 > 每新增一个灵感，必须在本表追加一行。
 
