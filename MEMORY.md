@@ -71,6 +71,9 @@
 
 - **GitHub MCP 集成没有建仓权限**：调用 `create_repository` 返回 `403 Resource not accessible by integration`（该 App 未获得 repo 创建授权）。可用本机 `~/.git-credentials` 中已存 PAT（scopes: `gist, repo, workflow`）直接调 REST API 建仓：`POST https://api.github.com/user/repos`；推送仍走 `git push` + `credential.helper=store`。
 - **`core.autocrlf=true` 会在每次 add 时刷一屏 LF→CRLF 警告**：仓库根已加 `.gitattributes`（`* text=auto eol=lf`），并在本仓库设 `core.autocrlf=false`，索引与工作区统一 LF。
+- **本机存在两套 Git，`user.name`/`user.email` 不继承**：shell 里的 `git` 是 PortableGit 2.55（`/mingw64/bin/git`，系统配置 `E:/Worksoft/WorkBuddy/resources/vendor/PortableGit/etc/gitconfig`），另有 `/e/Worksoft/Git/cmd/git`。历史提交用的是后者的身份，PortableGit 的 `~/.gitconfig` 里只有 `http.proxy` 与 `sslBackend`，没有用户信息，于是 `git commit` 直接报 `Author identity unknown`。**解法**：在仓库级补上与历史一致的 `git config --local user.name jiangshaohao` / `user.email 2623537618@qq.com`，不动全局配置。
+- **仓库级 `git config` 会因换 Git 实例而"凭空丢失"**：上一条修好后 `git config --local --list` 又是空的。结论是每次新会话提交前先跑一次 `git config --local --list | grep user\.`，为空就补设，不要假设它还在。
+- **验收截图需要单独 `.gitignore`**：仓库根 `.gitignore` 未覆盖 `shots/`，而 `palomar-landing/` 自带一份屏蔽 `shots/`。新增含 CDP 截图的灵感目录时，同样要补一份目录级 `.gitignore`。
 - **文件大小写**：Windows 本地不区分大小写，但 GitHub 服务端区分。三件套统一使用全大写 `AGENTS.md` / `README.md` / `MEMORY.md`，避免出现本地正常、远端重复文件的诡异问题。
 - **SVG 表现属性不支持 CSS 变量**：`setAttribute("stroke", "var(--x)")` 与 `<stop stop-color="var(--x)">` 均**静默失效**（回退为默认色），因为表现属性在解析期不接受 `var()`。必须改用 `el.style.stroke = "var(--x)"` 或 `style="stop-color:var(--x)"`。用 `document.createElementNS` 手工构建渐变是更稳的做法。
 - **`.reveal.in { transform: none }` 会静默压制 hover 抬升**：两者特异性相同（0,2,0），后写的 `.reveal.in` 胜出。若卡片类元素同时挂了渐入类与 hover 变换，必须在动画结束后**摘掉渐入类**，把 transform 交还给组件自身规则。
