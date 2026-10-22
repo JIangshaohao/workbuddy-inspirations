@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palomar - One Unified System for LLMs</title>
+  <link href="https://db.onlinewebfonts.com/c/0e6de1ec911a2e267ff136bbdd384a44?family=Helvetica+Neue+Light" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Oswald:wght@500&family=Montserrat:wght@700&family=Roboto+Slab:wght@600&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============================ Navbar ============================ -->
+  <nav id="navbar" class="navbar">
+    <div class="navbar__inner">
+      <!-- Desktop left links -->
+      <div class="navbar__links">
+        <button type="button" class="nav-link nav-link--button">
+          Solutions
+          <svg class="icon icon--chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <a href="#" class="nav-link">Plans</a>
+        <a href="#" class="nav-link">News</a>
+      </div>
+
+      <!-- Center logo -->
+      <div class="navbar__logo">
+        <svg class="icon icon--triangle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21.856a2 2 0 0 0 3.464 0l3.464-6a2 2 0 0 0 0-3.464l-3.464-6a2 2 0 0 0-3.464 0l-3.464 6a2 2 0 0 0 0 3.464z"/></svg>
+        <span class="navbar__wordmark">Palomar</span>
+      </div>
+
+      <!-- Desktop CTA -->
+      <a href="#" class="navbar__cta">Try It Free</a>
+
+      <!-- Mobile hamburger -->
+      <button id="menu-toggle" type="button" class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger__bar hamburger__bar--top"></span>
+        <span class="hamburger__bar hamburger__bar--bottom"></span>
+      </button>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu__inner">
+        <a href="#" class="mobile-menu__link">Solutions</a>
+        <a href="#" class="mobile-menu__link">Plans</a>
+        <a href="#" class="mobile-menu__link">News</a>
+        <a href="#" class="mobile-menu__cta">Try It Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================= Hero ============================= -->
+  <section class="hero">
+    <!-- Video layer -->
+    <div class="hero__video-layer">
+      <video
+        id="hero-video"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260820_010308_b1636845-4c15-4ab6-b0c9-9a29bfb0c6e3.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="hero__video"></video>
+    </div>
+
+    <!-- Content column -->
+    <div class="hero__content">
+      <!-- Announcement pill -->
+      <a href="#" class="pill">
+        <span class="pill__text">Live for everyone today! Offering $1MM in credits.</span>
+        <svg class="icon icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+
+      <!-- Headline -->
+      <h1 class="hero__headline">
+        One unified system to build,<br class="br-sm" /> test, ship, and observe LLMs
+      </h1>
+
+      <!-- Trusted by -->
+      <div class="trusted">
+        <p class="trusted__label">Backed by</p>
+        <div class="trusted__row">
+          <span class="trusted__logo trusted__logo--playfair">Meridian</span>
+          <span class="trusted__logo trusted__logo--oswald">STELLEX</span>
+          <span class="trusted__logo trusted__logo--montserrat">Luminar</span>
+          <span class="trusted__logo trusted__logo--roboto">OVERLAND</span>
+          <span class="trusted__logo trusted__logo--raleway">Kinetic</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>

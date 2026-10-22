@@ -36,6 +36,10 @@
 | `ganfan-blindbox-workbench` | 吃了吗您 · 干饭盲盒工作台（抽卡决定吃啥 + 饭票透支） | 单文件 HTML + 资料库运行时 SDK（零依赖零外链） | 已完成 | **一键做同款**复制产物；产物 `output.html`；托管于资料库页面 `fuLFSrmasJFqEEiSjogVYZ`，绑定数据表「菜品池」`komd1ZY7LY1QI8JfhST0zr`（29 行）与「吃饭记录」`IkagYbTEezIbu7PgapjVnX`（空表） |
 | `old-photo-restoration` | 老照片修复工作台（浏览器端四步修复管线 + 逐阶段量化指标） | 单文件 HTML + 原生 JS（零依赖零外链，算法自实现）；附 Python CLI 参考实现 | 已完成 | 主产物 `index.html`；CLI `scripts/beautify.py`；CDP 验收脚本 `tools/verify_page.js`（9 项指标口径，含 2 个历史回归项） |
 | `vesper-ai-landing` | 单视口视频背景落地页（点阵标题 Hero + 四项统计滚动） | 原生 HTML/CSS/JS 多文件（规格要求，例外于单文件约定）；CloudFront 背景视频 + CDN 字体 | 已完成 | 入口 `index.html`；`styles.css` + `main.js` + `assets/logo.webp` + `fonts/GeistPixel-Circle.woff2`；2026-10-22 从 Everyday 移入 |
+| `velorah-hero-landing` | Velorah® 单屏电影感 Hero（全屏视频背景 + 液态玻璃导航 + 衬线大标题） | 单文件 HTML + Tailwind CDN + Google Fonts | 已完成 | 入口 `index.html`；用户要求纯静态，放弃 React + Vite + shadcn/ui 方案；CloudFront 视频外链 |
+| `lumina-liquid-glass-footer` | LUMINA 液态玻璃落地页（全屏视频背景 + 渐变描边玻璃页脚） | 单文件 HTML + Tailwind v4 CDN + Lucide CDN | 已完成 | 原规格为 React + `motion/react`，用户偏好静态网页，故改为纯静态等价实现；社媒图标用内联 SVG（Lucide 已移除品牌图标） |
+| `palomar-landing` | Palomar Labs 落地页像素级复刻（固定导航 + 全视口视频 Hero） | 原生 HTML + CSS + JS（零框架零依赖零构建） | 已完成 | 三文件 `index.html`/`styles.css`/`main.js`；内联 SVG 图标；CDP 验收脚本 `tools/verify.js`（多断点截图 + 样式断言）；规格禁止 Footer/额外 section |
+| `asme-liquid-glass-landing` | Asme 液态玻璃品牌落地页（全屏视频 Hero + 5 区块 + 滚动渐入） | 单文件 HTML + Tailwind CDN + 原生 JS（零构建零依赖） | 已完成 | 入口 `index.html`；规格为 React+Vite+framer-motion，用户偏好静态改为纯静态等价实现；CloudFront 视频 + Google Fonts + 内联 SVG 图标 |
 
 > 每新增一个灵感，必须在本表追加一行。
 
@@ -82,6 +86,8 @@
 - **不要用整图 Laplacian 方差论证"变清晰了"**：噪点/颗粒本身就是高频，颗粒多的一方永远赢。该指标只能在相邻处理阶段之间比较；跨"处理前/后"比较需要换成只统计纹理区能量的口径。
 - **`chrome --screenshot` 验证不了带运行时逻辑的单页**：该命令只截视口且不执行脚本。正确做法是 CDP：`Emulation.setDeviceMetricsOverride` + `DOM.setFileInputFiles` + `Runtime.evaluate({awaitPromise:true})`。Node 22 自带 `WebSocket`，无需额外依赖（已验证脚本见 `old-photo-restoration/tools/verify_page.js`）。
 - **`git push` 直连 github.com:443 会卡 21 秒后超时**：本机需走 Clash 混合端口 `127.0.0.1:7897`。不要改全局 `git config`，用一次性参数即可：`git -c http.proxy=http://127.0.0.1:7897 -c https.proxy=http://127.0.0.1:7897 push origin main`。探测可用端口：`Test-NetConnection 127.0.0.1 -Port <port> -InformationLevel Quiet`。
+- **截图验证大体积背景视频必须轮询 `video.readyState`，不能用固定 sleep**：12MB 视频在 headless Chrome 中从 `readyState 0` 到 `4` 需约 20 秒，固定 sleep 3~5s 只会拍到空白底色，极易误判为"视频不显示 / 编码不支持"。正确做法是轮询到 `readyState >= 2`（已解首帧）再 `Page.captureScreenshot`。
+- **Windows 上删 `node_modules` 可能报"拒绝访问"**：残留的 dev server 会锁住 `esbuild.exe` / `*.node` 原生模块句柄。先停掉占用进程，再 `cmd /c rmdir /s /q node_modules`。
 
 ---
 

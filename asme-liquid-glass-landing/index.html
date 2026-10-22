@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Asme — Know it, then all</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+  /* 衬线显示字体（规格：Instrument Serif） */
+  .font-instrument { font-family: 'Instrument Serif', serif; }
+
+  /* 液态玻璃：规格 index.css 中 .liquid-glass 原样落地 */
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* 规格中的径向渐变任意值类，改为自定义类更稳健 */
+  .bg-radial-top {
+    background-image: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  }
+  .bg-radial-center {
+    background-image: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+  }
+
+  /* 滚动渐入（等价 framer-motion useInView），位移/时长/延迟由 data-* 驱动 */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0);
+    transition:
+      opacity var(--dur, 0.8s) cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s),
+      transform var(--dur, 0.8s) cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s);
+    will-change: transform, opacity;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body class="bg-black text-white antialiased">
+
+  <!-- ============ SECTION 1 · HERO ============ -->
+  <section class="relative min-h-screen overflow-hidden flex flex-col">
+
+    <!-- 背景视频：覆盖整个视口 -->
+    <video id="hero-video"
+      class="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4"
+      muted autoplay playsinline preload="auto"></video>
+
+    <!-- 导航栏 -->
+    <nav class="relative z-20 px-6 py-6">
+      <div class="liquid-glass rounded-full max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <!-- 左侧 -->
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white shrink-0">
+            <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+          </svg>
+          <span class="text-white font-semibold text-lg ml-2">Asme</span>
+          <div class="hidden md:flex items-center gap-8 ml-8">
+            <a href="#" class="text-white/80 hover:text-white text-sm font-medium">Features</a>
+            <a href="#" class="text-white/80 hover:text-white text-sm font-medium">Pricing</a>
+            <a href="#" class="text-white/80 hover:text-white text-sm font-medium">About</a>
+          </div>
+        </div>
+        <!-- 右侧 -->
+        <div class="flex items-center gap-4">
+          <button type="button" class="text-white text-sm font-medium">Sign Up</button>
+          <button type="button" class="liquid-glass rounded-full px-6 py-2 text-white text-sm font-medium">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero 主体内容 -->
+    <div class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center" style="transform: translateY(-20%);">
+      <h1 class="font-instrument text-7xl md:text-8xl lg:text-9xl text-white tracking-tight whitespace-nowrap">
+        Know it then <em class="italic">all</em>
+      </h1>
+
+      <!-- 邮箱订阅 -->
+      <div class="max-w-xl w-full mt-8">
+        <div class="liquid-glass rounded-full pl-6 pr-2 py-2 flex items-center gap-3">
+          <input type="email" placeholder="Enter your email"
+            class="flex-1 min-w-0 bg-transparent text-white placeholder:text-white/40 outline-none text-sm" />
+          <button type="button" class="bg-white rounded-full p-3 text-black shrink-0" aria-label="Subscribe">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 副标题 -->
+      <p class="text-white text-sm leading-relaxed px-4 mt-6 max-w-md mx-auto">
+        Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out on exciting updates.
+      </p>
+
+      <!-- Manifesto 按钮 -->
+      <button type="button" class="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium hover:bg-white/5 transition-colors mt-8">
+        Manifesto
+      </button>
+    </div>
+
+    <!-- 社交图标页脚 -->
+    <div class="relative z-10 flex justify-center gap-4 pb-12">
+      <a href="#" aria-label="Instagram" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+        </svg>
+      </a>
+      <a href="#" aria-label="Twitter" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+        </svg>
+      </a>
+      <a href="#" aria-label="Globe" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2 · ABOUT ============ -->
+  <section class="bg-black bg-radial-top pt-32 md:pt-44 pb-10 md:pb-14 px-6 overflow-hidden">
+    <p class="reveal text-white/40 text-sm tracking-widest uppercase" data-y="20" data-duration="0.6">About Us</p>
+    <h2 class="font-instrument text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mt-6">
+      <span class="reveal inline-block" data-y="40" data-duration="0.8" data-delay="0.1">
+        Pioneering <em class="italic text-white/60">ideas</em> for
+        <br class="hidden md:block" />
+        <em class="italic text-white/60">minds that create, build, and inspire.</em>
+      </span>
+    </h2>
+  </section>
+
+  <!-- ============ SECTION 3 · FEATURED VIDEO ============ -->
+  <section class="bg-black pt-6 md:pt-10 pb-20 md:pb-32 px-6 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal relative rounded-3xl overflow-hidden aspect-video" data-y="60" data-duration="0.9">
+        <video class="w-full h-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260402_054547_9875cfc5-155a-4229-8ec8-b7ba7125cbf8.mp4"
+          muted autoplay loop playsinline preload="auto"></video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+
+        <!-- 底部覆盖内容 -->
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div class="liquid-glass rounded-2xl p-6 md:p-8 max-w-md">
+            <p class="text-white/50 text-xs tracking-widest uppercase mb-3">Our Approach</p>
+            <p class="text-white text-sm md:text-base leading-relaxed">We believe in the power of curiosity-driven exploration. Every project starts with a question, and every answer opens a new door to innovation.</p>
+          </div>
+          <button type="button" class="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium transition-transform hover:scale-105 active:scale-95 shrink-0">
+            Explore more
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4 · PHILOSOPHY（Innovation x Vision） ============ -->
+  <section class="bg-black py-28 md:py-40 px-6 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="font-instrument text-5xl md:text-7xl lg:text-8xl text-white tracking-tight mb-16 md:mb-24">
+        <span class="reveal inline-block" data-y="40" data-duration="0.8">Innovation <em class="italic text-white/40">x</em> Vision</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <!-- 左侧视频 -->
+        <div class="reveal" data-x="-40" data-duration="0.8">
+          <div class="rounded-3xl overflow-hidden" style="aspect-ratio: 4 / 3;">
+            <video class="w-full h-full object-cover"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260307_083826_e938b29f-a43a-41ec-a153-3d4730578ab8.mp4"
+              muted autoplay loop playsinline preload="auto"></video>
+          </div>
+        </div>
+        <!-- 右侧文本 -->
+        <div class="reveal flex flex-col gap-8 md:gap-10" data-x="40" data-duration="0.8">
+          <div>
+            <p class="text-white/40 text-xs tracking-widest uppercase mb-4">Choose your space</p>
+            <p class="text-white/70 text-base md:text-lg leading-relaxed">Every meaningful breakthrough begins at the intersection of disciplined strategy and remarkable creative vision. We operate at that crossroads, turning bold thinking into tangible outcomes that move people and reshape industries.</p>
+          </div>
+          <div class="w-full h-px bg-white/10"></div>
+          <div>
+            <p class="text-white/40 text-xs tracking-widest uppercase mb-4">Shape the future</p>
+            <p class="text-white/70 text-base md:text-lg leading-relaxed">We believe that the best work emerges when curiosity meets conviction. Our process is designed to uncover hidden opportunities and translate them into experiences that resonate long after the first impression.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5 · SERVICES（What we do） ============ -->
+  <section class="bg-black bg-radial-center py-28 md:py-40 px-6 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal flex items-end justify-between mb-12 md:mb-16" data-y="30" data-duration="0.7">
+        <h2 class="font-instrument text-3xl md:text-5xl text-white tracking-tight">What we do</h2>
+        <p class="text-white/40 text-sm hidden md:block">Our services</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <!-- 卡片 1 -->
+        <div class="liquid-glass rounded-3xl overflow-hidden group reveal" data-y="50" data-duration="0.8" data-delay="0">
+          <div class="relative aspect-video overflow-hidden">
+            <video class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+              muted autoplay loop playsinline preload="auto"></video>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+          </div>
+          <div class="p-6 md:p-8">
+            <div class="flex items-center justify-between mb-4">
+              <p class="uppercase tracking-widest text-white/40 text-xs">Strategy</p>
+              <span class="liquid-glass rounded-full p-2 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+                </svg>
+              </span>
+            </div>
+            <h3 class="text-white text-xl md:text-2xl mb-3 tracking-tight">Research &amp; Insight</h3>
+            <p class="text-white/50 text-sm leading-relaxed">We dig deep into data, culture, and human behavior to surface the insights that drive meaningful, lasting change.</p>
+          </div>
+        </div>
+
+        <!-- 卡片 2 -->
+        <div class="liquid-glass rounded-3xl overflow-hidden group reveal" data-y="50" data-duration="0.8" data-delay="0.15">
+          <div class="relative aspect-video overflow-hidden">
+            <video class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
+              muted autoplay loop playsinline preload="auto"></video>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+          </div>
+          <div class="p-6 md:p-8">
+            <div class="flex items-center justify-between mb-4">
+              <p class="uppercase tracking-widest text-white/40 text-xs">Craft</p>
+              <span class="liquid-glass rounded-full p-2 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+                </svg>
+              </span>
+            </div>
+            <h3 class="text-white text-xl md:text-2xl mb-3 tracking-tight">Design &amp; Execution</h3>
+            <p class="text-white/50 text-sm leading-relaxed">From concept to launch, we obsess over every detail to deliver experiences that feel effortless and look extraordinary.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---- 滚动渐入（等价 framer-motion useInView，margin -100px） ---- */
+      var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+      revealEls.forEach(function (el) {
+        var y = el.getAttribute('data-y');
+        var x = el.getAttribute('data-x');
+        var dur = el.getAttribute('data-duration');
+        var delay = el.getAttribute('data-delay');
+        if (y) el.style.setProperty('--ty', y + 'px');
+        if (x) el.style.setProperty('--tx', x + 'px');
+        if (dur) el.style.setProperty('--dur', dur + 's');
+        if (delay) el.style.setProperty('--delay', delay + 's');
+      });
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+        revealEls.forEach(function (el) { io.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      /* ---- Hero 视频无缝循环：淡入淡出（规格：原生 JS + rAF） ---- */
+      var hero = document.getElementById('hero-video');
+      if (hero) {
+        hero.style.opacity = '0'; // 起始 opacity: 0
+
+        function fade(el, from, to, duration, done) {
+          var start = performance.now();
+          function step(now) {
+            var t = Math.min((now - start) / duration, 1);
+            el.style.opacity = (from + (to - from) * t).toFixed(3);
+            if (t < 1) {
+              requestAnimationFrame(step);
+            } else if (typeof done === 'function') {
+              done();
+            }
+          }
+          requestAnimationFrame(step);
+        }
+
+        var fadingOut = false;
+
+        hero.addEventListener('canplay', function () {
+          hero.play();
+          fade(hero, 0, 1, 500);
+        });
+
+        hero.addEventListener('timeupdate', function () {
+          if (!fadingOut && hero.duration && hero.duration - hero.currentTime <= 0.55) {
+            fadingOut = true;
+            var current = parseFloat(hero.style.opacity) || 1;
+            fade(hero, current, 0, 500, function () { fadingOut = false; });
+          }
+        });
+
+        hero.addEventListener('ended', function () {
+          hero.style.opacity = '0';
+          setTimeout(function () {
+            hero.currentTime = 0;
+            hero.play();
+            fade(hero, 0, 1, 500);
+          }, 100);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

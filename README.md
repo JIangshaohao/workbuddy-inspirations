@@ -24,7 +24,11 @@
 | [netmusic-listening-portrait](./netmusic-listening-portrait) | 网易云音乐「你的听歌画像」数据报告，8 年 10 个月真实数据 | `index.html`（约 190 KB，图片全内联） | 构建期 Node 预渲染 + 内联 SVG | 双击即开，离线可读 |
 | [ganfan-blindbox-workbench](./ganfan-blindbox-workbench) | 「吃了吗您」干饭盲盒工作台，抽卡决定吃啥 + 饭票透支记账 | `output.html` | 单文件 HTML + 资料库运行时 SDK | 需在 WorkBuddy 资料库中打开（依赖在线数据表） |
 | [old-photo-restoration](./old-photo-restoration) | 老照片修复工作台，浏览器端四步修复管线，全程不上传 | `index.html`（CLI：`scripts/beautify.py`） | 原生 JS Canvas 自实现算法 + Python OpenCV 参考实现 | 网页双击即开；CLI 需 Python + OpenCV |
+| [velorah-hero-landing](./velorah-hero-landing) | Velorah® 单屏电影感 Hero：全屏视频背景 + 液态玻璃导航 + 衬线大标题 | `index.html` | 单文件 HTML + Tailwind CDN + Google Fonts | 双击即开，需联网（视频与字体走 CDN） |
+| [lumina-liquid-glass-footer](./lumina-liquid-glass-footer) | LUMINA 液态玻璃落地页：全屏视频背景 + 渐变描边玻璃页脚 | `index.html` | 单文件 HTML + Tailwind v4 CDN + Lucide CDN | 双击即开，需联网（视频/字体/图标走 CDN） |
 | [vesper-ai-landing](./vesper-ai-landing) | 单视口视频背景落地页，点阵标题 Hero + 四项统计区（AI 平台 Landing） | `index.html`（样式 `styles.css`、逻辑 `main.js`） | 原生 HTML/CSS/JS；CloudFront 全屏背景视频 | 双击即开，需联网（视频与字体/图标走 CDN） |
+| [palomar-landing](./palomar-landing) | Palomar Labs 落地页像素级复刻：固定导航 + 全视口视频 Hero | `index.html`（样式 `styles.css`、逻辑 `main.js`） | 原生 HTML/CSS/JS，零依赖零构建；内联 SVG 图标 | 双击即开，需联网（视频与字体走 CDN） |
+| [asme-liquid-glass-landing](./asme-liquid-glass-landing) | Asme 液态玻璃落地页：全屏视频 Hero + 5 区块 + 滚动渐入 | `index.html` | 单文件 HTML + Tailwind CDN + 原生 JS；内联 SVG 图标 | 双击即开，需联网（视频/字体/样式走 CDN） |
 
 ## 快速开始
 
@@ -57,7 +61,9 @@ workbuddy-inspirations/
 ├── netmusic-listening-portrait/
 ├── ganfan-blindbox-workbench/
 ├── old-photo-restoration/
-└── vesper-ai-landing/           # 例外：多文件结构（规格要求），入口仍为 index.html
+├── velorah-hero-landing/         # 单文件纯静态，Tailwind CDN
+├── vesper-ai-landing/           # 例外：多文件结构（规格要求），入口仍为 index.html
+└── palomar-landing/             # 原生 HTML/CSS/JS 三文件，零依赖
 ```
 
 ## 仓库约定
@@ -85,6 +91,8 @@ workbuddy-inspirations/
 - **`ganfan-blindbox-workbench`** 的数据存放在资料库在线数据表，脱离运行时打开会提示「数据表连接失败」。
 - **`netmusic-listening-portrait`** 是构建期预渲染的静态快照，页面本身不发起任何网络请求，因此不会随听歌记录实时更新。
 - **`resume-landing-page`** 中的联系方式为占位数据（`example.com` / `138-0000-0000`），使用时请替换为真实信息。
+- **`palomar-landing`** 的背景视频约 12 MB，首次加载需十几秒才会出现画面（加载期间显示奶油色底）；离线打开时首屏只有纯色背景。
+- **`velorah-hero-landing`** 的背景视频与 Instrumental Serif / Inter 字体均走 CDN，离线打开时视频黑屏、标题回退系统衬线字体（仍可读）。
 - **`vesper-ai-landing`** 是仓库中唯一按规格采用多文件结构的灵感；背景视频、点阵字体与 Font Awesome 图标均来自 CDN，离线打开时视频黑屏、标题回退本地兜底字体（仍可读）。
 
 ## 说明
